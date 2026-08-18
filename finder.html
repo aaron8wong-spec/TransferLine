@@ -1,0 +1,2162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="_ds/nocturne-6cd027d0-a837-4cf7-a0a3-56f535e02261/styles.css" />
+<script src="_ds/nocturne-6cd027d0-a837-4cf7-a0a3-56f535e02261/_ds_bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #DCD3BA; color: #2A2823; -webkit-font-smoothing: antialiased; }
+  a { color: #33503E; text-decoration: none; border-bottom: 1px solid #8FA893; }
+  a:hover { color: #243A2C; border-bottom-color: #4A6E56; }
+  select, button, input { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; }
+  select { appearance: none; -webkit-appearance: none; padding-right: 30px !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6' fill='%235B5749'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 11px center; }
+  select:hover { border-color: #33503E; }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; letter-spacing: 0; }
+  h1 em { font-style: italic; color: #33503E; }
+  button:focus-visible, select:focus-visible, input:focus-visible { outline: 2px solid #33503E; outline-offset: 1px; }
+  ::selection { background: #DCE6DB; }
+  @keyframes riseIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @keyframes spinner { to { transform: rotate(360deg); } }
+  @keyframes rowIn { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+  @keyframes stripeIn { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: none; } }
+  @keyframes barIn { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @keyframes markIn { from { opacity: 0; transform: scale(0.7); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.001ms !important; animation-delay: 0ms !important; transition-duration: 0.001ms !important; }
+  }
+</style>
+</helmet>
+
+<div style="min-height: 100vh; padding: 28px 20px 48px; background: #DCD3BA; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif; font-size: 14px; color: #2A2823;">
+  <div style="max-width: 1220px; margin: 0 auto; background: #EDE6D4; border: 1px solid #C6BB9C;">
+
+  <div style="position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between; gap: 22.4px; padding: 0 33.6px; height: 62px; background: #D9CFB4; border-bottom: 1px solid #C6BB9C; box-shadow: 0 1px 0 rgba(42,40,35,0.06); align-items: flex-end; padding-bottom: 0;">
+    <div style="display: flex; align-items: baseline; gap: 12px; padding-bottom: 16px;">
+      <svg width="34" height="18" viewBox="0 0 34 18" aria-hidden="true" style="flex-shrink: 0;">
+        <path d="M1 9 C 8 2, 12 2, 17 9 S 26 16, 33 9" fill="none" stroke="#33503E" stroke-width="1.6"></path>
+        <circle cx="1" cy="9" r="2.2" fill="#2A2823"></circle>
+        <circle cx="33" cy="9" r="2.2" fill="#33503E"></circle>
+      </svg>
+      <span style="font-family: Georgia, 'Times New Roman', serif; font-style: italic; font-weight: 700; font-size: 19px; letter-spacing: 0.01em;">TransferLine</span>
+      <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11px; color: #5B5749; letter-spacing: 0.12em; text-transform: uppercase; border-left: 1px solid #C9BFA6; padding-left: 12px;">Transfer articulation</span>
+    </div>
+    <div style="display: flex; align-items: flex-end; gap: 6px;">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+        <button onClick="{{ s.go }}" style="display: flex; align-items: center; gap: 8.4px; padding: 8px 16px 9px; position: relative; top: 1px; border-radius: 6px 6px 0 0; border: 1px solid {{ s.border }}; border-bottom: none; background: {{ s.bg }}; color: {{ s.fg }}; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; letter-spacing: 0.03em; cursor: pointer; transition: background 0.18s ease, color 0.18s ease, padding-bottom 0.18s ease;" style-hover="color: #2A2823; padding-bottom: 12px;">
+          <span style="font-size: 11px; color: #6F6A58; font-variant-numeric: tabular-nums;">{{ s.n }}</span>
+          <span>{{ s.label }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+    <div style="max-width: 1080px; margin: 0 auto; padding: 67.2px 33.6px 89.6px; animation: riseIn 0.42s cubic-bezier(.22,.7,.2,1) both;">
+      <div style="max-width: 620px;">
+        
+        <h1 style="font-weight: 400; font-size: 46px; line-height: 1.16; margin: 0 0 16.8px;">Every course you still need, across every college you're applying to.</h1>
+        <p style="font-size: 16px; line-height: 1.6; color: #5B5749; margin: 0; text-wrap: pretty;">One articulation view instead of six browser tabs. TransferLine flags the requirements your community college doesn't offer at all, so you find out in August rather than in your last semester.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 320px 1fr; gap: 22.4px; margin-top: 44.8px; align-items: start;">
+        <div style="background: #F6F1E5; border-radius: 3px; box-shadow: 0 0 0 1px #C9BFA6; padding: 22.4px;">
+          <div style="font-size: 11px; font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A58; margin-bottom: 11.2px;">Your home college</div>
+          <select value="{{ homeCollege }}" onChange="{{ onHomeChange }}" style="width: 100%; padding: 10px 11.2px; font-size: 14px; color: #2A2823; background-color: #EDE6D4; border: 1px solid #C9BFA6; border-radius: 3px; cursor: pointer;">
+            <sc-for list="{{ homeOptions }}" as="h" hint-placeholder-count="5">
+              <option value="{{ h }}">{{ h }}</option>
+            </sc-for>
+          </select>
+          <sc-if value="{{ homeMapped }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top: 11.2px; font-size: 12px; color: #6F6A58; line-height: 1.55;">{{ homeMappedNote }}</div>
+          </sc-if>
+          <div style="margin-top: 22.4px; padding-top: 16.8px; border-top: 1px solid rgba(42,40,35,0.16); display: grid; gap: 11.2px;">
+            <div style="display: flex; justify-content: space-between; font-size: 13px; color: #5B5749;">
+              <span>Catalog year</span><span style="font-variant-numeric: tabular-nums; color: #2A2823;">2026–27</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; color: #5B5749;">
+              <span>Sources</span><span style="color: #2A2823;">ASSIST + catalogs</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 13px; color: #5B5749;">
+              <span>Term</span><span style="color: #2A2823;">Summer 2026</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="background: #F6F1E5; border-radius: 3px; box-shadow: 0 0 0 1px #C9BFA6; padding: 22.4px;">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 16.8px;">
+            <div style="font-size: 11px; font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A58;">Transfer targets</div>
+            <div style="font-size: 12px; color: #6F6A58; font-variant-numeric: tabular-nums;">{{ selectedCount }}</div>
+          </div>
+          <div style="display: grid; gap: 8.4px;">
+            <sc-for list="{{ targets }}" as="t" hint-placeholder-count="6">
+              <div style="border: 1px solid {{ t.border }}; background: {{ t.bg }}; border-radius: 3px; padding: 11.2px 14px; display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; animation: rowIn 0.36s cubic-bezier(.22,.7,.2,1) both; animation-delay: {{ t.delay }}; transition: background 0.2s ease, border-color 0.2s ease, transform 0.16s ease;" style-hover="transform: translateX(3px);">
+                <button onClick="{{ t.toggle }}" style="display: flex; align-items: center; gap: 11.2px; background: none; border: none; padding: 0; text-align: left; cursor: pointer; color: inherit;">
+                  <span style="width: 17px; height: 17px; border-radius: 2px; border: 1.5px solid {{ t.boxBorder }}; background: {{ t.boxBg }}; display: flex; align-items: center; justify-content: center; color: #E9EFE8; font-size: 11px; font-weight: 600; flex-shrink: 0; transition: background 0.18s ease, border-color 0.18s ease;"><span style="animation: markIn 0.22s cubic-bezier(.22,.7,.2,1) both;">{{ t.check }}</span></span>
+                  <span style="display: grid; gap: 2.8px;">
+                    <span style="font-size: 14px; font-weight: 500;">{{ t.name }}</span>
+                    <span style="font-size: 12px; color: #6F6A58;">{{ t.note }}</span>
+                  </span>
+                </button>
+                <sc-if value="{{ t.selected }}" hint-placeholder-val="{{ true }}">
+                  <select value="{{ t.major }}" onChange="{{ t.onMajor }}" style="padding: 6px 8.4px; font-size: 12px; color: #2A2823; background-color: #EDE6D4; border: 1px solid #C9BFA6; border-radius: 3px; cursor: pointer; width: 268px;">
+                    <sc-for list="{{ majors }}" as="m" hint-placeholder-count="4">
+                      <option value="{{ m }}">{{ m }}</option>
+                    </sc-for>
+                  </select>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 22.4px; margin-top: 33.6px;">
+        <button onClick="{{ goUpload }}" style="padding: 11.2px 22.4px; font-size: 14px; font-weight: 500; color: #243A2C; background: transparent; border: 1px solid #33503E; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;" style-hover="background: #E3EBE2; color: #1F3327;">Continue to records</button>
+        <span style="font-size: 13px; color: #6F6A58;">{{ homeSummary }}</span>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isUpload }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 1080px; margin: 0 auto; padding: 56px 33.6px 89.6px; animation: riseIn 0.42s cubic-bezier(.22,.7,.2,1) both;">
+      
+      <h1 style="font-weight: 400; font-size: 36px; line-height: 1.14; margin: 0 0 11.2px;">Add your records.</h1>
+      <p style="font-size: 15px; line-height: 1.6; color: #5B5749; margin: 0 0 33.6px; max-width: 540px;">Unofficial transcripts are fine. Everything we read stays editable — fix anything wrong before it reaches your results.</p>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16.8px;">
+        <div onDragOver="{{ onDragOverTr }}" onDragEnter="{{ onDragOverTr }}" onDragLeave="{{ onDragLeaveTr }}" onDrop="{{ onDropTr }}" style="background: {{ trCardBg }}; border-radius: 3px; box-shadow: 0 0 0 1px {{ trRing }}; padding: 22.4px; min-height: 190px; display: flex; flex-direction: column; justify-content: space-between; transition: background 0.15s ease;">
+          <div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 11.2px; margin-bottom: 5.6px;">
+              <div style="font-size: 14px; font-weight: 600;">Community college transcript</div>
+              <div style="font-size: 11px; color: #6F6A58; letter-spacing: 0.06em; text-transform: uppercase;">{{ trBadge }}</div>
+            </div>
+            <div style="font-size: 13px; color: {{ trHintFg }}; line-height: 1.55;">{{ trHint }}</div>
+          </div>
+
+          <input type="file" accept=".pdf,.txt,.csv,.tsv,.html,.htm" ref="{{ trInputRef }}" onChange="{{ onPickTr }}" style="display: none;" />
+
+          <sc-if value="{{ trParsing }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; align-items: center; gap: 11.2px; margin-top: 22.4px;">
+              <span style="width: 14px; height: 14px; border: 2px solid #C9BFA6; border-top-color: #33503E; border-radius: 50%; animation: spinner 0.7s linear infinite;"></span>
+              <span style="font-size: 13px; color: #5B5749;">{{ trProgress }}</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ trIdle }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; align-items: center; gap: 8.4px; margin-top: 22.4px;">
+              <button onClick="{{ browseTr }}" style="padding: 8.4px 16.8px; font-size: 13px; font-weight: 500; color: #243A2C; background: transparent; border: 1px solid #33503E; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;" style-hover="background: #E3EBE2;">Choose file</button>
+              <button onClick="{{ useSample }}" style="padding: 8.4px 14px; font-size: 13px; font-weight: 500; color: #5B5749; background: transparent; border: 1px solid #C9BFA6; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;" style-hover="border-color: #33503E; color: #2A2823;">Use sample</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ trSettled }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top: 22.4px; display: flex; align-items: center; justify-content: space-between; gap: 11.2px;">
+              <div style="display: flex; align-items: center; gap: 8.4px; font-size: 13px; color: {{ trFileFg }}; min-width: 0;">
+                <span style="width: 17px; height: 17px; border-radius: 50%; background: {{ trIconBg }}; color: #E9EFE8; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0;">{{ trIcon }}</span>
+                <span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ trFileName }}</span>
+              </div>
+              <button onClick="{{ browseTr }}" style="flex-shrink: 0; padding: 5px 11.2px; font-size: 12px; font-weight: 500; color: #5B5749; background: transparent; border: 1px solid #C9BFA6; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;" style-hover="border-color: #33503E; color: #2A2823;">Replace</button>
+            </div>
+          </sc-if>
+        </div>
+
+        <div onDragOver="{{ onDragOverAp }}" onDragEnter="{{ onDragOverAp }}" onDragLeave="{{ onDragLeaveAp }}" onDrop="{{ onDropAp }}" style="background: {{ apCardBg }}; border-radius: 3px; box-shadow: 0 0 0 1px {{ apRing }}; padding: 22.4px; min-height: 190px; display: flex; flex-direction: column; justify-content: space-between; transition: background 0.15s ease;">
+          <div>
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 11.2px; margin-bottom: 5.6px;">
+              <div style="font-size: 14px; font-weight: 600;">AP / IB score report</div>
+              <div style="font-size: 11px; color: #6F6A58; letter-spacing: 0.06em; text-transform: uppercase;">{{ apBadge }}</div>
+            </div>
+            <div style="font-size: 13px; color: {{ apHintFg }}; line-height: 1.55;">{{ apHint }}</div>
+          </div>
+
+          <input type="file" accept=".pdf,.txt,.csv,.tsv,.html,.htm" ref="{{ apInputRef }}" onChange="{{ onPickAp }}" style="display: none;" />
+
+          <sc-if value="{{ apParsing }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; align-items: center; gap: 11.2px; margin-top: 22.4px;">
+              <span style="width: 14px; height: 14px; border: 2px solid #C9BFA6; border-top-color: #33503E; border-radius: 50%; animation: spinner 0.7s linear infinite;"></span>
+              <span style="font-size: 13px; color: #5B5749;">Reading score report…</span>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ apIdle }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; align-items: center; gap: 8.4px; margin-top: 22.4px;">
+              <button onClick="{{ browseAp }}" style="padding: 8.4px 16.8px; font-size: 13px; font-weight: 500; color: #243A2C; background: transparent; border: 1px solid #33503E; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;" style-hover="background: #E3EBE2;">Upload report</button>
+              <button onClick="{{ enterAp }}" style="padding: 8.4px 14px; font-size: 13px; font-weight: 500; color: #5B5749; background: transparent; border: 1px solid #C9BFA6; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;" style-hover="border-color: #33503E; color: #2A2823;">Enter manually</button>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ apSettled }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top: 16.8px;">
+              <div style="display: flex; flex-wrap: wrap; gap: 5.6px;">
+                <sc-for list="{{ apScores }}" as="a" hint-placeholder-count="3">
+                  <span style="display: flex; align-items: center; gap: 8.4px; padding: 5px 8.4px 5px 11.2px; background: #F1E5CA; border: 1px solid #D8BE86; border-radius: 3px; font-size: 12px; color: #7A5714;">
+                    <span>{{ a.exam }}</span>
+                    <span style="font-weight: 600; font-variant-numeric: tabular-nums;">{{ a.score }}</span>
+                    <button onClick="{{ a.remove }}" style="width: 16px; height: 16px; border: none; border-radius: 3px; background: transparent; color: #A97A22; font-size: 13px; line-height: 1; cursor: pointer;" style-hover="color: #5C4210;">×</button>
+                  </span>
+                </sc-for>
+              </div>
+              <div style="display: flex; gap: 5.6px; margin-top: 11.2px;">
+                <input value="{{ apDraftExam }}" onChange="{{ onApExam }}" onKeyDown="{{ onApKey }}" placeholder="Exam name" style="flex: 1; min-width: 0; padding: 6px 8.4px; font-size: 12px; color: #2A2823; background: #EDE6D4; border: 1px solid #C9BFA6; border-radius: 3px;" />
+                <input value="{{ apDraftScore }}" onChange="{{ onApScore }}" onKeyDown="{{ onApKey }}" placeholder="1–5" style="width: 54px; padding: 6px 8.4px; font-size: 12px; color: #2A2823; background: #EDE6D4; border: 1px solid #C9BFA6; border-radius: 3px;" />
+                <button onClick="{{ addAp }}" style="padding: 6px 11.2px; font-size: 12px; font-weight: 500; color: #243A2C; background: transparent; border: 1px solid #8FA893; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;" style-hover="background: #E3EBE2; border-color: #33503E;">Add</button>
+                <button onClick="{{ browseAp }}" style="padding: 6px 11.2px; font-size: 12px; font-weight: 500; color: #5B5749; background: transparent; border: 1px solid #C9BFA6; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;" style-hover="border-color: #33503E; color: #2A2823;">Upload</button>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <sc-if value="{{ trSettled }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top: 33.6px; background: #F6F1E5; border-radius: 3px; box-shadow: 0 0 0 1px #C9BFA6; overflow: hidden;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 22.4px; padding: 16.8px 22.4px; border-bottom: 1px solid rgba(42,40,35,0.16);">
+            <div style="font-size: 14px; font-weight: 600;">Parsed course history</div>
+            <div style="display: flex; align-items: center; gap: 16.8px;">
+              <span style="font-size: 12px; color: #6F6A58; font-variant-numeric: tabular-nums;">{{ unitsTotal }} units · GPA {{ gpa }}</span>
+              <button onClick="{{ toggleAdd }}" style="padding: 5px 11.2px; font-size: 12px; font-weight: 500; color: #5B5749; background: transparent; border: 1px solid #C9BFA6; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;" style-hover="border-color: #33503E; color: #2A2823;">{{ addLabel }}</button>
+            </div>
+          </div>
+
+          <sc-if value="{{ adding }}" hint-placeholder-val="{{ false }}">
+            <div style="padding: 16.8px 22.4px; background: #E7DFC9; border-bottom: 1px solid rgba(42,40,35,0.16);">
+              <div style="font-size: 12px; color: #6F6A58; margin-bottom: 8.4px;">Add a course we missed</div>
+              <div style="display: flex; gap: 8.4px;">
+                <input value="{{ query }}" onChange="{{ onQuery }}" placeholder="Search Evergreen Valley College catalog…" style="flex: 1; padding: 8.4px 11.2px; font-size: 13px; color: #2A2823; background: #EDE6D4; border: 1px solid #C9BFA6; border-radius: 3px;" />
+              </div>
+              <div style="display: grid; gap: 2.8px; margin-top: 8.4px;">
+                <sc-for list="{{ matches }}" as="m" hint-placeholder-count="3">
+                  <button onClick="{{ m.add }}" style="display: grid; grid-template-columns: 96px 1fr auto; gap: 14px; align-items: center; text-align: left; padding: 8.4px 11.2px; background: transparent; border: 1px solid transparent; border-radius: 3px; cursor: pointer; color: #2A2823; font-size: 13px;" style-hover="background: #E3EBE2; border-color: #BFCFC3;">
+                    <span style="color: #33503E; font-variant-numeric: tabular-nums;">{{ m.code }}</span>
+                    <span>{{ m.title }}</span>
+                    <span style="color: #6F6A58; font-size: 12px;">{{ m.units }} units</span>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <div style="display: grid; grid-template-columns: 100px 1fr 84px 70px 34px; gap: 14px; padding: 8.4px 22.4px; background: #E7DFC9; border-bottom: 1px solid rgba(42,40,35,0.16); font-size: 11px; font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A58;">
+            <div>Course</div><div>Title</div><div>Term</div><div>Grade</div><div></div>
+          </div>
+          <sc-for list="{{ courses }}" as="c" hint-placeholder-count="8">
+            <div style="display: grid; grid-template-columns: 100px 1fr 84px 70px 34px; gap: 14px; padding: 11.2px 22.4px; background: {{ c.rowBg }}; border-bottom: 1px solid rgba(42,40,35,0.10); font-size: 13px; align-items: center; animation: rowIn 0.3s ease both; animation-delay: {{ c.delay }};">
+              <div style="color: #33503E; font-variant-numeric: tabular-nums;">{{ c.code }}</div>
+              <div>{{ c.title }}</div>
+              <div style="color: #6F6A58; font-size: 12px;">{{ c.term }}</div>
+              <div style="font-weight: 500; font-variant-numeric: tabular-nums; color: {{ c.gradeFg }};">{{ c.grade }}</div>
+              <button onClick="{{ c.remove }}" style="justify-self: end; width: 24px; height: 24px; border-radius: 3px; border: 1px solid transparent; background: transparent; color: #8C8571; font-size: 14px; cursor: pointer; line-height: 1;" style-hover="border-color: #8FA893; color: #243A2C;">×</button>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <div style="display: flex; align-items: center; gap: 22.4px; margin-top: 33.6px;">
+        <button onClick="{{ goResults }}" style="padding: 11.2px 22.4px; font-size: 14px; font-weight: 500; color: {{ ctaFg }}; background: transparent; border: 1px solid {{ ctaBorder }}; border-radius: 3px; cursor: {{ ctaCursor }}; opacity: {{ ctaOpacity }};" style-hover="background: #E3EBE2;">Run articulation</button>
+        <span style="font-size: 13px; color: #6F6A58;">{{ uploadSummary }}</span>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isResults }}" hint-placeholder-val="{{ false }}">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 56px 33.6px 112px; animation: riseIn 0.42s cubic-bezier(.22,.7,.2,1) both;">
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 33.6px; margin-bottom: 28px;">
+        <div>
+          
+          <h1 style="font-weight: 400; font-size: 36px; line-height: 1.14; margin: 0;">{{ resultsHeadline }}</h1>
+        </div>
+        <div style="font-size: 12px; color: #6F6A58; text-align: right; line-height: 1.7; flex-shrink: 0;">{{ homeCollege }}<br />Catalog 2026–27 · ASSIST</div>
+      </div>
+
+      <sc-if value="{{ hasGaps }}" hint-placeholder-val="{{ true }}">
+      <div style="border-radius: 3px; box-shadow: 0 0 0 1px #C99C90; background: #F3E3DD; padding: 22.4px; margin-bottom: 28px;">
+        <div style="display: flex; align-items: baseline; gap: 11.2px; margin-bottom: 5.6px;">
+          <span style="font-size: 26px; font-weight: 500; color: #9C3A2C; font-variant-numeric: tabular-nums;">{{ gapCount }}</span>
+          <span style="font-size: 15px; font-weight: 600; color: #9C3A2C;">requirements have no articulated course at {{ homeShort }}</span>
+        </div>
+        <p style="font-size: 13px; line-height: 1.6; color: #5B5749; margin: 0 0 16.8px; max-width: 660px;">These can't be satisfied at your home college under the current agreement. Cross-enrolling is the usual path. Every option below still needs sign-off from a counselor before you register.</p>
+        <div style="display: grid; gap: 11.2px;">
+          <sc-for list="{{ gaps }}" as="g" hint-placeholder-count="3">
+            <div style="background: #F6F1E5; border-radius: 3px; box-shadow: 0 0 0 1px #C9BFA6; padding: 16.8px; animation: rowIn 0.42s cubic-bezier(.22,.7,.2,1) both; animation-delay: {{ g.delay }};">
+              <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 16.8px; margin-bottom: 2.8px;">
+                <div style="font-size: 14px; font-weight: 600;">{{ g.title }}</div>
+                <div style="font-size: 11px; color: #9C3A2C; flex-shrink: 0; letter-spacing: 0.04em; text-transform: uppercase;">{{ g.blocks }}</div>
+              </div>
+              <div style="font-size: 12px; color: #6F6A58;">{{ g.equiv }}</div>
+              <sc-if value="{{ g.noAlts }}" hint-placeholder-val="{{ false }}">
+                <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(42,40,35,0.12); font-size: 13px; color: #6F6A58; line-height: 1.55;">{{ g.noAltsNote }}</div>
+              </sc-if>
+              <sc-if value="{{ g.hasAlts }}" hint-placeholder-val="{{ true }}">
+                <div style="display: grid; gap: 5.6px; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(42,40,35,0.12);">
+                  <sc-for list="{{ g.alts }}" as="alt" hint-placeholder-count="2">
+                    <div style="display: grid; grid-template-columns: 148px 1fr auto; gap: 14px; align-items: baseline; font-size: 13px;">
+                      <span style="color: #33503E;">{{ alt.college }}</span>
+                      <span>{{ alt.course }}</span>
+                      <span style="color: #6F6A58; font-size: 12px;">{{ alt.mode }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      </sc-if>
+
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16.8px; min-width: 0;">
+        <div style="display: flex; flex-wrap: wrap; gap: 5.6px; min-width: 0; flex: 1 1 520px;">
+          <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="2">
+            <button onClick="{{ tab.select }}" style="display: grid; gap: 2.8px; text-align: left; padding: 8.4px 14px; background: {{ tab.bg }}; border: 1px solid {{ tab.border }}; border-radius: 3px; cursor: pointer; color: {{ tab.fg }};" style-hover="border-color: #33503E;">
+              <span style="font-size: 13px; font-weight: 500;">{{ tab.name }}</span>
+              <span style="font-size: 11px; color: #6F6A58;">{{ tab.sub }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display: flex; gap: 2.8px; padding: 2.8px; background: #E7DFC9; border-radius: 3px; box-shadow: 0 0 0 1px #C9BFA6; flex-shrink: 0;">
+          <sc-for list="{{ views }}" as="v" hint-placeholder-count="3">
+            <button onClick="{{ v.select }}" style="padding: 6px 14px; font-size: 12px; font-weight: 500; border: none; border-radius: 3px; cursor: pointer; background: {{ v.bg }}; color: {{ v.fg }};">{{ v.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background: #F6F1E5; border-radius: 3px; box-shadow: 0 0 0 1px #C9BFA6; padding: 22.4px 28px 28px; margin-top: 11.2px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 33.6px; padding-bottom: 16.8px; border-bottom: 1px solid rgba(42,40,35,0.16);">
+          <div>
+            <div style="font-size: 18px; font-weight: 500; margin-bottom: 2.8px;">{{ activeName }}</div>
+            <div style="font-size: 12px; color: #6F6A58;">{{ activeMajor }} · {{ activeProgress }}</div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 16.8px; flex-shrink: 0;">
+            <sc-for list="{{ legend }}" as="l" hint-placeholder-count="4">
+              <div style="display: flex; align-items: center; gap: 5.6px; font-size: 12px; color: #5B5749;">
+                <span style="width: 7px; height: 7px; border-radius: 50%; background: {{ l.dot }};"></span>
+                <span>{{ l.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <sc-if value="{{ hasSummary }}" hint-placeholder-val="{{ true }}">
+          <div style="padding: 16.8px 0 5.6px;">
+            <div style="display: flex; gap: 2px; height: 10px; border-radius: 2px; overflow: hidden; background: #E7DFC9; transform-origin: left; animation: barIn 0.62s cubic-bezier(.22,.7,.2,1) both;">
+              <sc-for list="{{ summaryBar }}" as="b" hint-placeholder-count="3">
+                <div title="{{ b.label }}" style="flex: {{ b.grow }} 1 0; background: {{ b.bg }}; transition: flex-grow 0.5s cubic-bezier(.22,.7,.2,1);"></div>
+              </sc-for>
+            </div>
+            <div style="margin-top: 8.4px; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 11px; letter-spacing: 0.04em; color: #5B5749;">{{ summaryText }}</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isAreas }}" hint-placeholder-val="{{ true }}">
+          <div style="display: grid; gap: 0;">
+            <sc-for list="{{ areas }}" as="area" hint-placeholder-count="4">
+              <div style="padding: {{ area.pad }}; margin-bottom: {{ area.mb }}; background: {{ area.bg }}; border-radius: 3px; box-shadow: {{ area.ring }}; border-bottom: {{ area.rule }}; animation: rowIn 0.45s cubic-bezier(.22,.7,.2,1) both; animation-delay: {{ area.delay }}; transition: background 0.3s ease, box-shadow 0.3s ease;">
+                <div style="display: flex; align-items: baseline; gap: 11.2px; margin-bottom: 14px;">
+                  <div style="font-size: 11px; font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.1em; text-transform: uppercase; color: #33503E;">{{ area.name }}</div>
+                  <div style="flex: 1; height: 1px; background: linear-gradient(to right, rgba(42,40,35,0.14), transparent);"></div>
+                  <div style="font-size: 11px; font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.06em; color: {{ area.countFg }}; font-variant-numeric: tabular-nums;">{{ area.count }}</div>
+                </div>
+                <div style="display: grid; gap: 2.8px;">
+                  <sc-for list="{{ area.rows }}" as="r" hint-placeholder-count="4">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 132px; gap: 22.4px; align-items: center; padding: 8.4px 11.2px 8.4px 14px; border-left: 3px solid {{ r.stripe }}; border-radius: 0 3px 3px 0; background: {{ r.rowBg }}; animation: rowIn 0.38s cubic-bezier(.22,.7,.2,1) both; animation-delay: {{ r.delay }}; transition: transform 0.2s ease, box-shadow 0.2s ease;" style-hover="transform: translateX(4px);">
+                      <div style="display: grid; gap: 2px;">
+                        <div style="font-size: 13px; font-weight: 500;">{{ r.req }}</div>
+                        <div style="font-size: 12px; color: #6F6A58;">{{ r.reqTitle }}</div>
+                      </div>
+                      <div style="display: flex; align-items: baseline; gap: 8.4px;">
+                        <svg width="30" height="12" viewBox="0 0 30 12" aria-hidden="true" style="flex-shrink: 0; align-self: center; animation: stripeIn 0.5s ease both; animation-delay: {{ r.delay }};">
+                          <path d="M29 6 C 23 1.5, 19 1.5, 15 6 S 6 10.5, 1 6" fill="none" stroke="{{ r.stripe }}" stroke-width="1.5" stroke-dasharray="{{ r.dash }}" stroke-linecap="round"></path>
+                          <circle cx="29" cy="6" r="1.9" fill="{{ r.stripe }}"></circle>
+                          <circle cx="1" cy="6" r="1.9" fill="{{ r.endFill }}" stroke="{{ r.stripe }}" stroke-width="1"></circle>
+                        </svg>
+                        <div style="display: grid; gap: 2px;">
+                          <div style="font-size: 13px; color: {{ r.homeFg }};">{{ r.home }}</div>
+                          <div style="font-size: 12px; color: #6F6A58;">{{ r.homeTitle }}</div>
+                        </div>
+                      </div>
+                      <div style="justify-self: end; display: flex; align-items: center; gap: 5.6px; padding: 3px 10px; border-radius: 3px; background: {{ r.pillBg }}; border: 1px solid {{ r.pillBorder }}; font-size: 11px; font-weight: 500; color: {{ r.pillFg }};">
+                        <span style="width: 6px; height: 6px; border-radius: 50%; background: {{ r.dot }};"></span>
+                        <span>{{ r.status }}</span>
+                      </div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="font-size: 12px; color: #6F6A58; line-height: 1.6; margin-top: 16.8px; max-width: 620px;">{{ activeNote }}</div>
+        </sc-if>
+
+        <sc-if value="{{ noAreas }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 44.8px 0 33.6px; max-width: 520px;">
+            <div style="font-size: 15px; font-weight: 500; margin-bottom: 8.4px;">Not mapped yet</div>
+            <div style="font-size: 13px; color: #6F6A58; line-height: 1.65;">{{ unmappedNote }}</div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isPlan }}" hint-placeholder-val="{{ false }}">
+          <div style="display: grid; gap: 22.4px; padding-top: 22.4px;">
+            <sc-for list="{{ plan }}" as="term" hint-placeholder-count="2">
+              <div>
+                <div style="display: flex; align-items: baseline; gap: 11.2px; margin-bottom: 11.2px;">
+                  <div style="font-size: 14px; font-weight: 500;">{{ term.name }}</div>
+                  <div style="flex: 1; height: 1px; background: linear-gradient(to right, rgba(42,40,35,0.14), transparent);"></div>
+                  <div style="font-size: 12px; color: #6F6A58; font-variant-numeric: tabular-nums;">{{ term.units }} units</div>
+                </div>
+                <div style="display: grid; gap: 5.6px;">
+                  <sc-for list="{{ term.items }}" as="it" hint-placeholder-count="4">
+                    <div style="display: grid; grid-template-columns: 130px 1fr auto; gap: 16.8px; align-items: center; padding: 11.2px 14px; border-radius: 3px; background: {{ it.bg }}; box-shadow: 0 0 0 1px {{ it.ring }};">
+                      <div style="font-size: 13px; color: {{ it.codeFg }}; font-variant-numeric: tabular-nums;">{{ it.code }}</div>
+                      <div style="display: grid; gap: 2px;">
+                        <div style="font-size: 13px;">{{ it.title }}</div>
+                        <div style="font-size: 12px; color: #6F6A58;">{{ it.satisfies }}</div>
+                      </div>
+                      <div style="font-size: 11px; font-weight: 500; color: {{ it.tagFg }}; letter-spacing: 0.04em; text-transform: uppercase;">{{ it.tag }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ noPlan }}" hint-placeholder-val="{{ false }}">
+            <div style="padding: 44.8px 0 33.6px; max-width: 520px;">
+              <div style="font-size: 15px; font-weight: 500; margin-bottom: 8.4px;">No plan to show</div>
+              <div style="font-size: 13px; color: #6F6A58; line-height: 1.65;">{{ planEmptyNote }}</div>
+            </div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{ isTable }}" hint-placeholder-val="{{ false }}">
+          <div style="padding-top: 16.8px;">
+            <div style="display: grid; grid-template-columns: 1fr 34px 1fr 150px; gap: 16.8px; padding: 8.4px 11.2px 8.4px 17px; font-size: 11px; font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A58; border-bottom: 1px solid rgba(42,40,35,0.16);">
+              <div>Your record</div><div></div><div>Articulates to</div><div style="justify-self: end;">Status</div>
+            </div>
+            <sc-for list="{{ tableRows }}" as="row" hint-placeholder-count="8">
+              <div style="display: grid; grid-template-columns: 1fr 34px 1fr 150px; gap: 16.8px; align-items: center; padding: 11.2px 11.2px 11.2px 14px; border-left: 3px solid {{ row.stripe }}; border-bottom: 1px solid rgba(42,40,35,0.10); background: {{ row.rowBg }}; animation: rowIn 0.34s cubic-bezier(.22,.7,.2,1) both; animation-delay: {{ row.delay }}; transition: transform 0.2s ease;" style-hover="transform: translateX(4px);">
+                <div style="display: flex; align-items: baseline; gap: 8.4px;">
+                  <span style="font-size: 13px; color: #33503E; font-variant-numeric: tabular-nums;">{{ row.code }}</span>
+                  <span style="font-size: 12px; color: #5B5749;">{{ row.title }}</span>
+                </div>
+                <svg width="30" height="12" viewBox="0 0 30 12" aria-hidden="true" style="flex-shrink: 0;">
+                  <path d="M1 6 C 7 1.5, 11 1.5, 15 6 S 24 10.5, 29 6" fill="none" stroke="{{ row.stripe }}" stroke-width="1.5" stroke-dasharray="{{ row.dash }}" stroke-linecap="round"></path>
+                  <circle cx="1" cy="6" r="1.9" fill="{{ row.stripe }}"></circle>
+                  <circle cx="29" cy="6" r="1.9" fill="{{ row.endFill }}" stroke="{{ row.stripe }}" stroke-width="1"></circle>
+                </svg>
+                <div style="font-size: 13px; color: {{ row.toFg }};">{{ row.to }}</div>
+                <div style="justify-self: end; display: flex; align-items: center; gap: 5.6px; padding: 3px 10px; border-radius: 3px; background: {{ row.pillBg }}; border: 1px solid {{ row.pillBorder }}; font-size: 11px; font-weight: 500; color: {{ row.pillFg }};">
+                  <span style="width: 6px; height: 6px; border-radius: 50%; background: {{ row.dot }};"></span>
+                  <span>{{ row.status }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 16.8px; margin-top: 28px;">
+        <button onClick="{{ goHome }}" style="padding: 8.4px 16.8px; font-size: 13px; font-weight: 500; color: #5B5749; background: transparent; border: 1px solid #C9BFA6; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;" style-hover="border-color: #33503E; color: #2A2823;">Change colleges</button>
+        <button onClick="{{ noop }}" style="padding: 8.4px 16.8px; font-size: 13px; font-weight: 500; color: #243A2C; background: transparent; border: 1px solid #33503E; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;" style-hover="background: #E3EBE2;">Send to counselor for review</button>
+        <span style="font-size: 12px; color: #6F6A58;">Articulation is advisory until confirmed by transfer admissions.</span>
+      </div>
+    </div>
+  </sc-if>
+  </div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showAlternatives&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#33503E&quot;,&quot;options&quot;:[&quot;#33503E&quot;,&quot;#4A6E56&quot;,&quot;#33503E&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
+const C = {
+  bg: '#EDE6D4', surface: '#F6F1E5', text: '#2A2823',
+  n900: '#E1D8C0', n800: '#C9BFA6', n700: '#8C8571', n600: '#6F6A58', n400: '#5B5749',
+  a: '#33503E', a300: '#243A2C', a400: '#33503E', a500: '#4A6E56', a700: '#8FA893', a800: '#BFCFC3', a900: '#E3EBE2',
+  flag: '#9C3A2C', flagBg: '#F3E3DD', flagRing: '#C99C90'
+};
+
+const HOME_OPTIONS = [
+  'American River College',
+  'Berkeley City College',
+  'Cabrillo College',
+  'Cañada College',
+  'Chabot College',
+  'City College of San Francisco',
+  'College of Alameda',
+  'College of Marin',
+  'College of San Mateo',
+  'College of the Sequoias',
+  'Contra Costa College',
+  'Cosumnes River College',
+  'Cuesta College',
+  'De Anza College',
+  'Diablo Valley College',
+  'East Los Angeles College',
+  'El Camino College',
+  'Evergreen Valley College',
+  'Foothill College',
+  'Fresno City College',
+  'Fullerton College',
+  'Gavilan College',
+  'Glendale Community College',
+  'Hartnell College',
+  'Irvine Valley College',
+  'Laney College',
+  'Long Beach City College',
+  'Los Angeles City College',
+  'Los Angeles Pierce College',
+  'Los Medanos College',
+  'Merritt College',
+  'Mission College',
+  'Modesto Junior College',
+  'Monterey Peninsula College',
+  'Moorpark College',
+  'Mt. San Antonio College',
+  'Napa Valley College',
+  'Ohlone College',
+  'Orange Coast College',
+  'Palomar College',
+  'Pasadena City College',
+  'Riverside City College',
+  'Sacramento City College',
+  'Saddleback College',
+  'San Bernardino Valley College',
+  'San Diego City College',
+  'San Diego Mesa College',
+  'San Joaquin Delta College',
+  'San José City College',
+  'Santa Ana College',
+  'Santa Barbara City College',
+  'Santa Monica College',
+  'Santa Rosa Junior College',
+  'Shasta College',
+  'Sierra College',
+  'Skyline College',
+  'Solano Community College',
+  'Southwestern College',
+  'Ventura College',
+  'West Valley College'
+];
+const MAJORS = [
+  'Accounting, B.S.',
+  'Aerospace Engineering, B.S.',
+  'African American Studies, B.A.',
+  'Agricultural Business, B.S.',
+  'Animal Science, B.S.',
+  'Anthropology, B.A.',
+  'Applied Mathematics, B.S.',
+  'Architecture, B.Arch.',
+  'Art History, B.A.',
+  'Asian American Studies, B.A.',
+  'Astrophysics, B.S.',
+  'Biochemistry, B.S.',
+  'Bioengineering, B.S.',
+  'Biology, B.S.',
+  'Biomedical Engineering, B.S.',
+  'Business Administration, B.S.',
+  'Chemical Engineering, B.S.',
+  'Chemistry, B.S.',
+  'Chicano & Latino Studies, B.A.',
+  'Child & Adolescent Development, B.A.',
+  'Civil Engineering, B.S.',
+  'Cognitive Science, B.S.',
+  'Communication Studies, B.A.',
+  'Computer Engineering, B.S.',
+  'Computer Science, B.A.',
+  'Computer Science, B.S.',
+  'Construction Management, B.S.',
+  'Criminal Justice, B.S.',
+  'Dance, B.F.A.',
+  'Data Science, B.S.',
+  'Design Studies, B.A.',
+  'Earth & Planetary Science, B.S.',
+  'Economics, B.A.',
+  'Electrical Engineering, B.S.',
+  'Electrical Eng. & Computer Sci., B.S.',
+  'Elementary Education, B.A.',
+  'English, B.A.',
+  'Environmental Engineering, B.S.',
+  'Environmental Science, B.S.',
+  'Environmental Studies, B.A.',
+  'Ethnic Studies, B.A.',
+  'Film & Media Studies, B.A.',
+  'Finance, B.S.',
+  'Forestry & Natural Resources, B.S.',
+  'Gender & Sexuality Studies, B.A.',
+  'Geography, B.A.',
+  'Geology, B.S.',
+  'Global Studies, B.A.',
+  'Graphic Design, B.F.A.',
+  'History, B.A.',
+  'Hospitality Management, B.S.',
+  'Human Biology, B.S.',
+  'Industrial Engineering, B.S.',
+  'Information Science, B.S.',
+  'Interior Design, B.F.A.',
+  'International Business, B.S.',
+  'Journalism, B.S.',
+  'Kinesiology, B.S.',
+  'Landscape Architecture, B.L.A.',
+  'Legal Studies, B.A.',
+  'Liberal Studies, B.A.',
+  'Linguistics, B.A.',
+  'Management Information Systems, B.S.',
+  'Marketing, B.S.',
+  'Materials Science & Engineering, B.S.',
+  'Mathematics, B.A.',
+  'Mathematics, B.S.',
+  'Mechanical Engineering, B.S.',
+  'Microbiology, B.S.',
+  'Molecular & Cell Biology, B.S.',
+  'Music, B.A.',
+  'Music Performance, B.M.',
+  'Neuroscience, B.S.',
+  'Nursing, B.S.N.',
+  'Nutritional Science, B.S.',
+  'Philosophy, B.A.',
+  'Physics, B.S.',
+  'Political Science, B.A.',
+  'Psychology, B.A.',
+  'Public Health, B.S.',
+  'Public Policy, B.A.',
+  'Religious Studies, B.A.',
+  'Social Work, B.A.',
+  'Sociology, B.A.',
+  'Software Engineering, B.S.',
+  'Spanish, B.A.',
+  'Special Education, B.A.',
+  'Speech-Language Pathology, B.S.',
+  'Statistics, B.S.',
+  'Studio Art, B.A.',
+  'Supply Chain Management, B.S.',
+  'Sustainable Environmental Design, B.S.',
+  'Theatre Arts, B.A.',
+  'Urban Studies & Planning, B.A.'
+];
+
+const TARGETS = [
+  { id: 'pomona', name: 'Cal Poly Pomona', note: 'Impacted major — supplemental criteria apply', major: 'Computer Science, B.S.' },
+  { id: 'calpoly', name: 'Cal Poly San Luis Obispo', note: 'No major prep listed on ASSIST', major: 'Computer Science, B.S.' },
+  { id: 'eastbay', name: 'CSU East Bay', note: 'ADT pathway available', major: 'Computer Science, B.S.' },
+  { id: 'sac', name: 'Sacramento State', note: 'ADT pathway available', major: 'Computer Science, B.S.' },
+  { id: 'sdsu', name: 'San Diego State University', note: 'Impacted campus — local priority applies', major: 'Computer Science, B.S.' },
+  { id: 'sfsu', name: 'San Francisco State University', note: 'ADT pathway available', major: 'Computer Science, B.S.' },
+  { id: 'sjsu', name: 'San José State University', note: 'ADT pathway available', major: 'Computer Science, B.S.' },
+  { id: 'scu', name: 'Santa Clara University', note: 'Private — articulation by petition', major: 'Computer Science, B.S.' },
+  { id: 'stanford', name: 'Stanford University', note: 'Private — no ASSIST agreement', major: 'Computer Science, B.S.' },
+  { id: 'berkeley', name: 'UC Berkeley', note: 'ASSIST agreement current through 2026–27', major: 'Electrical Eng. & Computer Sci., B.S.' },
+  { id: 'davis', name: 'UC Davis', note: 'ASSIST agreement current', major: 'Computer Science, B.S.' },
+  { id: 'irvine', name: 'UC Irvine', note: 'Major prep required for admission review', major: 'Computer Science, B.S.' },
+  { id: 'merced', name: 'UC Merced', note: 'ASSIST agreement current', major: 'Computer Science, B.S.' },
+  { id: 'riverside', name: 'UC Riverside', note: 'ASSIST agreement current', major: 'Computer Science, B.S.' },
+  { id: 'ucsd', name: 'UC San Diego', note: 'Capped major — admitted by major', major: 'Computer Science, B.S.' },
+  { id: 'ucsb', name: 'UC Santa Barbara', note: 'Major prep required for admission review', major: 'Computer Science, B.S.' },
+  { id: 'ucsc', name: 'UC Santa Cruz', note: 'ASSIST agreement current', major: 'Computer Science, B.S.' },
+  { id: 'ucla', name: 'UCLA', note: 'Major prep differs by school', major: 'Computer Science, B.S.' },
+  { id: 'usc', name: 'USC', note: 'Private — articulation history on file', major: 'Computer Science, B.S.' }
+];
+
+const COURSES = [
+  { code: 'MATH 071', title: 'Calculus I', units: 5, grade: 'A', term: 'Fa 2024' },
+  { code: 'MATH 072', title: 'Calculus II', units: 5, grade: 'B+', term: 'Sp 2025' },
+  { code: 'CS 073', title: 'Programming in Python', units: 4, grade: 'A', term: 'Fa 2024' },
+  { code: 'CS 076', title: 'Object-Oriented Programming in C++', units: 4, grade: 'B+', term: 'Sp 2025' },
+  { code: 'ENGL 001A', title: 'English Composition', units: 3, grade: 'A−', term: 'Fa 2024' },
+  { code: 'PHYS 004A', title: 'Physics for Scientists & Engineers I', units: 5, grade: 'B', term: 'Fa 2025' },
+  { code: 'COMM 020', title: 'Oral Communication', units: 3, grade: 'A', term: 'Sp 2025' },
+  { code: 'MATH 079', title: 'Linear Algebra', units: 3, grade: 'IP', term: 'Su 2026' }
+];
+
+const CATALOG = [
+  { code: 'MATH 073', title: 'Calculus III (Multivariable)', units: 5 },
+  { code: 'MATH 019', title: 'Discrete Mathematics', units: 3 },
+  { code: 'CS 084', title: 'Data Structures & Algorithms', units: 4 },
+  { code: 'ENGL 001B', title: 'Composition & Critical Thinking', units: 3 },
+  { code: 'PHYS 004B', title: 'Physics for Scientists & Engineers II', units: 5 },
+  { code: 'HIST 017A', title: 'United States History', units: 3 },
+  { code: 'PSYCH 001', title: 'General Psychology', units: 3 },
+  { code: 'MATH 063', title: 'Elementary Statistics', units: 4 },
+  { code: 'MATH 080', title: 'Differential Equations', units: 3 },
+  { code: 'PHYS 004C', title: 'Physics for Scientists & Engineers III', units: 5 },
+  { code: 'BIOL 021', title: 'General Biology I', units: 5 },
+  { code: 'BIOL 022', title: 'General Biology II', units: 5 },
+  { code: 'BIOL 048', title: 'General Microbiology', units: 5 },
+  { code: 'BIOL 071', title: 'Human Anatomy', units: 5 },
+  { code: 'BIOL 072', title: 'Human Physiology', units: 5 },
+  { code: 'CHEM 001A', title: 'General Chemistry I', units: 5 },
+  { code: 'CHEM 001B', title: 'General Chemistry II', units: 5 },
+  { code: 'CHEM 012A', title: 'Organic Chemistry I', units: 5 },
+  { code: 'ECON 010A', title: 'Principles of Macroeconomics', units: 3 },
+  { code: 'ECON 010B', title: 'Principles of Microeconomics', units: 3 },
+  { code: 'ACCTG 020', title: 'Financial Accounting', units: 4 },
+  { code: 'ACCTG 021', title: 'Managerial Accounting', units: 4 },
+  { code: 'BUS 028', title: 'Business Law', units: 3 },
+  { code: 'CIT 010', title: 'Business Information Systems', units: 3 },
+  { code: 'PSYCH 010', title: 'Research Methods in Psychology', units: 4 },
+  { code: 'PSYCH 030', title: 'Developmental Psychology', units: 3 },
+  { code: 'SOC 010', title: 'Introduction to Sociology', units: 3 },
+  { code: 'ENGL 001C', title: 'Critical Thinking & Writing', units: 3 },
+  { code: 'ENGL 040', title: 'Introduction to Literature', units: 3 },
+  { code: 'ENGR 010', title: 'Introduction to Engineering', units: 3 },
+  { code: 'ENGR 035', title: 'Statics', units: 3 },
+  { code: 'ENGR 045', title: 'Properties of Materials', units: 3 },
+  { code: 'NUTR 010', title: 'Principles of Nutrition', units: 3 }
+];
+
+const AP = [
+  { exam: 'Calculus BC', score: 5 },
+  { exam: 'Computer Science A', score: 4 },
+  { exam: 'English Language', score: 3 }
+];
+
+const ARCH_ALTS = [
+  { college: 'De Anza College', course: 'CIS 21JA + 21JB — Assembly & Machine Organization', mode: 'In person · 25 min' },
+  { college: 'Foothill College', course: 'C S 45C — Computer Architecture', mode: 'Online · Fall' },
+  { college: 'Mission College', course: 'CSC 020 — Computer Architecture & Organization', mode: 'In person · 20 min' }
+];
+
+const GAP_INFO = {
+  'CS 61C': { equiv: 'No articulated course at Evergreen Valley College. Required before the EECS upper division.', alts: ARCH_ALTS },
+  'EECS 16A': { equiv: 'Not articulated by any California community college. Berkeley admits without it; expect it in your first term after transfer.', alts: [
+    { college: 'After transfer', course: 'Take Fall of junior year — adds one term to the plan', mode: 'Advisory' }
+  ] },
+  'CS 47': { equiv: 'No articulated course at Evergreen Valley College.', alts: [
+    { college: 'Mission College', course: 'CSC 020 — Computer Architecture & Organization', mode: 'In person · 20 min' },
+    { college: 'West Valley College', course: 'CS 020A — Assembly Language', mode: 'Online · Spring' }
+  ] },
+  'ECS 050': { equiv: 'No articulated course at Evergreen Valley College, and none statewide for the Davis version.', alts: ARCH_ALTS },
+  'COM SCI 33': { equiv: 'No articulated course at Evergreen Valley College.', alts: ARCH_ALTS }
+};
+
+['I&C SCI 51', 'CS 061', 'CSE 30', 'CMPSC 64', 'CSE 12', 'CS 237', 'CSC 256', 'CSC 35', 'CS 240', 'CS 2640', 'CPE 225', 'COEN 20', 'EE 109', 'CS 107'].forEach(code => {
+  GAP_INFO[code] = { equiv: 'No articulated course at Evergreen Valley College. Systems and architecture courses are the most common statewide gap.', alts: ARCH_ALTS };
+});
+
+// Terse row form: [requirement, title, EVC code or null for a gap, AP exam, AP min]
+function A(name, rows) {
+  return { name: name, rows: rows.map(r => ({
+    req: r[0], reqTitle: r[1],
+    // r[2] may be an array — ASSIST's "or" options, any one of which satisfies.
+    home: r[2] || 'No equivalent',
+    homeTitle: r[2] ? '' : 'Nothing articulates at EVC',
+    status: r[2] ? '' : 'No course',
+    kind: r[2] ? 'done' : 'gap',
+    ap: r[3] ? { exam: r[3], min: r[4] } : undefined
+  })) };
+}
+
+const CALC = 'Calculus BC';
+const ENGA = 'English Language';
+
+const AREAS = {
+  berkeley: [
+    { name: 'Mathematics', rows: [
+      { req: 'MATH 1A', reqTitle: 'Calculus', home: 'MATH 071', homeTitle: 'Calculus I · A', status: 'Cleared', kind: 'done', ap: { exam: 'Calculus BC', min: 3 } },
+      { req: 'MATH 1B', reqTitle: 'Calculus', home: 'MATH 072', homeTitle: 'Calculus II · B+', status: 'Cleared', kind: 'done', ap: { exam: 'Calculus BC', min: 5 } },
+      { req: 'MATH 53', reqTitle: 'Multivariable Calculus', home: 'MATH 073', homeTitle: 'Offered — not yet taken', status: 'To take', kind: 'needed' },
+      { req: 'MATH 54', reqTitle: 'Linear Algebra & Differential Equations', home: 'MATH 079', homeTitle: 'In progress · Su 2026', status: 'In progress', kind: 'progress' }
+    ]},
+    { name: 'Major preparation — EECS', rows: [
+      { req: 'CS 61A', reqTitle: 'Structure & Interpretation of Programs', home: ['CS 073', 'CS 076'], homeTitle: '', status: '', kind: 'done' },
+      { req: 'CS 61B', reqTitle: 'Data Structures', home: 'CS 084', homeTitle: 'Offered — not yet taken', status: 'To take', kind: 'needed' },
+      { req: 'CS 61C', reqTitle: 'Great Ideas in Computer Architecture', home: 'No equivalent', homeTitle: 'Nothing articulates at EVC', status: 'No course', kind: 'gap' },
+      { req: 'EECS 16A', reqTitle: 'Designing Information Devices & Systems I', home: 'No equivalent', homeTitle: 'Not articulated by any CCC', status: 'No course', kind: 'gap' }
+    ]},
+    { name: 'Physics', rows: [
+      { req: 'PHYSICS 7A', reqTitle: 'Mechanics & Wave Motion', home: 'PHYS 004A', homeTitle: 'Physics I · B', status: 'Cleared', kind: 'done' },
+      { req: 'PHYSICS 7B', reqTitle: 'Heat, Electricity & Magnetism', home: 'PHYS 004B', homeTitle: 'Offered — not yet taken', status: 'To take', kind: 'needed' }
+    ]},
+    { name: 'Reading & Composition', rows: [
+      { req: 'R&C Part A', reqTitle: 'Written composition', home: 'ENGL 001A', homeTitle: 'English Composition · A−', status: 'Cleared', kind: 'done', ap: { exam: 'English Language', min: 4 } },
+      { req: 'R&C Part B', reqTitle: 'Composition & critical thinking', home: ['ENGL 001B', 'ENGL 001C'], homeTitle: '', status: '', kind: 'needed' }
+    ]}
+  ],
+  irvine: [
+    A('Mathematics', [
+      ['MATH 2A', 'Single-Variable Calculus I', 'MATH 071', CALC, 3],
+      ['MATH 2B', 'Single-Variable Calculus II', 'MATH 072', CALC, 4],
+      ['MATH 2D', 'Multivariable Calculus', 'MATH 073'],
+      ['MATH 3A', 'Introduction to Linear Algebra', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['I&C SCI 31', 'Introduction to Programming', ['CS 073', 'CS 076']],
+      ['I&C SCI 33', 'Intermediate Programming', 'CS 076'],
+      ['I&C SCI 46', 'Data Structure Implementation', 'CS 084'],
+      ['I&C SCI 51', 'Introduction to Computer Organization', null]
+    ]),
+    A('Writing', [
+      ['Lower-division writing', 'English composition', 'ENGL 001A', ENGA, 3],
+      ['Second writing course', 'Critical reading & writing', ['ENGL 001B', 'ENGL 001C']]
+    ]),
+    A('Science', [
+      ['PHYSICS 7C', 'Classical Physics', 'PHYS 004A']
+    ])
+  ],
+  merced: [
+    A('Mathematics', [
+      ['MATH 021', 'Calculus I', 'MATH 071', CALC, 3],
+      ['MATH 022', 'Calculus II', 'MATH 072', CALC, 4],
+      ['MATH 023', 'Vector Calculus', 'MATH 073'],
+      ['MATH 024', 'Linear Algebra & Differential Equations', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science & Engineering', [
+      ['CSE 020', 'Introduction to Computing I', 'CS 073'],
+      ['CSE 022', 'Introduction to Computing II', 'CS 076'],
+      ['CSE 024', 'Advanced Programming', 'CS 084'],
+      ['CSE 015', 'Discrete Mathematics', 'MATH 019']
+    ]),
+    A('Writing', [
+      ['WRI 010', 'College Reading & Composition', 'ENGL 001A', ENGA, 3],
+      ['WRI 100', 'Second composition', 'ENGL 001B']
+    ]),
+    A('Science', [
+      ['PHYS 008', 'Introductory Physics I', 'PHYS 004A'],
+      ['PHYS 009', 'Introductory Physics II', 'PHYS 004B']
+    ])
+  ],
+  riverside: [
+    A('Mathematics', [
+      ['MATH 009A', 'First-Year Calculus', 'MATH 071', CALC, 3],
+      ['MATH 009B', 'First-Year Calculus', 'MATH 072', CALC, 4],
+      ['MATH 009C', 'First-Year Calculus', 'MATH 073'],
+      ['MATH 031', 'Applied Linear Algebra', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['CS 010A', 'Introduction to Computer Science I', 'CS 073'],
+      ['CS 010B', 'Introduction to Computer Science II', 'CS 076'],
+      ['CS 010C', 'Introduction to Data Structures', 'CS 084'],
+      ['CS 061', 'Machine Organization & Assembly', null]
+    ]),
+    A('Writing', [
+      ['ENGL 001A', 'Beginning Composition', 'ENGL 001A', ENGA, 3],
+      ['ENGL 001B', 'Intermediate Composition', 'ENGL 001B']
+    ]),
+    A('Science', [
+      ['PHYS 040A', 'General Physics', 'PHYS 004A']
+    ])
+  ],
+  ucsd: [
+    A('Mathematics', [
+      ['MATH 20A', 'Calculus for Science & Engineering', 'MATH 071', CALC, 3],
+      ['MATH 20B', 'Calculus for Science & Engineering', 'MATH 072', CALC, 4],
+      ['MATH 20C', 'Calculus & Analytic Geometry', 'MATH 073'],
+      ['MATH 18', 'Linear Algebra', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['CSE 8A', 'Introduction to Programming', ['CS 073', 'CS 076']],
+      ['CSE 12', 'Basic Data Structures', 'CS 084'],
+      ['CSE 20', 'Discrete Mathematics', 'MATH 019'],
+      ['CSE 30', 'Computer Organization & Systems Programming', null]
+    ]),
+    A('Writing', [
+      ['Lower-division writing', 'English composition', 'ENGL 001A', ENGA, 3],
+      ['Second writing course', 'Critical reading & writing', 'ENGL 001B']
+    ]),
+    A('Science', [
+      ['PHYS 2A', 'Mechanics', 'PHYS 004A'],
+      ['PHYS 2B', 'Electricity & Magnetism', 'PHYS 004B']
+    ])
+  ],
+  ucsb: [
+    A('Mathematics', [
+      ['MATH 3A', 'Calculus with Applications', 'MATH 071', CALC, 3],
+      ['MATH 3B', 'Calculus with Applications', 'MATH 072', CALC, 4],
+      ['MATH 4A', 'Linear Algebra', 'MATH 079'],
+      ['MATH 6A', 'Vector Calculus', 'MATH 073']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['CMPSC 16', 'Problem Solving I', 'CS 073'],
+      ['CMPSC 24', 'Problem Solving II', 'CS 084'],
+      ['CMPSC 40', 'Foundations of Computer Science', 'MATH 019'],
+      ['CMPSC 64', 'Computer Organization & Logic Design', null]
+    ]),
+    A('Writing', [
+      ['Writing 2', 'Academic writing', 'ENGL 001A', ENGA, 3],
+      ['Second writing course', 'Critical reading & writing', 'ENGL 001B']
+    ]),
+    A('Science', [
+      ['PHYS 1', 'Basic Physics', 'PHYS 004A'],
+      ['PHYS 2', 'Basic Physics', 'PHYS 004B']
+    ])
+  ],
+  ucsc: [
+    A('Mathematics', [
+      ['MATH 19A', 'Calculus for Science & Engineering', 'MATH 071', CALC, 3],
+      ['MATH 19B', 'Calculus for Science & Engineering', 'MATH 072', CALC, 4],
+      ['MATH 23A', 'Vector Calculus', 'MATH 073'],
+      ['AM 10', 'Mathematical Methods — Linear Algebra', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['CSE 20', 'Beginning Programming in Python', 'CS 073'],
+      ['CSE 30', 'Programming Abstractions', 'CS 076'],
+      ['CSE 13S', 'Computer Systems & C Programming', 'CS 084'],
+      ['CSE 12', 'Computer Systems & Assembly Language', null]
+    ]),
+    A('Writing', [
+      ['Composition', 'Entry-level writing', 'ENGL 001A', ENGA, 3],
+      ['Composition 2', 'Critical reading & writing', 'ENGL 001B']
+    ]),
+    A('Science', [
+      ['PHYS 5A', 'Introduction to Physics', 'PHYS 004A']
+    ])
+  ],
+  sdsu: [
+    A('Mathematics', [
+      ['MATH 150', 'Calculus I', 'MATH 071', CALC, 3],
+      ['MATH 151', 'Calculus II', 'MATH 072', CALC, 4],
+      ['MATH 252', 'Calculus III', 'MATH 073'],
+      ['MATH 254', 'Introduction to Linear Algebra', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['CS 150', 'Programming Fundamentals', 'CS 073'],
+      ['CS 210', 'Data Structures', 'CS 084'],
+      ['CS 160', 'Discrete Mathematics', 'MATH 019'],
+      ['CS 237', 'Machine Organization & Assembly', null]
+    ]),
+    A('Golden Four', [
+      ['Area A1', 'Oral communication', 'COMM 020'],
+      ['Area A2', 'Written communication', 'ENGL 001A'],
+      ['Area A3', 'Critical thinking', 'ENGL 001B'],
+      ['Area B4', 'Quantitative reasoning', 'MATH 071', CALC, 3]
+    ]),
+    A('Science', [
+      ['PHYS 195', 'Principles of Physics', 'PHYS 004A']
+    ])
+  ],
+  sfsu: [
+    A('Mathematics', [
+      ['MATH 226', 'Calculus I', 'MATH 071', CALC, 3],
+      ['MATH 227', 'Calculus II', 'MATH 072', CALC, 4],
+      ['MATH 228', 'Calculus III', 'MATH 073'],
+      ['MATH 325', 'Linear Algebra', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['CSC 210', 'Introduction to Computer Programming', 'CS 073'],
+      ['CSC 220', 'Data Structures', 'CS 084'],
+      ['CSC 230', 'Discrete Mathematical Structures', 'MATH 019'],
+      ['CSC 256', 'Machine Structures', null]
+    ]),
+    A('Golden Four', [
+      ['Area A1', 'Oral communication', 'COMM 020'],
+      ['Area A2', 'Written communication', 'ENGL 001A'],
+      ['Area A3', 'Critical thinking', 'ENGL 001B'],
+      ['Area B4', 'Quantitative reasoning', 'MATH 071', CALC, 3]
+    ]),
+    A('Science', [
+      ['PHYS 220', 'General Physics with Calculus', 'PHYS 004A']
+    ])
+  ],
+  sac: [
+    A('Mathematics', [
+      ['MATH 30', 'Calculus I', 'MATH 071', CALC, 3],
+      ['MATH 31', 'Calculus II', 'MATH 072', CALC, 4],
+      ['MATH 32', 'Calculus III', 'MATH 073'],
+      ['MATH 35', 'Introduction to Linear Algebra', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['CSC 15', 'Programming Concepts & Methodology I', 'CS 073'],
+      ['CSC 20', 'Programming Concepts & Methodology II', 'CS 084'],
+      ['CSC 28', 'Discrete Structures', 'MATH 019'],
+      ['CSC 35', 'Introduction to Computer Architecture', null]
+    ]),
+    A('Golden Four', [
+      ['Area A1', 'Oral communication', 'COMM 020'],
+      ['Area A2', 'Written communication', 'ENGL 001A'],
+      ['Area A3', 'Critical thinking', 'ENGL 001B'],
+      ['Area B4', 'Quantitative reasoning', 'MATH 071', CALC, 3]
+    ]),
+    A('Science', [
+      ['PHYS 11A', 'General Physics — Mechanics', 'PHYS 004A']
+    ])
+  ],
+  eastbay: [
+    A('Mathematics', [
+      ['MATH 130', 'Calculus I', 'MATH 071', CALC, 3],
+      ['MATH 131', 'Calculus II', 'MATH 072', CALC, 4],
+      ['MATH 230', 'Calculus III', 'MATH 073'],
+      ['MATH 240', 'Introduction to Linear Algebra', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['CS 119', 'Introduction to Programming', 'CS 073'],
+      ['CS 201', 'Data Structures', 'CS 084'],
+      ['CS 224', 'Discrete Structures', 'MATH 019'],
+      ['CS 240', 'Computer Organization & Assembly', null]
+    ]),
+    A('Golden Four', [
+      ['Area A1', 'Oral communication', 'COMM 020'],
+      ['Area A2', 'Written communication', 'ENGL 001A'],
+      ['Area A3', 'Critical thinking', 'ENGL 001B'],
+      ['Area B4', 'Quantitative reasoning', 'MATH 071', CALC, 3]
+    ]),
+    A('Science', [
+      ['PHYS 110', 'General Physics I', 'PHYS 004A']
+    ])
+  ],
+  pomona: [
+    A('Mathematics', [
+      ['MAT 1140', 'Calculus I', 'MATH 071', CALC, 3],
+      ['MAT 1150', 'Calculus II', 'MATH 072', CALC, 4],
+      ['MAT 2140', 'Calculus III', 'MATH 073'],
+      ['MAT 2250', 'Linear Algebra', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['CS 1300', 'Introduction to Programming', 'CS 073'],
+      ['CS 2300', 'Data Structures & Algorithms', 'CS 084'],
+      ['CS 2400', 'Discrete Structures', 'MATH 019'],
+      ['CS 2640', 'Computer Organization & Assembly', null]
+    ]),
+    A('Golden Four', [
+      ['Area A1', 'Oral communication', 'COMM 020'],
+      ['Area A2', 'Written communication', 'ENGL 001A'],
+      ['Area A3', 'Critical thinking', 'ENGL 001B'],
+      ['Area B4', 'Quantitative reasoning', 'MATH 071', CALC, 3]
+    ]),
+    A('Science', [
+      ['PHY 1510', 'General Physics', 'PHYS 004A']
+    ])
+  ],
+  calpoly: [
+    A('Mathematics', [
+      ['MATH 141', 'Calculus I', 'MATH 071', CALC, 3],
+      ['MATH 142', 'Calculus II', 'MATH 072', CALC, 4],
+      ['MATH 143', 'Calculus III', 'MATH 073'],
+      ['MATH 206', 'Linear Algebra I', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['CSC 101', 'Fundamentals of Computer Science', 'CS 073'],
+      ['CSC 202', 'Data Structures', 'CS 084'],
+      ['CSC 248', 'Discrete Structures', 'MATH 019'],
+      ['CPE 225', 'Computer Organization', null]
+    ]),
+    A('Golden Four', [
+      ['Area A1', 'Oral communication', 'COMM 020'],
+      ['Area A2', 'Written communication', 'ENGL 001A'],
+      ['Area A3', 'Critical thinking', 'ENGL 001B'],
+      ['Area B4', 'Quantitative reasoning', 'MATH 071', CALC, 3]
+    ]),
+    A('Science', [
+      ['PHYS 141', 'General Physics I', 'PHYS 004A']
+    ])
+  ],
+  scu: [
+    A('Mathematics', [
+      ['MATH 11', 'Calculus & Analytic Geometry I', 'MATH 071', CALC, 3],
+      ['MATH 12', 'Calculus & Analytic Geometry II', 'MATH 072', CALC, 4],
+      ['MATH 13', 'Calculus & Analytic Geometry III', 'MATH 073'],
+      ['MATH 53', 'Linear Algebra', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science & Engineering', [
+      ['CSCI 10', 'Introduction to Computer Science', 'CS 073'],
+      ['CSCI 61', 'Data Structures', 'CS 084'],
+      ['CSCI 60', 'Object-Oriented Programming', 'CS 076'],
+      ['COEN 20', 'Introduction to Embedded Systems', null]
+    ]),
+    A('Core curriculum', [
+      ['Critical Thinking & Writing 1', 'Composition', 'ENGL 001A', ENGA, 4],
+      ['Critical Thinking & Writing 2', 'Argument & research', 'ENGL 001B']
+    ]),
+    A('Science', [
+      ['PHYS 31', 'Physics for Scientists & Engineers I', 'PHYS 004A']
+    ])
+  ],
+  usc: [
+    A('Mathematics', [
+      ['MATH 125', 'Calculus I', 'MATH 071', CALC, 3],
+      ['MATH 126', 'Calculus II', 'MATH 072', CALC, 4],
+      ['MATH 226', 'Calculus III', 'MATH 073'],
+      ['MATH 225', 'Linear Algebra & Differential Equations', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['CSCI 103', 'Introduction to Programming', 'CS 073'],
+      ['CSCI 104', 'Data Structures & Object-Oriented Design', 'CS 084'],
+      ['CSCI 170', 'Discrete Methods in Computer Science', 'MATH 019'],
+      ['EE 109', 'Introduction to Embedded Systems', null]
+    ]),
+    A('Writing', [
+      ['WRIT 150', 'Writing & Critical Reasoning', 'ENGL 001A', ENGA, 4],
+      ['WRIT 340', 'Advanced writing', 'ENGL 001B']
+    ]),
+    A('Science', [
+      ['PHYS 151', 'Mechanics & Thermodynamics', 'PHYS 004A']
+    ])
+  ],
+  stanford: [
+    A('Mathematics', [
+      ['MATH 19', 'Calculus', 'MATH 071', CALC, 4],
+      ['MATH 20', 'Calculus', 'MATH 072', CALC, 5],
+      ['MATH 51', 'Linear Algebra & Multivariable Calculus', 'MATH 079']
+    ]),
+    A('Major preparation — Computer Science', [
+      ['CS 106A', 'Programming Methodology', 'CS 073'],
+      ['CS 106B', 'Programming Abstractions', 'CS 084'],
+      ['CS 103', 'Mathematical Foundations of Computing', 'MATH 019'],
+      ['CS 107', 'Computer Organization & Systems', null]
+    ]),
+    A('Writing', [
+      ['PWR 1', 'Writing & Rhetoric', 'ENGL 001A', ENGA, 4]
+    ]),
+    A('Science', [
+      ['PHYSICS 41', 'Mechanics', 'PHYS 004A']
+    ])
+  ],
+  davis: [
+    { name: 'Mathematics', rows: [
+      { req: 'MAT 21A', reqTitle: 'Differential Calculus', home: 'MATH 071', homeTitle: '', status: '', kind: 'done', ap: { exam: 'Calculus BC', min: 3 } },
+      { req: 'MAT 21B', reqTitle: 'Integral Calculus', home: 'MATH 072', homeTitle: '', status: '', kind: 'done', ap: { exam: 'Calculus BC', min: 4 } },
+      { req: 'MAT 21C', reqTitle: 'Vector Analysis', home: 'MATH 073', homeTitle: '', status: '', kind: 'done' },
+      { req: 'MAT 22A', reqTitle: 'Linear Algebra', home: 'MATH 079', homeTitle: '', status: '', kind: 'done' }
+    ]},
+    { name: 'Major preparation — Computer Science', rows: [
+      { req: 'ECS 032A', reqTitle: 'Introduction to Programming', home: 'CS 073', homeTitle: '', status: '', kind: 'done' },
+      { req: 'ECS 036B', reqTitle: 'Data Structures & Algorithms', home: 'CS 084', homeTitle: '', status: '', kind: 'done' },
+      { req: 'ECS 050', reqTitle: 'Machine-Dependent Programming', home: 'No equivalent', homeTitle: 'Nothing articulates at EVC', status: 'No course', kind: 'gap' }
+    ]},
+    { name: 'English composition', rows: [
+      { req: 'Entry Level Writing', reqTitle: 'Satisfied by composition', home: 'ENGL 001A', homeTitle: '', status: '', kind: 'done', ap: { exam: 'English Language', min: 3 } },
+      { req: 'Second composition', reqTitle: 'Critical reading & writing', home: 'ENGL 001B', homeTitle: '', status: '', kind: 'done' }
+    ]},
+    { name: 'Science', rows: [
+      { req: 'PHY 9A', reqTitle: 'Classical Physics', home: 'PHYS 004A', homeTitle: '', status: '', kind: 'done' },
+      { req: 'PHY 9B', reqTitle: 'Waves, Fluids & Thermodynamics', home: 'PHYS 004B', homeTitle: '', status: '', kind: 'done' }
+    ]}
+  ],
+  ucla: [
+    { name: 'Mathematics', rows: [
+      { req: 'MATH 31A', reqTitle: 'Differential & Integral Calculus', home: 'MATH 071', homeTitle: '', status: '', kind: 'done', ap: { exam: 'Calculus BC', min: 3 } },
+      { req: 'MATH 31B', reqTitle: 'Integration & Infinite Series', home: 'MATH 072', homeTitle: '', status: '', kind: 'done', ap: { exam: 'Calculus BC', min: 4 } },
+      { req: 'MATH 32A', reqTitle: 'Calculus of Several Variables', home: 'MATH 073', homeTitle: '', status: '', kind: 'done' },
+      { req: 'MATH 33A', reqTitle: 'Linear Algebra & Applications', home: 'MATH 079', homeTitle: '', status: '', kind: 'done' }
+    ]},
+    { name: 'Major preparation — Computer Science', rows: [
+      { req: 'COM SCI 31', reqTitle: 'Introduction to Computer Science I', home: 'CS 073', homeTitle: '', status: '', kind: 'done' },
+      { req: 'COM SCI 32', reqTitle: 'Introduction to Computer Science II', home: 'CS 084', homeTitle: '', status: '', kind: 'done' },
+      { req: 'COM SCI 33', reqTitle: 'Computer Organization', home: 'No equivalent', homeTitle: 'Nothing articulates at EVC', status: 'No course', kind: 'gap' }
+    ]},
+    { name: 'Physics', rows: [
+      { req: 'PHYSICS 1A', reqTitle: 'Mechanics', home: 'PHYS 004A', homeTitle: '', status: '', kind: 'done' },
+      { req: 'PHYSICS 1B', reqTitle: 'Oscillations & Electric Fields', home: 'PHYS 004B', homeTitle: '', status: '', kind: 'done' }
+    ]},
+    { name: 'Writing', rows: [
+      { req: 'Writing I', reqTitle: 'English composition', home: 'ENGL 001A', homeTitle: '', status: '', kind: 'done', ap: { exam: 'English Language', min: 3 } },
+      { req: 'Writing II', reqTitle: 'Critical reading & writing', home: 'ENGL 001B', homeTitle: '', status: '', kind: 'done' }
+    ]}
+  ],
+  sjsu: [
+    { name: 'Mathematics', rows: [
+      { req: 'MATH 30', reqTitle: 'Calculus I', home: 'MATH 071', homeTitle: 'Calculus I · A', status: 'Cleared', kind: 'done', ap: { exam: 'Calculus BC', min: 3 } },
+      { req: 'MATH 31', reqTitle: 'Calculus II', home: 'MATH 072', homeTitle: 'Calculus II · B+', status: 'Cleared', kind: 'done', ap: { exam: 'Calculus BC', min: 4 } },
+      { req: 'MATH 32', reqTitle: 'Calculus III', home: 'MATH 073', homeTitle: 'Offered — not yet taken', status: 'To take', kind: 'needed' },
+      { req: 'MATH 42', reqTitle: 'Discrete Mathematics', home: 'MATH 019', homeTitle: 'Offered — not yet taken', status: 'To take', kind: 'needed' }
+    ]},
+    { name: 'Major preparation — Computer Science', rows: [
+      { req: 'CS 46A', reqTitle: 'Introduction to Programming', home: ['CS 073', 'CS 076'], homeTitle: '', status: '', kind: 'done', ap: { exam: 'Computer Science A', min: 4 } },
+      { req: 'CS 46B', reqTitle: 'Introduction to Data Structures', home: 'CS 084', homeTitle: 'Offered — not yet taken', status: 'To take', kind: 'needed' },
+      { req: 'CS 47', reqTitle: 'Introduction to Computer Systems', home: 'No equivalent', homeTitle: 'Nothing articulates at EVC', status: 'No course', kind: 'gap' }
+    ]},
+    { name: 'Golden Four', rows: [
+      { req: 'Area A1', reqTitle: 'Oral communication', home: 'COMM 020', homeTitle: 'Oral Communication · A', status: 'Cleared', kind: 'done' },
+      { req: 'Area A2', reqTitle: 'Written communication', home: 'ENGL 001A', homeTitle: 'English Composition · A−', status: 'Cleared', kind: 'done' },
+      { req: 'Area A3', reqTitle: 'Critical thinking', home: ['ENGL 001B', 'ENGL 001C'], homeTitle: '', status: '', kind: 'needed' },
+      { req: 'Area B4', reqTitle: 'Quantitative reasoning', home: ['MATH 071', 'MATH 063'], homeTitle: '', status: '', kind: 'done', ap: { exam: 'Calculus BC', min: 3 } }
+    ]},
+    { name: 'Science', rows: [
+      { req: 'PHYS 50', reqTitle: 'General Physics — Mechanics', home: 'PHYS 004A', homeTitle: 'Physics I · B', status: 'Cleared', kind: 'done' }
+    ]}
+  ]
+};
+
+// Major prep and the quantitative/science sequence come from the chosen major.
+// The campus supplies writing and general education; those areas stay.
+const MAJOR_PREP = {
+  'Biology': [
+    A('Major preparation — Biology', [
+      ['General Biology I', 'Cell & molecular biology', 'BIOL 021'],
+      ['General Biology II', 'Organismal biology & evolution', 'BIOL 022'],
+      ['General Chemistry I', 'Inorganic chemistry with lab', 'CHEM 001A'],
+      ['General Chemistry II', 'Inorganic chemistry with lab', 'CHEM 001B'],
+      ['Organic Chemistry I', 'Structure & reactions', 'CHEM 012A']
+    ]),
+    A('Quantitative & physical science', [
+      ['Calculus I', 'Differential calculus', 'MATH 071', CALC, 3],
+      ['Statistics', 'Introductory statistics', 'MATH 063'],
+      ['Physics I', 'Mechanics with lab', 'PHYS 004A']
+    ])
+  ],
+  'Business': [
+    A('Major preparation — Business', [
+      ['Financial Accounting', 'Principles of accounting I', 'ACCTG 020'],
+      ['Managerial Accounting', 'Principles of accounting II', 'ACCTG 021'],
+      ['Macroeconomics', 'Principles of macroeconomics', 'ECON 010A'],
+      ['Microeconomics', 'Principles of microeconomics', 'ECON 010B'],
+      ['Business Law', 'Legal environment of business', 'BUS 028']
+    ]),
+    A('Quantitative', [
+      ['Business Calculus', 'Calculus for business & social science', ['MATH 071', 'MATH 072'], CALC, 3],
+      ['Statistics', 'Introductory statistics', 'MATH 063'],
+      ['Information Systems', 'Business information systems', 'CIT 010']
+    ])
+  ],
+  'Psychology': [
+    A('Major preparation — Psychology', [
+      ['General Psychology', 'Introduction to psychology', 'PSYCH 001'],
+      ['Research Methods', 'Design & analysis in psychology', 'PSYCH 010'],
+      ['Developmental Psychology', 'Lifespan development', 'PSYCH 030'],
+      ['Introduction to Sociology', 'Social science breadth', 'SOC 010']
+    ]),
+    A('Quantitative & science', [
+      ['Statistics', 'Introductory statistics', ['MATH 063', 'PSYCH 010']],
+      ['General Biology I', 'Life science with lab', ['BIOL 021', 'BIOL 071']]
+    ])
+  ],
+  'Economics': [
+    A('Major preparation — Economics', [
+      ['Macroeconomics', 'Principles of macroeconomics', 'ECON 010A'],
+      ['Microeconomics', 'Principles of microeconomics', 'ECON 010B'],
+      ['Statistics', 'Introductory statistics', 'MATH 063']
+    ]),
+    A('Quantitative', [
+      ['Calculus I', 'Differential calculus', 'MATH 071', CALC, 3],
+      ['Calculus II', 'Integral calculus', 'MATH 072', CALC, 4],
+      ['Linear Algebra', 'Matrix methods', 'MATH 079']
+    ])
+  ],
+  'Engineering': [
+    A('Major preparation — Engineering', [
+      ['Introduction to Engineering', 'Engineering design & graphics', 'ENGR 010'],
+      ['Statics', 'Engineering mechanics', 'ENGR 035'],
+      ['Properties of Materials', 'Materials science with lab', 'ENGR 045'],
+      ['Programming for Engineers', 'Computing for engineering', 'CS 073'],
+      ['Dynamics', 'Engineering dynamics', null]
+    ]),
+    A('Mathematics & physics', [
+      ['Calculus I', 'Differential calculus', 'MATH 071', CALC, 3],
+      ['Calculus II', 'Integral calculus', 'MATH 072', CALC, 4],
+      ['Calculus III', 'Multivariable calculus', 'MATH 073'],
+      ['Differential Equations', 'Ordinary differential equations', 'MATH 080'],
+      ['Physics I', 'Mechanics with lab', 'PHYS 004A'],
+      ['Physics II', 'Electricity & magnetism with lab', 'PHYS 004B'],
+      ['Physics III', 'Waves, optics & modern physics', 'PHYS 004C'],
+      ['General Chemistry I', 'Inorganic chemistry with lab', 'CHEM 001A']
+    ])
+  ],
+  'Mathematics': [
+    A('Major preparation — Mathematics', [
+      ['Calculus I', 'Differential calculus', 'MATH 071', CALC, 3],
+      ['Calculus II', 'Integral calculus', 'MATH 072', CALC, 4],
+      ['Calculus III', 'Multivariable calculus', 'MATH 073'],
+      ['Linear Algebra', 'Matrix methods & vector spaces', 'MATH 079'],
+      ['Differential Equations', 'Ordinary differential equations', 'MATH 080'],
+      ['Discrete Mathematics', 'Proof & combinatorics', 'MATH 019']
+    ]),
+    A('Supporting science', [
+      ['Physics I', 'Mechanics with lab', 'PHYS 004A'],
+      ['Programming', 'Introductory programming', 'CS 073']
+    ])
+  ],
+  'Health': [
+    A('Major preparation — Health sciences', [
+      ['Human Anatomy', 'Anatomy with lab', 'BIOL 071'],
+      ['Human Physiology', 'Physiology with lab', 'BIOL 072'],
+      ['Microbiology', 'General microbiology with lab', 'BIOL 048'],
+      ['General Chemistry I', 'Inorganic chemistry with lab', 'CHEM 001A'],
+      ['Nutrition', 'Principles of nutrition', 'NUTR 010']
+    ]),
+    A('Behavioral science & statistics', [
+      ['General Psychology', 'Introduction to psychology', 'PSYCH 001'],
+      ['Developmental Psychology', 'Lifespan development', 'PSYCH 030'],
+      ['Statistics', 'Introductory statistics', 'MATH 063']
+    ])
+  ],
+  'English': [
+    A('Major preparation — English', [
+      ['Introduction to Literature', 'Critical reading of literature', 'ENGL 040'],
+      ['Critical Thinking & Writing', 'Argument & research', 'ENGL 001C'],
+      ['Survey of British Literature', 'Period survey', null]
+    ]),
+    A('Quantitative', [
+      ['Statistics', 'Introductory statistics', 'MATH 063']
+    ])
+  ]
+};
+
+const FAMILY_RULES = [
+  [/computer science|software eng|electrical eng.*computer|information science|management information/i, 'Computer Science'],
+  [/nursing|public health|kinesiolog|nutrition|speech-language|social work/i, 'Health'],
+  [/biolog|microbiolog|neuroscience|biochemistr|human biolog|animal science/i, 'Biology'],
+  [/business|accounting|finance|marketing|supply chain|hospitality|international business/i, 'Business'],
+  [/psycholog|child & adolescent/i, 'Psychology'],
+  [/econom/i, 'Economics'],
+  [/engineering|architect/i, 'Engineering'],
+  [/mathematic|statistic|data science|physics|astrophysic|chemistr/i, 'Mathematics'],
+  [/english|linguistic|comparative|literature/i, 'English']
+];
+
+function familyFor(major) {
+  const m = String(major || '');
+  for (let i = 0; i < FAMILY_RULES.length; i++) {
+    if (FAMILY_RULES[i][0].test(m)) return FAMILY_RULES[i][1];
+  }
+  return '';
+}
+
+const KEEP_AREA = /writing|composition|golden four|core curriculum/i;
+
+const NOTES = {
+  berkeley: 'Berkeley reads Calculus BC as MATH 1A at 3 and adds MATH 1B at 5, and English Language clears R&C Part A at 4. Computer Science A carries elective units only — it does not clear CS 61A.',
+  sjsu: 'SJSU reads Calculus BC as MATH 30 at 3, MATH 31 at 4, and GE Area B4 at 3; Computer Science A clears CS 46A at 4. English Language does not clear Area A2 — ENGL 001A does.',
+  davis: 'Davis reads Calculus BC as MAT 21A at 3 and adds 21B at 4. Computer Science A carries elective units only. ECS 050 has no community college equivalent statewide.',
+  ucla: 'UCLA reads Calculus BC as MATH 31A at 3 and adds 31B at 4. Computer Science A does not clear COM SCI 31. Major prep must be complete by the end of spring to be competitive.',
+  irvine: 'Irvine expects the full I&C SCI 31/33/46 sequence before review. Calculus BC clears MATH 2A at 3 and adds 2B at 4.',
+  merced: 'Merced articulates the entire lower division at EVC — the only campus on your list with no cross-enrollment required.',
+  riverside: 'Riverside reads Calculus BC as MATH 009A at 3 and adds 009B at 4. CS 061 is the one course with no EVC equivalent.',
+  ucsd: 'San Diego admits by major and does not allow a change after transfer, so CSE 8A, 12, 20 and 30 all carry weight in review.',
+  ucsb: 'Santa Barbara requires CMPSC 16, 24 and 40 plus the math sequence before review. Calculus BC clears MATH 3A at 3.',
+  ucsc: 'Santa Cruz reads Calculus BC as MATH 19A at 3 and adds 19B at 4. CSE 12 has no EVC equivalent.',
+  sdsu: 'San Diego State is impacted; local-area applicants receive priority. Calculus BC clears MATH 150 and GE Area B4 at 3.',
+  sfsu: 'San Francisco State grants the Golden Four from the EVC sequence. CSC 256 is the one course with no equivalent.',
+  sac: 'Sacramento State follows the ADT pathway — completing the CS associate degree for transfer guarantees junior standing.',
+  eastbay: 'East Bay follows the ADT pathway. Calculus BC clears MATH 130 and GE Area B4 at 3.',
+  pomona: 'Pomona applies supplemental criteria to an impacted CS major, so grades in major prep matter beyond the minimum.',
+  calpoly: 'Cal Poly SLO publishes no major-prep articulation on ASSIST — every equivalence below is advisory and needs departmental confirmation.',
+  scu: 'Santa Clara is private and reviews articulation by petition. Expect to submit syllabi for each EVC course.',
+  usc: 'USC keeps an articulation history rather than an ASSIST agreement. Calculus BC clears MATH 125 at 3; WRIT 150 needs English Language at 4.',
+  stanford: 'Stanford has no articulation agreement with any community college. Every equivalence below is an estimate from prior transfer records.'
+};
+
+const PLANS = {
+  berkeley: [
+    { name: 'Fall 2026', units: 17, items: [
+      { code: 'MATH 073', title: 'Calculus III (Multivariable)', satisfies: 'Satisfies MATH 53', tag: 'At EVC', kind: 'home' },
+      { code: 'CS 084', title: 'Data Structures & Algorithms', satisfies: 'Satisfies CS 61B', tag: 'At EVC', kind: 'home' },
+      { code: 'ENGL 001B', title: 'Composition & Critical Thinking', satisfies: 'Satisfies R&C Part B', tag: 'At EVC', kind: 'home' },
+      { code: 'PHYS 004B', title: 'Physics for Scientists & Engineers II', satisfies: 'Satisfies PHYSICS 7B', tag: 'At EVC', kind: 'home' }
+    ]},
+    { name: 'Spring 2027', units: 14, items: [
+      { code: 'CIS 21JA + 21JB', title: 'Assembly & Machine Organization — De Anza College', satisfies: 'Only path to CS 61C · cross-enrollment form due Nov 14', tag: 'Cross-enroll', kind: 'cross', units: 5 },
+      { code: 'IGETC 3A', title: 'Arts elective', satisfies: 'General education', tag: 'At EVC', kind: 'home' },
+      { code: 'IGETC 4', title: 'Social & behavioral science', satisfies: 'General education', tag: 'At EVC', kind: 'home' },
+      { code: 'EECS 16A', title: 'Deferred to Berkeley — Fall of junior year', satisfies: 'No CCC articulation exists', tag: 'After transfer', kind: 'after' }
+    ]}
+  ],
+  sjsu: [
+    { name: 'Fall 2026', units: 15, items: [
+      { code: 'MATH 073', title: 'Calculus III (Multivariable)', satisfies: 'Satisfies MATH 32', tag: 'At EVC', kind: 'home' },
+      { code: 'MATH 019', title: 'Discrete Mathematics', satisfies: 'Satisfies MATH 42', tag: 'At EVC', kind: 'home' },
+      { code: 'CS 084', title: 'Data Structures & Algorithms', satisfies: 'Satisfies CS 46B', tag: 'At EVC', kind: 'home' },
+      { code: 'ENGL 001B', title: 'Composition & Critical Thinking', satisfies: 'Satisfies Golden Four A3', tag: 'At EVC', kind: 'home' }
+    ]},
+    { name: 'Spring 2027', units: 12, items: [
+      { code: 'CSC 020', title: 'Computer Architecture & Organization — Mission College', satisfies: 'Only path to CS 47 · cross-enrollment form due Nov 14', tag: 'Cross-enroll', kind: 'cross', units: 3 },
+      { code: 'IGETC 3B', title: 'Humanities elective', satisfies: 'General education', tag: 'At EVC', kind: 'home' },
+      { code: 'IGETC 4', title: 'Social & behavioral science', satisfies: 'General education', tag: 'At EVC', kind: 'home' },
+      { code: 'IGETC 5C', title: 'Laboratory science', satisfies: 'General education', tag: 'At EVC', kind: 'home' }
+    ]}
+  ]
+};
+
+const TABLES = {
+  berkeley: [
+    { code: 'MATH 071', title: 'Calculus I', to: 'MATH 1A — Calculus', status: 'Cleared', kind: 'done' },
+    { code: 'MATH 072', title: 'Calculus II', to: 'MATH 1B — Calculus', status: 'Cleared', kind: 'done' },
+    { code: 'MATH 079', title: 'Linear Algebra', to: 'MATH 54 — partial credit', status: 'In progress', kind: 'progress' },
+    { code: 'CS 073', title: 'Programming in Python', to: 'CS 61A — Structure & Interpretation', status: 'Cleared', kind: 'done' },
+    { code: 'CS 076', title: 'OOP in C++', to: 'No Berkeley equivalent', status: 'Elective only', kind: 'needed' },
+    { code: 'ENGL 001A', title: 'English Composition', to: 'R&C Part A', status: 'Cleared', kind: 'done' },
+    { code: 'PHYS 004A', title: 'Physics I', to: 'PHYSICS 7A', status: 'Cleared', kind: 'done' },
+    { code: 'COMM 020', title: 'Oral Communication', to: 'IGETC Area 1C', status: 'Cleared', kind: 'done' },
+    { code: 'AP BC', title: 'Calculus BC · 5', to: 'Duplicates MATH 1A / 1B', status: 'No added credit', kind: 'needed' },
+    { code: 'AP CS A', title: 'Computer Science A · 4', to: 'Elective units only', status: 'Elective only', kind: 'needed' },
+    { code: '—', title: 'Required, nothing on record', to: 'CS 61C — Computer Architecture', status: 'No course at EVC', kind: 'gap' },
+    { code: '—', title: 'Required, nothing on record', to: 'EECS 16A — Information Devices', status: 'No course at EVC', kind: 'gap' }
+  ],
+  sjsu: [
+    { code: 'MATH 071', title: 'Calculus I', to: 'MATH 30 + GE Area B4', status: 'Cleared', kind: 'done' },
+    { code: 'MATH 072', title: 'Calculus II', to: 'MATH 31 — Calculus II', status: 'Cleared', kind: 'done' },
+    { code: 'MATH 079', title: 'Linear Algebra', to: 'MATH 39 — Linear Algebra', status: 'In progress', kind: 'progress' },
+    { code: 'CS 073', title: 'Programming in Python', to: 'CS 46A — Intro to Programming', status: 'Cleared', kind: 'done' },
+    { code: 'CS 076', title: 'OOP in C++', to: 'CS 49C — Programming in C', status: 'Cleared', kind: 'done' },
+    { code: 'ENGL 001A', title: 'English Composition', to: 'Golden Four A2', status: 'Cleared', kind: 'done' },
+    { code: 'COMM 020', title: 'Oral Communication', to: 'Golden Four A1', status: 'Cleared', kind: 'done' },
+    { code: 'PHYS 004A', title: 'Physics I', to: 'PHYS 50 — General Physics', status: 'Cleared', kind: 'done' },
+    { code: 'AP BC', title: 'Calculus BC · 5', to: 'MATH 30 + 31 + Area B4', status: 'Cleared', kind: 'done' },
+    { code: 'AP Eng', title: 'English Language · 3', to: 'Does not clear Area A2', status: 'No added credit', kind: 'needed' },
+    { code: '—', title: 'Required, nothing on record', to: 'CS 47 — Computer Systems', status: 'No course at EVC', kind: 'gap' }
+  ]
+};
+
+const GRADE_PTS = { 'A+': 4, 'A': 4, 'A-': 3.7, 'A−': 3.7, 'B+': 3.3, 'B': 3, 'B-': 2.7, 'B−': 2.7, 'C+': 2.3, 'C': 2, 'C-': 1.7, 'C−': 1.7, 'D+': 1.3, 'D': 1, 'D-': 0.7, 'F': 0 };
+const TERM_RE = /\b(fall|spring|summer|winter|fa|sp|su|wi)[\s,]*(20\d{2})\b/i;
+const ROW_RE = /^([A-Z]{2,7})[\s\-]?(\d{1,3}[A-Z]{0,2})\s+(.{3,70}?)\s+(\d{1,2}(?:\.\d{1,2})?)\s+([ABCD][+\-−]?|F|IP|CR|NC|NP|P|W|RD)(?=\s|$)/;
+const SMALL_WORDS = /^(a|an|and|as|at|but|by|for|from|in|into|nor|of|on|or|the|to|via|with)$/;
+const ROMAN = /^(i|ii|iii|iv|v|vi|vii|viii|ix|x|xi|xii)$/;
+const AP_STOP = /^(total|page|score|scores|date|gpa|units|credit|credits|sum|average|report|student|id|year|grade|name|address|college|university|board|number|of|and)\b/i;
+
+function titleCase(str) {
+  const t = str.trim().replace(/\s+/g, ' ');
+  if (/[a-z]/.test(t)) return t;
+  const words = t.toLowerCase().split(' ');
+  return words.map((w, i) => {
+    const letters = w.replace(/[^a-z]/g, '');
+    const isLast = i === words.length - 1;
+    // Minor words stay lowercase, but never at either end of the title.
+    if (i > 0 && !isLast && SMALL_WORDS.test(letters)) return w;
+    // Roman numerals and short codes (II, BC, AB, a trailing A) stay uppercase.
+    if (ROMAN.test(letters)) return w.toUpperCase();
+    if (letters.length === 1 || (letters.length === 2 && !SMALL_WORDS.test(letters))) return w.toUpperCase();
+    return w.replace(/(^|[-\/])([a-z])/g, (m, sep, c) => sep + c.toUpperCase());
+  }).join(' ');
+}
+
+function normalizeGrade(g) {
+  return g.toUpperCase().replace(/[−–—]/g, '-');
+}
+
+function normalizeTerm(word, year) {
+  const map = { fall: 'Fa', fa: 'Fa', spring: 'Sp', sp: 'Sp', summer: 'Su', su: 'Su', winter: 'Wi', wi: 'Wi' };
+  return (map[word.toLowerCase()] || 'Fa') + ' ' + year;
+}
+
+async function extractText(file) {
+  const name = (file.name || '').toLowerCase();
+  if (name.endsWith('.pdf')) {
+    const lib = window.pdfjsLib;
+    if (!lib) throw new Error('The PDF reader did not load. Try a text or CSV export instead.');
+    if (lib.GlobalWorkerOptions && !lib.GlobalWorkerOptions.workerSrc) {
+      lib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+    const buf = await file.arrayBuffer();
+    const doc = await lib.getDocument({ data: buf }).promise;
+    let out = '';
+    for (let p = 1; p <= doc.numPages; p++) {
+      const page = await doc.getPage(p);
+      const content = await page.getTextContent();
+      let lastY = null, line = '';
+      content.items.forEach(it => {
+        const y = it.transform[5];
+        if (lastY !== null && Math.abs(y - lastY) > 2.5) { out += line.trim() + '\n'; line = ''; }
+        line += it.str + ' ';
+        lastY = y;
+      });
+      out += line.trim() + '\n';
+    }
+    return out;
+  }
+  const text = await file.text();
+  if (/\.html?$/.test(name)) {
+    const el = document.createElement('div');
+    el.innerHTML = text;
+    return (el.innerText || el.textContent || '').replace(/\n{2,}/g, '\n');
+  }
+  if (/\.(csv|tsv)$/.test(name)) return text.replace(/[\t,]+/g, ' ');
+  return text;
+}
+
+const READ_SYSTEM = 'You read college transcripts and AP/IB score reports that have been extracted to plain text. Layout varies wildly between colleges and the extraction is often messy, with columns run together or split across lines. Return only JSON. Never invent a course or a score that is not in the text.';
+
+function jsonFrom(reply) {
+  const fenced = reply.match(/```(?:json)?\s*([\s\S]*?)```/);
+  const body = (fenced ? fenced[1] : reply).trim();
+  const start = body.search(/[\[{]/);
+  const end = Math.max(body.lastIndexOf('}'), body.lastIndexOf(']'));
+  if (start < 0 || end <= start) throw new Error('no json');
+  return JSON.parse(body.slice(start, end + 1));
+}
+
+async function readCoursesWithClaude(text) {
+  if (!(window.claude && window.claude.complete)) throw new Error('unavailable');
+  const reply = await window.claude.complete({
+    model: 'claude-sonnet-4-5',
+    max_tokens: 8000,
+    system: READ_SYSTEM,
+    messages: [{ role: 'user', content:
+      'Extract every course from this community college transcript.\n\n' +
+      'Return a JSON object: {"college": string|null, "courses": [{"code": string, "title": string, "units": number, "grade": string, "term": string}]}\n\n' +
+      'Rules:\n' +
+      '- code: department and number exactly as printed, one space between them (e.g. "MATH 071").\n' +
+      '- title: the course title in title case. Keep roman numerals and codes uppercase (Calculus II, Programming in C++).\n' +
+      '- units: the units/credits attempted as a number.\n' +
+      '- grade: the letter grade with its modifier (A, A-, B+, C), or IP for in progress, or CR/NC/P/NP/W as printed.\n' +
+      '- term: abbreviate as "Fa 2024", "Sp 2025", "Su 2026", "Wi 2025". Use the term heading the course sits under. If none, use "—".\n' +
+      '- Skip totals, GPA lines, transfer-credit summaries, and test credit.\n' +
+      '- If a row is ambiguous, include it with your best reading rather than dropping it.\n\n' +
+      'TRANSCRIPT TEXT:\n' + text.slice(0, 60000) }]
+  });
+  const data = jsonFrom(reply);
+  const rows = (data.courses || [])
+    .filter(c => c && c.code && c.title)
+    .map(c => ({
+      code: String(c.code).toUpperCase().replace(/\s+/g, ' ').trim(),
+      title: titleCase(String(c.title)),
+      units: Number(c.units) || 0,
+      grade: normalizeGrade(String(c.grade || '—')),
+      term: String(c.term || '—')
+    }));
+  if (!rows.length) throw new Error('none found');
+  return { rows, college: data.college || '' };
+}
+
+async function readApWithClaude(text) {
+  if (!(window.claude && window.claude.complete)) throw new Error('unavailable');
+  const reply = await window.claude.complete({
+    model: 'claude-sonnet-4-5',
+    max_tokens: 2000,
+    system: READ_SYSTEM,
+    messages: [{ role: 'user', content:
+      'Extract every AP or IB exam score from this score report.\n\n' +
+      'Return a JSON object: {"scores": [{"exam": string, "score": number}]}\n\n' +
+      'Rules:\n' +
+      '- exam: the subject name without the leading "AP" (e.g. "Calculus BC", "Physics 1: Algebra-Based", "Computer Science A"). Keep subject codes uppercase.\n' +
+      '- score: the reported score as a number. If the same exam appears more than once, keep the highest.\n' +
+      '- Ignore dates, administration years, "sent to" columns, and student identifiers.\n\n' +
+      'REPORT TEXT:\n' + text.slice(0, 40000) }]
+  });
+  const data = jsonFrom(reply);
+  const rows = (data.scores || [])
+    .filter(a => a && a.exam && Number(a.score) >= 1)
+    .map(a => ({ exam: titleCase(String(a.exam)), score: Number(a.score) }));
+  if (!rows.length) throw new Error('none found');
+  return rows;
+}
+
+function parseCourses(text) {
+  const out = [];
+  const seen = {};
+  let term = '';
+  text.split(/\r?\n/).forEach(raw => {
+    const line = raw.replace(/\s+/g, ' ').trim();
+    if (!line) return;
+    const t = line.match(TERM_RE);
+    if (t) term = normalizeTerm(t[1], t[2]);
+    const m = line.match(ROW_RE);
+    if (!m) return;
+    const code = (m[1] + ' ' + m[2]).toUpperCase();
+    if (seen[code]) return;
+    seen[code] = 1;
+    out.push({ code, title: titleCase(m[3]), units: parseFloat(m[4]), grade: normalizeGrade(m[5]), term: term || '—' });
+  });
+  return out;
+}
+
+function cleanApLine(raw) {
+  return raw
+    .replace(/\s+/g, ' ')
+    .replace(/\b(19|20)\d{2}\b/g, ' ')
+    .replace(/\b(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\b/gi, ' ')
+    .replace(/\b(grade|score|exam|subject|taken|admin(istration)?)\b\s*:?/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function plausibleExam(name) {
+  const t = name.replace(/^(AP|IB)\s+/i, '').replace(/[\s:.\-–]+$/, '').trim();
+  if (t.length < 4 || t.length > 46) return '';
+  if (AP_STOP.test(t)) return '';
+  if (!/[A-Za-z]{3}/.test(t)) return '';
+  return titleCase(t);
+}
+
+function parseApScores(text) {
+  const out = [];
+  const seen = {};
+  const push = (name, score) => {
+    const exam = plausibleExam(name);
+    if (!exam) return;
+    const key = exam.toLowerCase();
+    if (seen[key]) { seen[key].score = Math.max(seen[key].score, score); return; }
+    const row = { exam, score };
+    seen[key] = row;
+    out.push(row);
+  };
+
+  const lines = text.split(/\r?\n/).map(cleanApLine).filter(l => l.length > 0);
+
+  // A line ends in a score when its last token is a standalone 1–7.
+  const trailingScore = /(^|\s)([1-7])\s*$/;
+
+  lines.forEach((line, i) => {
+    const m = line.match(trailingScore);
+    if (m) {
+      // Everything before the final standalone digit is the exam name, so a
+      // title that itself contains a digit ("Physics 1") survives intact.
+      const name = line.slice(0, line.length - m[0].length).replace(/[\s:\-–|,\/]+$/, '');
+      if (name) { push(name, Number(m[2])); return; }
+      // Bare score on its own line — pair it with the preceding line, unless
+      // that line already carried its own trailing score.
+      if (i > 0 && !trailingScore.test(lines[i - 1])) push(lines[i - 1], Number(m[2]));
+      return;
+    }
+    // Score sits mid-line (a trailing column we stripped, or notes after it):
+    // take the last standalone 1–7 and everything before it as the name.
+    const nums = [];
+    const re = /(^|\s)([1-7])(?=\s)/g;
+    let hit;
+    while ((hit = re.exec(line)) !== null) nums.push({ index: hit.index + hit[1].length, score: Number(hit[2]) });
+    if (!nums.length) return;
+    const last = nums[nums.length - 1];
+    const name = line.slice(0, last.index).replace(/[\s:\-–|,\/]+$/, '');
+    if (name) push(name, last.score);
+  });
+
+  return out;
+}
+
+const PASSING = /^(A\+?|A-|B\+|B|B-|C\+|C|C-|D\+|D|D-|CR|P)$/;
+
+const STATUS = {
+  done: { dot: C.a500, fg: C.a300, bg: C.a900, border: C.a800, rowBg: 'transparent',
+    stripe: '#33503E', dash: 'none', endFill: '#33503E' },
+  progress: { dot: '#A97A22', fg: '#7A5714', bg: '#F1E5CA', border: '#D8BE86', rowBg: 'transparent',
+    stripe: '#A97A22', dash: '5 3', endFill: '#A97A22' },
+  planned: { dot: C.n700, fg: C.n400, bg: '#EDE6D4', border: C.n800, rowBg: 'transparent',
+    stripe: '#BFCFC3', dash: '3 4', endFill: 'transparent' },
+  needed: { dot: C.n700, fg: C.n400, bg: '#EDE6D4', border: C.n800, rowBg: 'transparent',
+    stripe: '#8C8571', dash: '3 4', endFill: 'transparent' },
+  gap: { dot: C.flag, fg: C.flag, bg: C.flagBg, border: C.flagRing, rowBg: 'rgba(156,58,44,0.06)',
+    stripe: '#9C3A2C', dash: '1 4', endFill: 'transparent' }
+};
+
+class Component extends DCLogic {
+  state = {
+    screen: 'home',
+    homeCollege: 'Evergreen Valley College',
+    selected: ['berkeley', 'sjsu'],
+    majors: TARGETS.reduce((m, t) => { m[t.id] = t.major; return m; }, {}),
+    trStatus: 'idle',
+    trFileName: '',
+    trMessage: '',
+    trProgress: '',
+    trError: false,
+    dragging: '',
+    apStatus: 'idle',
+    apFileName: '',
+    apMessage: '',
+    apError: false,
+    apRows: [],
+    apDraftExam: '',
+    apDraftScore: '',
+    courses: [],
+    adding: false,
+    query: '',
+    tab: 'berkeley',
+    view: 'areas'
+  };
+
+  trInput = React.createRef();
+  apInput = React.createRef();
+
+  go = (screen) => () => { this.setState({ screen }); window.scrollTo(0, 0); };
+
+  handleTranscript = async (file) => {
+    if (!file) return;
+    this.setState({ trStatus: 'parsing', trFileName: file.name, trError: false, trMessage: '', trProgress: 'Extracting text from ' + file.name + '…' });
+    let text = '';
+    try {
+      text = await extractText(file);
+    } catch (err) {
+      this.setState({ trStatus: 'error', trError: true, trMessage: (err && err.message) || 'Could not open that file. Add courses by hand below.' });
+      return;
+    }
+    if (!text.replace(/\s/g, '').length) {
+      this.setState({ trStatus: 'error', trError: true, trMessage: 'This PDF has no text layer — it is probably a scan or a photo. Export a text-based copy from your portal, or add courses by hand below.' });
+      return;
+    }
+    this.setState({ trProgress: 'Reading your course history…' });
+    try {
+      const result = await readCoursesWithClaude(text);
+      this.setState({
+        trStatus: 'done', trError: false, courses: result.rows,
+        trMessage: result.rows.length + ' courses read from ' + file.name + '. Check the grades and units below before continuing.'
+      });
+      return;
+    } catch (err) {
+      const fallback = parseCourses(text);
+      if (fallback.length) {
+        this.setState({
+          trStatus: 'done', trError: false, courses: fallback,
+          trMessage: fallback.length + ' courses read by pattern matching — the smart reader was unavailable, so check every row below.'
+        });
+        return;
+      }
+      this.setState({ trStatus: 'error', trError: true, trMessage: 'Text came out of the file, but no courses could be identified in it. Add them by hand below.' });
+    }
+  };
+
+  handleAp = async (file) => {
+    if (!file) return;
+    this.setState({ apStatus: 'parsing', apFileName: file.name, apError: false, apMessage: '' });
+    let text = '';
+    try {
+      text = await extractText(file);
+    } catch (err) {
+      this.setState({ apStatus: 'error', apError: true, apMessage: (err && err.message) || 'Could not open that file. Type the scores in below.' });
+      return;
+    }
+    if (!text.replace(/\s/g, '').length) {
+      this.setState({ apStatus: 'error', apError: true, apMessage: 'This PDF has no text layer — type the scores in below.' });
+      return;
+    }
+    const merge = (rows, note) => this.setState(p => {
+      const seen = {};
+      const all = p.apRows.concat(rows).filter(r => {
+        const k = r.exam.toLowerCase();
+        if (seen[k]) return false;
+        seen[k] = 1;
+        return true;
+      });
+      return { apStatus: 'done', apError: false, apRows: all, apMessage: note };
+    });
+    try {
+      const rows = await readApWithClaude(text);
+      merge(rows, rows.length + ' scores read from ' + file.name + '.');
+    } catch (err) {
+      const fallback = parseApScores(text);
+      if (fallback.length) {
+        merge(fallback, fallback.length + ' scores read by pattern matching — check them below.');
+        return;
+      }
+      this.setState({ apStatus: 'error', apError: true, apMessage: 'No exam scores could be identified in that file. Type them in below instead.' });
+    }
+  };
+
+  addApDraft = () => {
+    const exam = this.state.apDraftExam.trim();
+    const score = Number(this.state.apDraftScore);
+    if (!exam || !(score >= 1 && score <= 7)) return;
+    this.setState(p => ({
+      apRows: p.apRows.concat([{ exam: titleCase(exam), score }]),
+      apDraftExam: '', apDraftScore: '', apStatus: 'done', apError: false,
+      apMessage: 'Applied against every college below — rules differ by campus.'
+    }));
+  };
+
+  fileFrom = (e) => {
+    e.preventDefault();
+    const dt = e.dataTransfer;
+    return dt && dt.files && dt.files[0];
+  };
+
+  renderVals() {
+    const s = this.state;
+    const accent = this.props.accentColor ?? C.a;
+    const showAlts = this.props.showAlternatives ?? true;
+    const selected = s.selected;
+    const selectedTargets = TARGETS.filter(t => selected.indexOf(t.id) >= 0);
+    const trDone = s.trStatus === 'done';
+    const ready = s.courses.length > 0 && selected.length > 0;
+    const shortHome = s.homeCollege.replace(/ Community College$| College$| Junior College$/, '');
+
+    const steps = [
+      { n: '01', label: 'Colleges', key: 'home' },
+      { n: '02', label: 'Records', key: 'upload' },
+      { n: '03', label: 'Results', key: 'results' }
+    ].map(st => {
+      const on = s.screen === st.key;
+      return { n: st.n, label: st.label, go: this.go(st.key),
+        bg: on ? '#EDE6D4' : '#DED4B9', fg: on ? C.text : C.n600, border: '#C6BB9C' };
+    });
+
+    const targets = TARGETS.map((t, ti) => {
+      const on = selected.indexOf(t.id) >= 0;
+      return {
+        name: t.name, note: t.note, selected: on, check: on ? '✓' : '', delay: (ti * 0.03).toFixed(2) + 's',
+        major: s.majors[t.id],
+        bg: on ? C.a900 : 'transparent', border: on ? C.a800 : C.n800,
+        boxBg: on ? accent : 'transparent', boxBorder: on ? accent : C.n700,
+        toggle: () => this.setState(p => ({
+          selected: p.selected.indexOf(t.id) >= 0 ? p.selected.filter(x => x !== t.id) : p.selected.concat([t.id])
+        })),
+        onMajor: (e) => this.setState(p => ({ majors: Object.assign({}, p.majors, { [t.id]: e.target.value }) }))
+      };
+    });
+
+    const unitsTotal = s.courses.reduce((a, c) => a + (c.units || 0), 0);
+    const graded = s.courses.filter(c => GRADE_PTS[c.grade] !== undefined);
+    const gradedUnits = graded.reduce((a, c) => a + (c.units || 0), 0);
+    const gpa = gradedUnits ? (graded.reduce((a, c) => a + GRADE_PTS[c.grade] * (c.units || 0), 0) / gradedUnits).toFixed(2) : '—';
+    const q = s.query.trim().toLowerCase();
+    const have = s.courses.map(c => c.code);
+    const matches = CATALOG
+      .filter(c => have.indexOf(c.code) < 0)
+      .filter(c => !q || (c.code + ' ' + c.title).toLowerCase().indexOf(q) >= 0)
+      .slice(0, 4)
+      .map(c => ({ code: c.code, title: c.title, units: c.units,
+        add: () => this.setState(p => ({ courses: p.courses.concat([Object.assign({ grade: 'PLN', term: 'Planned' }, c)]), query: '' })) }));
+
+    const courses = s.courses.map((c, i) => ({
+      code: c.code, title: c.title, units: c.units, term: c.term, grade: c.grade,
+      rowBg: i % 2 ? '#F1EADA' : 'transparent', delay: (i * 0.02).toFixed(2) + 's',
+      gradeFg: c.grade === 'IP' || c.grade === 'PLN' ? C.n600 : C.text,
+      remove: () => this.setState(p => ({ courses: p.courses.filter((_, j) => j !== i) }))
+    }));
+
+    const tab = selected.indexOf(s.tab) >= 0 ? s.tab : (selected[0] || 'berkeley');
+    const activeTarget = TARGETS.filter(t => t.id === tab)[0] || TARGETS[0];
+    // Every requirement row's home-college half is derived from the parsed
+    // record; only 'gap' (nothing articulates anywhere) is fixed data.
+    const byCode = {};
+    s.courses.forEach(c => { byCode[String(c.code).toUpperCase().replace(/\s+/g, ' ').trim()] = c; });
+    const catalogUnits = {};
+    CATALOG.concat(COURSES).forEach(c => { catalogUnits[c.code] = c.units; });
+
+    const apFor = (spec) => {
+      if (!spec) return null;
+      const want = spec.exam.toLowerCase();
+      const hit = s.apRows.filter(a => {
+        const name = a.exam.toLowerCase();
+        return name.indexOf(want) >= 0 || want.indexOf(name) >= 0;
+      })[0];
+      return hit && hit.score >= spec.min ? hit : null;
+    };
+
+    const resolveRow = (r) => {
+      if (r.kind === 'gap') return Object.assign({}, r, { homeTitle: 'Nothing articulates at ' + shortHome });
+      // A requirement may list several "or" options; the best one on the record wins.
+      const options = (Array.isArray(r.home) ? r.home : [r.home]).map(x => String(x).toUpperCase().trim());
+      const onRecord = options.map(o => byCode[o]).filter(Boolean);
+      const best = onRecord.filter(x => PASSING.test(normalizeGrade(String(x.grade || ''))))[0] || onRecord[0];
+      const optionLabel = options.join(' or ');
+      const c = best;
+      if (!c) {
+        const ap = apFor(r.ap);
+        if (ap) return Object.assign({}, r, {
+          kind: 'done', status: 'Cleared by AP', apExam: ap.exam, apScore: ap.score,
+          home: 'AP ' + ap.exam, homeTitle: 'Score ' + ap.score + ' · meets the minimum of ' + r.ap.min
+        });
+        return Object.assign({}, r, { kind: 'needed', status: 'To take', home: optionLabel,
+          homeTitle: options.length > 1
+            ? 'Either course satisfies it at ' + shortHome + ' — neither is on your record'
+            : 'Offered at ' + shortHome + ' — not on your record' });
+      }
+      const alsoNote = options.length > 1 ? ' · ' + optionLabel + ' both count' : '';
+      const g = normalizeGrade(String(c.grade || ''));
+      if (g === 'PLN') return Object.assign({}, r, { kind: 'planned', status: 'Planned', home: c.code, homeTitle: c.title + ' · added by hand' });
+      if (g === 'IP' || g === 'RD') return Object.assign({}, r, { kind: 'progress', status: 'In progress', home: c.code, homeTitle: c.title + ' · ' + c.term });
+      if (PASSING.test(g)) {
+        const dup = apFor(r.ap);
+        return Object.assign({}, r, { kind: 'done', status: 'Cleared', home: c.code,
+          homeTitle: c.title + ' · ' + g + alsoNote + (dup ? ' · AP ' + dup.exam + ' duplicates this, no extra credit' : '') });
+      }
+      return Object.assign({}, r, { kind: 'needed', status: 'Retake — ' + g, home: c.code, homeTitle: c.title + ' · ' + g });
+    };
+    // The campus keeps writing and general education; the chosen major supplies
+    // major prep and the quantitative/science sequence.
+    const areasSourceFor = (id) => {
+      const campus = AREAS[id] || [];
+      if (!campus.length) return [];
+      const family = familyFor(s.majors[id]);
+      if (family === 'Computer Science') return campus;
+      const kept = campus.filter(a => KEEP_AREA.test(a.name));
+      const prep = MAJOR_PREP[family] || [];
+      return prep.concat(kept);
+    };
+    const resolvedFor = (id) => areasSourceFor(id).map(a => ({ name: a.name, rows: a.rows.map(resolveRow) }));
+    const areasRaw = resolvedFor(tab);
+
+    const tabs = selectedTargets.map(t => {
+      const on = t.id === tab;
+      const rows = resolvedFor(t.id).reduce((a, ar) => a.concat(ar.rows), []);
+      const cleared = rows.filter(r => r.kind === 'done').length;
+      const gaps = rows.filter(r => r.kind === 'gap').length;
+      return { name: t.name, sub: cleared + ' of ' + rows.length + ' cleared · ' + gaps + ' with no course',
+        select: () => this.setState({ tab: t.id }),
+        bg: on ? C.a900 : 'transparent', fg: on ? C.a300 : C.n400,
+        border: on ? C.a800 : C.n800 };
+    });
+
+    const views = [
+      { key: 'areas', label: 'By requirement' },
+      { key: 'plan', label: 'Semester plan' },
+      { key: 'table', label: 'Course table' }
+    ].map(v => ({ label: v.label, select: () => this.setState({ view: v.key }),
+      bg: s.view === v.key ? C.a900 : 'transparent', fg: s.view === v.key ? C.a300 : C.n600 }));
+
+    let rowTick = 0;
+    const areas = areasRaw.map((a, ai) => {
+      const doneCount = a.rows.filter(r => r.kind === 'done').length;
+      const complete = a.rows.length > 0 && doneCount === a.rows.length;
+      return {
+      name: a.name,
+      count: complete ? doneCount + '/' + a.rows.length + ' complete' : doneCount + '/' + a.rows.length,
+      countFg: complete ? '#33503E' : C.n600,
+      pad: complete ? '16.8px' : '22.4px 0',
+      mb: complete ? '11.2px' : '0',
+      bg: complete ? '#E3EBE2' : 'transparent',
+      ring: complete ? '0 0 0 1px #8FA893' : 'none',
+      rule: complete ? 'none' : '1px solid rgba(42,40,35,0.10)',
+      delay: (ai * 0.05).toFixed(2) + 's',
+      rows: a.rows.map(r => {
+        const st = STATUS[r.kind];
+        const delay = ((ai * 0.05) + (rowTick++ * 0.018)).toFixed(3) + 's';
+        return { req: r.req, reqTitle: r.reqTitle, home: r.home, homeTitle: r.homeTitle, status: r.status,
+          dot: st.dot, pillBg: st.bg, pillFg: st.fg, pillBorder: st.border, rowBg: st.rowBg,
+          stripe: st.stripe, dash: st.dash, endFill: st.endFill, delay: delay,
+          homeFg: r.kind === 'gap' ? C.flag : C.text };
+      })
+      };
+    });
+
+    const cleared = (code) => {
+      const c = byCode[String(code).toUpperCase().trim()];
+      return !!c && PASSING.test(normalizeGrade(String(c.grade || '')));
+    };
+    const flatRows = areasRaw.reduce((a, ar) => a.concat(ar.rows), []);
+    const derivedPlan = () => {
+      const todo = flatRows.filter(r => r.kind === 'needed' || r.kind === 'planned' || r.kind === 'gap');
+      const once = {};
+      const items = todo.filter(r => {
+        const key = r.kind === 'gap' ? 'gap:' + r.req : 'home:' + r.home;
+        if (once[key]) return false;
+        once[key] = 1;
+        return true;
+      }).map(r => r.kind === 'gap'
+        ? { code: 'Cross-enroll', title: r.req + ' — ' + r.reqTitle, satisfies: 'Nothing at ' + shortHome + ' articulates · needs counselor approval', tag: 'Cross-enroll', kind: 'cross', units: 4 }
+        : { code: r.home, title: r.reqTitle, satisfies: 'Satisfies ' + r.req, tag: 'At EVC', kind: 'home' });
+      const terms = [];
+      ['Fall 2026', 'Spring 2027', 'Fall 2027'].forEach((name, i) => {
+        const slice = items.slice(i * 4, i * 4 + 4);
+        if (slice.length) terms.push({ name: name, items: slice });
+      });
+      return terms;
+    };
+    const planBase = (familyFor(s.majors[tab]) === 'Computer Science' && PLANS[tab]) || derivedPlan();
+    const plan = planBase.map(t => {
+      const items = t.items.filter(it => !(it.kind === 'home' && cleared(it.code)));
+      // Cross-enrolled courses still count toward the term load; only work
+      // deferred until after transfer contributes nothing.
+      const units = items.reduce((a, it) => a + (it.kind === 'after' ? 0 : (it.units || catalogUnits[it.code] || 3)), 0);
+      return { name: t.name, units, items };
+    }).filter(t => t.items.length > 0).map(t => ({
+      name: t.name, units: t.units,
+      items: t.items.map(it => {
+        const cross = it.kind === 'cross';
+        const after = it.kind === 'after';
+        return { code: it.code, title: it.title, satisfies: it.satisfies,
+          tag: it.tag === 'At EVC' ? 'At ' + shortHome : it.tag,
+          bg: cross ? C.flagBg : 'transparent',
+          ring: cross ? C.flagRing : C.n800,
+          codeFg: cross ? C.flag : C.a400,
+          tagFg: cross ? C.flag : (after ? C.n600 : C.n600) };
+      })
+    }));
+
+    const usedCodes = {};
+    const usedAp = {};
+    let tableTick = 0;
+    const tableRows = flatRows.map(r => {
+      const st = STATUS[r.kind] || STATUS.needed;
+      const matched = r.kind !== 'gap' && !r.apExam && !Array.isArray(r.home) && byCode[String(r.home).toUpperCase().trim()];
+      if (matched) usedCodes[matched.code] = 1;
+      if (r.apExam) usedAp[r.apExam.toLowerCase()] = 1;
+      return {
+        code: matched ? matched.code : (r.apExam ? 'AP' : '—'),
+        title: matched ? matched.title : (r.apExam ? r.apExam + ' · ' + r.apScore : (r.kind === 'gap' ? 'Nothing articulates' : 'Not on your record')),
+        to: r.req + ' — ' + r.reqTitle,
+        status: r.status, dot: st.dot, statusFg: st.fg, rowBg: st.rowBg,
+        stripe: st.stripe, dash: st.dash, endFill: st.endFill, delay: (tableTick++ * 0.016).toFixed(3) + 's',
+        pillBg: st.bg, pillFg: st.fg, pillBorder: st.border,
+        toFg: r.kind === 'gap' ? C.flag : C.text
+      };
+    });
+    s.courses.filter(c => !usedCodes[c.code]).forEach(c => {
+      tableRows.push({
+        code: c.code, title: c.title, to: 'No major or GE requirement matched',
+        status: 'Elective units', dot: STATUS.needed.dot, statusFg: STATUS.needed.fg,
+        rowBg: STATUS.needed.rowBg, stripe: STATUS.needed.stripe, dash: STATUS.needed.dash,
+        endFill: STATUS.needed.endFill, delay: (tableTick++ * 0.016).toFixed(3) + 's',
+        pillBg: STATUS.needed.bg, pillFg: STATUS.needed.fg,
+        pillBorder: STATUS.needed.border, toFg: C.n400
+      });
+    });
+    s.apRows.filter(a => !usedAp[a.exam.toLowerCase()]).forEach(a => {
+      tableRows.push({
+        code: 'AP', title: a.exam + ' · ' + a.score, to: 'No requirement cleared at this campus — elective credit only',
+        status: 'Review', dot: STATUS.progress.dot, statusFg: STATUS.progress.fg,
+        rowBg: STATUS.progress.rowBg, stripe: STATUS.progress.stripe, dash: STATUS.progress.dash,
+        endFill: STATUS.progress.endFill, delay: (tableTick++ * 0.016).toFixed(3) + 's',
+        pillBg: STATUS.progress.bg, pillFg: STATUS.progress.fg,
+        pillBorder: STATUS.progress.border, toFg: C.n400
+      });
+    });
+
+    const allRows = selectedTargets.reduce((a, t) => a.concat(
+      resolvedFor(t.id).reduce((b, ar) => b.concat(ar.rows.map(r => Object.assign({ collegeName: t.name }, r))), [])
+    ), []);
+    // Requirements that resolve to the same set of cross-enrollment options are
+    // one problem, not several — group them so the panel stays readable.
+    const gapGroups = [];
+    const gapIndex = {};
+    allRows.filter(r => r.kind === 'gap').forEach(r => {
+      const info = GAP_INFO[r.req] || {};
+      const alts = info.alts || [];
+      const key = alts.map(a => a.course).join('|') || r.req;
+      if (!gapIndex[key]) {
+        gapIndex[key] = { reqs: [], colleges: [], equiv: info.equiv || 'No articulated course at Evergreen Valley College.', alts: alts };
+        gapGroups.push(gapIndex[key]);
+      }
+      const g = gapIndex[key];
+      if (g.reqs.indexOf(r.req) < 0) g.reqs.push(r.req);
+      if (g.colleges.indexOf(r.collegeName) < 0) g.colleges.push(r.collegeName);
+    });
+    const gapList = gapGroups.map(g => {
+      const shown = g.colleges.slice(0, 3).join(', ');
+      const rest = g.colleges.length - 3;
+      // Never suggest cross-enrolling at the college the student already attends.
+      const alts = g.alts.filter(a => a.college !== s.homeCollege && a.college !== shortHome);
+      return {
+        title: g.reqs.slice(0, 4).join(' · ') + (g.reqs.length > 4 ? ' and ' + (g.reqs.length - 4) + ' more' : ''),
+        blocks: 'Blocks ' + shown + (rest > 0 ? ' +' + rest + ' more' : ''),
+        equiv: g.equiv.replace(/Evergreen Valley College/g, shortHome).replace(/\bEVC\b/g, shortHome),
+        alts: alts,
+        hasAlts: showAlts && alts.length > 0,
+        noAlts: showAlts && alts.length === 0,
+        noAltsNote: 'No nearby college on file offers an articulated equivalent. Ask a counselor about a course substitution or petition.'
+      };
+    });
+    const gapTotal = allRows.filter(r => r.kind === 'gap').length;
+    const clearedTotal = allRows.filter(r => r.kind === 'done').length;
+    const activeRows = areasRaw.reduce((a, ar) => a.concat(ar.rows), []);
+
+    // One thread per requirement, grouped by how it lands. Drives the summary bar.
+    const bandOf = (k) => k === 'done' ? 0 : (k === 'progress' ? 1 : (k === 'gap' ? 3 : 2));
+    const bandDefs = [
+      { label: 'cleared', bg: '#33503E' },
+      { label: 'in progress', bg: '#A97A22' },
+      { label: 'to take', bg: '#8C8571' },
+      { label: 'no course', bg: '#9C3A2C' }
+    ];
+    const bandCounts = [0, 0, 0, 0];
+    activeRows.forEach(r => { bandCounts[bandOf(r.kind)] += 1; });
+    const summaryBar = bandDefs.map((b, i) => ({
+      bg: b.bg, label: bandCounts[i] + ' ' + b.label,
+      grow: bandCounts[i], show: bandCounts[i] > 0
+    })).filter(b => b.show);
+    const summaryText = bandDefs
+      .map((b, i) => bandCounts[i] ? bandCounts[i] + ' ' + b.label : null)
+      .filter(Boolean).join('  ·  ');
+
+    return {
+      steps, targets, courses, matches, areas, plan, tableRows, tabs, views,
+      isHome: s.screen === 'home', isUpload: s.screen === 'upload', isResults: s.screen === 'results',
+      homeOptions: HOME_OPTIONS, majors: MAJORS,
+      homeCollege: s.homeCollege,
+      homeShort: shortHome,
+      homeMapped: s.homeCollege !== 'Evergreen Valley College',
+      homeMappedNote: 'Catalog and articulation data in this prototype are mapped for Evergreen Valley College. Results below still use that catalog.',
+      onHomeChange: (e) => this.setState({ homeCollege: e.target.value }),
+      selectedCount: selected.length + ' of ' + TARGETS.length + ' selected',
+      homeSummary: selected.length
+        ? 'Comparing ' + selectedTargets.map(t => t.name).join(' and ') + '.'
+        : 'Pick at least one transfer target to continue.',
+      goUpload: this.go('upload'),
+      goHome: this.go('home'),
+      goResults: ready ? this.go('results') : () => {},
+      noop: () => {},
+
+      trIdle: s.trStatus === 'idle',
+      trParsing: s.trStatus === 'parsing',
+      trDone,
+      trSettled: s.trStatus === 'done' || s.trStatus === 'error',
+      trProgress: s.trProgress || 'Reading course history…',
+      trRing: s.trError ? C.flagRing : (trDone ? C.a800 : (s.dragging === 'tr' ? accent : C.n800)),
+      trCardBg: s.dragging === 'tr' ? C.a900 : C.surface,
+      trBadge: trDone ? s.courses.length + ' courses · ' + unitsTotal + ' units' : (s.trError ? 'Not recognized' : 'Required'),
+      trHint: s.trMessage || (s.dragging === 'tr' ? 'Release to read this file' : 'Drag a PDF, TXT, CSV or saved web page here. Any college\u2019s layout works — an unofficial transcript from your student portal is enough.'),
+      trHintFg: s.trError ? C.flag : C.n600,
+      trFileName: s.trFileName || '—',
+      trFileFg: s.trError ? C.flag : C.a300,
+      trIconBg: s.trError ? C.flag : accent,
+      trIcon: s.trError ? '!' : '✓',
+      trInputRef: this.trInput,
+      browseTr: () => { if (this.trInput.current) this.trInput.current.click(); },
+      onPickTr: (e) => { const f = e.target.files && e.target.files[0]; e.target.value = ''; this.handleTranscript(f); },
+      onDropTr: (e) => { const f = this.fileFrom(e); this.setState({ dragging: '' }); this.handleTranscript(f); },
+      onDragOverTr: (e) => { e.preventDefault(); if (s.dragging !== 'tr') this.setState({ dragging: 'tr' }); },
+      onDragOverAp: (e) => { e.preventDefault(); if (s.dragging !== 'ap') this.setState({ dragging: 'ap' }); },
+      onDragLeaveTr: () => this.setState({ dragging: '' }),
+      useSample: () => this.setState({
+        trStatus: 'done', trError: false, courses: COURSES, trFileName: 'evc_transcript_su26.pdf',
+        trMessage: 'Sample record loaded — 8 courses from Evergreen Valley College.'
+      }),
+
+      apIdle: s.apStatus === 'idle',
+      apParsing: s.apStatus === 'parsing',
+      apSettled: s.apStatus === 'done' || s.apStatus === 'error',
+      apRing: s.apError ? C.flagRing : (s.apStatus === 'done' ? C.a800 : (s.dragging === 'ap' ? accent : C.n800)),
+      apCardBg: s.dragging === 'ap' ? C.a900 : C.surface,
+      apBadge: s.apRows.length ? s.apRows.length + ' scores' : 'Optional',
+      apHint: s.apMessage || (s.dragging === 'ap' ? 'Release to read this file' : 'Scores clear requirements at some campuses and not others. Upload the College Board report or type them in.'),
+      apHintFg: s.apError ? C.flag : C.n600,
+      apInputRef: this.apInput,
+      browseAp: () => { if (this.apInput.current) this.apInput.current.click(); },
+      onPickAp: (e) => { const f = e.target.files && e.target.files[0]; e.target.value = ''; this.handleAp(f); },
+      onDropAp: (e) => { const f = this.fileFrom(e); this.setState({ dragging: '' }); this.handleAp(f); },
+      onDragLeaveAp: () => this.setState({ dragging: '' }),
+      enterAp: () => this.setState({ apStatus: 'done', apMessage: 'Type each exam and its score.' }),
+      apScores: s.apRows.map((a, i) => ({
+        exam: a.exam, score: a.score,
+        remove: () => this.setState(p => ({ apRows: p.apRows.filter((_, j) => j !== i) }))
+      })),
+      apDraftExam: s.apDraftExam,
+      apDraftScore: s.apDraftScore,
+      onApExam: (e) => this.setState({ apDraftExam: e.target.value }),
+      onApScore: (e) => this.setState({ apDraftScore: e.target.value }),
+      onApKey: (e) => { if (e.key === 'Enter') this.addApDraft(); },
+      addAp: () => this.addApDraft(),
+
+      unitsTotal, gpa,
+      adding: s.adding,
+      addLabel: s.adding ? 'Close search' : 'Add a course',
+      toggleAdd: () => this.setState(p => ({ adding: !p.adding })),
+      query: s.query,
+      onQuery: (e) => this.setState({ query: e.target.value }),
+      ctaFg: ready ? C.a300 : C.n600,
+      ctaBorder: ready ? accent : C.n800,
+      ctaCursor: ready ? 'pointer' : 'not-allowed',
+      ctaOpacity: ready ? '1' : '0.45',
+      uploadSummary: ready
+        ? 'Cross-referencing ' + s.courses.length + ' courses against ' + selected.length + ' agreements.'
+        : (selected.length ? 'Add a transcript, or add courses by hand, to run articulation.' : 'Pick at least one transfer target first.'),
+
+      resultsHeadline: clearedTotal + ' requirements cleared, ' + gapTotal + ' with nowhere to take them.',
+      gapCount: gapTotal,
+      gaps: gapList.map((g, gi) => Object.assign({}, g, { delay: (gi * 0.06).toFixed(2) + 's' })),
+      hasGaps: gapList.length > 0,
+      noAreas: areasRaw.length === 0,
+      noPlan: plan.length === 0,
+      planEmptyNote: areasRaw.length === 0
+        ? 'A term-by-term plan needs an articulation agreement for this campus.'
+        : 'Every course in the planned terms is already on your record — nothing left to schedule here.',
+      unmappedNote: familyFor(s.majors[activeTarget.id])
+        ? 'Articulation for ' + activeTarget.name + ' is not mapped in this prototype yet.'
+        : 'Major prep for ' + s.majors[activeTarget.id] + ' is not mapped in this prototype yet. Mapped majors cover computer science, engineering, mathematics, biology, business, economics, psychology, English and the health sciences.',
+      showAlts,
+      summaryBar: summaryBar, summaryText: summaryText, hasSummary: activeRows.length > 0,
+      activeName: activeTarget.name,
+      activeMajor: s.majors[activeTarget.id],
+      activeProgress: activeRows.filter(r => r.kind === 'done').length + ' of ' + activeRows.length + ' cleared',
+      activeNote: s.apRows.length
+        ? (familyFor(s.majors[tab]) === 'Computer Science' ? (NOTES[tab] || '').replace(/\bEVC\b/g, shortHome) : 'Exam credit rules differ by campus and by major.') + ' Scores on file: ' + s.apRows.map(a => a.exam + ' (' + a.score + ')').join(', ') + '. Exam credit is advisory — every campus applies it differently.'
+        : 'No AP or IB scores on file. Add them on the previous step if you have them — they clear requirements at some campuses and not others.',
+      isAreas: s.view === 'areas', isPlan: s.view === 'plan', isTable: s.view === 'table',
+      legend: [
+        { label: 'Cleared', dot: '#33503E' },
+        { label: 'In progress', dot: '#A97A22' },
+        { label: 'To take at ' + shortHome, dot: C.n700 },
+        { label: 'No course at ' + shortHome, dot: C.flag }
+      ]
+    };
+  }
+}
+
+</script>
+</body>
+</html>
