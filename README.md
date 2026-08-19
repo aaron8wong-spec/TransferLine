@@ -4,15 +4,13 @@ A static web app that reads your community college transcript and tells you, cam
 
 Live: https://transfer-line-six.vercel.app
 
-- `index.html` — landing page
-- `finder.html` — the three-step finder (Colleges → Records → Results)
-- `transfer-track.html` — earlier single-page version, kept for reference
-- `support.js` — the component runtime both pages load
-- `_ds/` — design-system stylesheet and bundle (Nocturne)
-- `api/read.js` — serverless transcript/score reader (optional, see below)
-- `backend/` — the ASSIST scraping and slot-matching pipeline that produces the articulation data
+## The problem
 
-## How it works
+A California community college student applying to five universities has to open five separate ASSIST agreements, cross-reference each one against their own transcript by hand, and hope they notice the requirements their own college doesn't offer. Those gaps are the expensive ones: a course that doesn't exist at your campus is usually discovered in the last semester, when there's no time left to cross-enroll somewhere that does teach it.
+
+TransferLine collapses that into one pass.
+
+## What it does
 
 **1. Colleges.** Pick your home community college, then any number of receiving universities and a major for each.
 
@@ -20,59 +18,53 @@ Live: https://transfer-line-six.vercel.app
 
 **3. Results.** Each campus gets a requirement-by-requirement table: cleared, still to take, or no articulated course. Requirements with no equivalent at your home college are grouped into a gaps panel that names nearby colleges where an articulated course does exist. The same data can be read as a semester plan or a flat course table.
 
-Campuses whose requirements come from the scraped ASSIST pipeline are badged **Verified**; the rest are badged **Sample** and use hard-coded placeholder articulation for demonstration.
+A concrete example the app surfaces: UC San Diego Computer Engineering requires Data Structures, and Evergreen Valley College has no articulated equivalent for it — so the finder tells the student to take CIS 22C at De Anza instead of leaving a blank row.
 
-## Data
+Campuses whose requirements come from the scraped ASSIST pipeline are badged **Verified**; the rest are badged **Sample** and use placeholder articulation for demonstration.
 
-The finder fetches three static JSON files at load:
+## How it was built
+
+### The data model
+
+Everything hinges on a *slot* — a canonical requirement id like `calc1`, `prog2`, or `comporg`. Berkeley's MATH 1A and UCLA's MATH 31A both resolve to the same `calc1` slot even though nothing about their codes matches, which is what makes multi-campus comparison possible at all. Three published files drive the frontend:
 
 | File | Shape |
 | --- | --- |
-| `backend/dist/school_majors.json` | `{ school_key: [{ id, label, slots: [...] }] }` |
-| `backend/dist/catalog.json` | `{ ccc_key: { slot_id: "course code" } }` |
+| `backend/dist/school_majors.json` | `{ school_key: [{ id, label, slots: [...] }] }` — which slots each major requires |
+| `backend/dist/catalog.json` | `{ ccc_key: { slot_id: "course code" } }` — what each slot looks like at each community college |
 | `backend/dist/slots.json` | the canonical slot registry (name + category) |
 
-A *slot* is a canonical requirement — `calc1`, `prog2`, `comporg` — so Berkeley's MATH 1A and UCLA's MATH 31A both resolve to the same slot even though nothing about their codes matches. `catalog.json` then answers "what does this slot look like at this community college?"
+### The pipeline
 
-Catalog cells are maintainer-authored prose, and the frontend parses them per receiving campus: `;` and `--` separate clauses, a clause naming the campus being viewed wins over a neutral one, a school named inside parentheses is a caveat rather than scope, provenance notes (`PDF`, `inferred`, `see limitation`) are dropped, `for COGS 9A`-style references are receiving courses, and `+` means every listed course is required. A clause stating that a campus has no equivalent renders as a real gap, not as missing data.
+`backend/` holds three Python stages, documented in [`backend/README.md`](backend/README.md):
 
-Regenerating these files is documented in [`backend/README.md`](backend/README.md) — three Python stages: scrape ASSIST, match courses to slots with a review queue for anything uncertain, then publish `dist/`.
+1. **`scrape_raw.py`** — fetches every (community college × university × major) combination from ASSIST's JSON endpoints, one file per combination, rate-limited.
+2. **`match_slots.py`** — classifies each articulation (clean one-to-one, a *series* that must be taken together, a set of *alternatives*, or a genuine no-articulation gap) and matches it to a canonical slot using keyword hints on the receiving course title. Anything not both cleanly classified *and* confidently matched goes to `data/review_queue.json` rather than being guessed at. A human resolves the queue in `slot_overrides.json`, keyed by `school|course` so decisions carry forward through future re-scrapes.
+3. **`build_dist.py`** — publishes the three `dist/` files. Unresolved queue items are excluded, which reads as "no articulation yet" in the frontend — the same honest signal as a confirmed gap.
 
-Known pipeline gap: `slot_registry.json` does not yet define `diffeq`, `physics3`, `circuits`, `cogsci_research`, or `psych_intro`, all of which `school_majors.json` requires. The frontend names them locally so no requirement silently disappears, but adding them to the registry is the real fix.
+### Parsing maintainer prose
 
-## The transcript reader
+Catalog cells are written by a human, not generated, so the frontend parses them per receiving campus: `;` and `--` separate clauses, a clause naming the campus being viewed beats a neutral one, a school named inside parentheses is a caveat rather than scope, provenance notes (`PDF`, `inferred`, `see limitation`) are dropped, `for COGS 9A`-style references are read as receiving courses, and `+` means every listed course is required. A clause stating a campus has no equivalent becomes a real gap rather than missing data.
 
-Transcript and score-report parsing has three paths, tried in order:
+### The transcript reader
+
+Three paths, tried in order:
 
 1. `window.claude.complete`, when the page runs inside the Claude design host.
-2. `POST /api/read?kind=courses|ap`, a Vercel serverless function that calls the Anthropic API with a fixed prompt. Requires `ANTHROPIC_API_KEY` in the project's environment variables.
+2. `POST /api/read?kind=courses|ap` — a Vercel serverless function calling the Anthropic API with a fixed prompt (the key stays server-side, and the two prompts are hard-coded so the endpoint can't be used as a general model proxy).
 3. A built-in columnar parser for the SJECCD/PeopleSoft transcript print, verified against a real 18-row EVC/San José City transcript. This runs with no key and no network at all.
 
-`api/read.js` accepts only the two fixed prompts, so it can't be used as a general model proxy. The articulation data itself is static and needs no server.
+### The frontend
 
-## Run locally
+Plain static HTML with no build step. `support.js` is the component runtime both pages load; `_ds/` carries the Nocturne design system's stylesheet and bundle. The articulation data is fetched as static JSON, so the whole app works from any file server.
 
-    python3 -m http.server 8000
-    # http://localhost:8000
+- `index.html` — landing page
+- `finder.html` — the three-step finder
+- `transfer-track.html` — earlier single-page version, kept for reference
 
-The finder fetches `backend/dist/*.json` over HTTP, so open it through a server rather than as a `file://` URL.
+## Honest limitations
 
-## Deploy on Vercel
-
-No build step — plain static HTML plus one serverless function.
-
-1. Import the repo on vercel.com: **Add New… → Project**.
-2. Framework Preset **Other**, Build Command empty, Output Directory `.`, Root Directory the repo root.
-3. Add `ANTHROPIC_API_KEY` under Settings → Environment Variables if you want the hosted reader.
-4. Deploy. Vercel serves `index.html` at the domain root and `finder.html` at `/finder.html`.
-
-From the CLI:
-
-    npx vercel        # preview
-    npx vercel --prod # production
-
-## Caveats
-
-- Articulation for most campuses is sample data. Verify anything that matters against ASSIST and a counselor before you register.
+- Articulation for most campuses is sample data. Verify anything that matters against ASSIST and a counselor before registering.
 - The ASSIST JSON endpoints the scraper uses are not an official public API and can change without notice.
 - Only `Course`-type articulations are parsed; ASSIST's `Series`, `Requirement`, and `GeneralEducation` types are not handled yet.
+- `slot_registry.json` does not yet define `diffeq`, `physics3`, `circuits`, `cogsci_research`, or `psych_intro`, all of which `school_majors.json` requires. The frontend names them locally so no requirement silently disappears, but adding them to the registry is the real fix.
