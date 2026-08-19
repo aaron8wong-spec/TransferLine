@@ -1,0 +1,38 @@
+[
+  {
+    "school_key": "ucsd",
+    "exam": "Calculus AB",
+    "min_score": 4,
+    "slot_id": "calc1"
+  },
+  {
+    "school_key": "ucsd",
+    "exam": "Calculus BC",
+    "min_score": 3,
+    "slot_id": "calc1"
+  },
+  {
+    "school_key": "ucsd",
+    "exam": "Calculus BC",
+    "min_score": 4,
+    "slot_id": "calc2"
+  },
+  {
+    "school_key": "uci",
+    "exam": "Calculus AB",
+    "min_score": 3,
+    "slot_id": "calc1"
+  },
+  {
+    "school_key": "uci",
+    "exam": "Calculus BC",
+    "min_score": 3,
+    "slot_id": "calc1"
+  },
+  {
+    "school_key": "uci",
+    "exam": "Calculus BC",
+    "min_score": 4,
+    "slot_id": "calc2"
+  }
+]

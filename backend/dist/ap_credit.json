@@ -1,1 +1,38 @@
-{}
+{
+  "ucsd": {
+    "calc1": [
+      {
+        "exam": "Calculus AB",
+        "min": 4
+      },
+      {
+        "exam": "Calculus BC",
+        "min": 3
+      }
+    ],
+    "calc2": [
+      {
+        "exam": "Calculus BC",
+        "min": 4
+      }
+    ]
+  },
+  "uci": {
+    "calc1": [
+      {
+        "exam": "Calculus AB",
+        "min": 3
+      },
+      {
+        "exam": "Calculus BC",
+        "min": 3
+      }
+    ],
+    "calc2": [
+      {
+        "exam": "Calculus BC",
+        "min": 4
+      }
+    ]
+  }
+}

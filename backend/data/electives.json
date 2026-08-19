@@ -35,12 +35,17 @@
         ]
       },
       {
-        "option_id": "physics_2course",
-        "option_label": "EVC PHYS 007A + PHYS 007B (only 2 courses -- EVC has no 3rd physics course option here)",
+        "option_id": "physics_calc_based",
+        "option_label": "EVC PHYS 007A + PHYS 007B (only 2 courses -- EVC has no 3rd course here). This satisfies UCI's CALCULUS-BASED 'Classical Physics' sequence (PHYSICS 7C/7D/7E) specifically.",
         "slots": [
           "physics1",
           "physics2"
         ]
+      },
+      {
+        "option_id": "physics_algebra_based",
+        "option_label": "UCI ALSO separately accepts an ALGEBRA-based 'Basic Physics' sequence (PHYSICS 3A/3B/3C) as an alternative option -- this is NOT the same course sequence as physics1/2/3 above and is NOT interchangeable with it (confirmed: user verified these are non-equivalent). No EVC course has been confirmed against this specific algebra-based track -- do not assume the calc-based mapping above covers it.",
+        "slots": []
       },
       {
         "option_id": "statistics",
@@ -112,13 +117,18 @@
         ]
       },
       {
-        "option_id": "physics_3course",
-        "option_label": "De Anza PHYS 2A/2B/2C (5 units, DEPRECATED next fall) OR PHYS 4A/4B/4C (6 units, use this one going forward)",
+        "option_id": "physics_calc_based",
+        "option_label": "De Anza PHYS 2A/2B/2C (5 units, DEPRECATED next fall) OR PHYS 4A/4B/4C (6 units, use this one going forward). This satisfies UCI's CALCULUS-BASED 'Classical Physics' sequence (PHYSICS 7C/7D/7E) specifically.",
         "slots": [
           "physics1",
           "physics2",
           "physics3"
         ]
+      },
+      {
+        "option_id": "physics_algebra_based",
+        "option_label": "UCI ALSO separately accepts an ALGEBRA-based 'Basic Physics' sequence (PHYSICS 3A/3B/3C) as an alternative option -- this is NOT the same course sequence as physics1/2/3 above and is NOT interchangeable with it (confirmed: user verified these are non-equivalent). No De Anza course has been confirmed against this specific algebra-based track -- do not assume the calc-based mapping above covers it.",
+        "slots": []
       },
       {
         "option_id": "statistics",
