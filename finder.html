@@ -88,7 +88,7 @@
               <span>Catalog year</span><span style="font-variant-numeric: tabular-nums; color: #2A2823;">2026–27</span>
             </div>
             <div style="display: flex; justify-content: space-between; font-size: 13px; color: #5B5749;">
-              <span>Sources</span><span style="color: #2A2823;">ASSIST + catalogs</span>
+              <span>Sources</span><span style="color: #2A2823;">{{ sourceSummary }}</span>
             </div>
             <div style="display: flex; justify-content: space-between; font-size: 13px; color: #5B5749;">
               <span>Term</span><span style="color: #2A2823;">Summer 2026</span>
@@ -101,13 +101,17 @@
             <div style="font-size: 11px; font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: 0.08em; text-transform: uppercase; color: #6F6A58;">Transfer targets</div>
             <div style="font-size: 12px; color: #6F6A58; font-variant-numeric: tabular-nums;">{{ selectedCount }}</div>
           </div>
+          <p style="font-size: 12px; line-height: 1.55; color: {{ sourceNoteFg }}; margin: -8.4px 0 16.8px; max-width: 620px;">{{ sourceNote }}</p>
           <div style="display: grid; gap: 8.4px;">
             <sc-for list="{{ targets }}" as="t" hint-placeholder-count="6">
               <div style="border: 1px solid {{ t.border }}; background: {{ t.bg }}; border-radius: 3px; padding: 11.2px 14px; display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; animation: rowIn 0.36s cubic-bezier(.22,.7,.2,1) both; animation-delay: {{ t.delay }}; transition: background 0.2s ease, border-color 0.2s ease, transform 0.16s ease;" style-hover="transform: translateX(3px);">
-                <button onClick="{{ t.toggle }}" style="display: flex; align-items: center; gap: 11.2px; background: none; border: none; padding: 0; text-align: left; cursor: pointer; color: inherit;">
-                  <span style="width: 17px; height: 17px; border-radius: 2px; border: 1.5px solid {{ t.boxBorder }}; background: {{ t.boxBg }}; display: flex; align-items: center; justify-content: center; color: #E9EFE8; font-size: 11px; font-weight: 600; flex-shrink: 0; transition: background 0.18s ease, border-color 0.18s ease;"><span style="animation: markIn 0.22s cubic-bezier(.22,.7,.2,1) both;">{{ t.check }}</span></span>
-                  <span style="display: grid; gap: 2.8px;">
-                    <span style="font-size: 14px; font-weight: 500;">{{ t.name }}</span>
+                <button onClick="{{ t.toggle }}" style="display: flex; align-items: center; gap: 11.2px; background: none; border: none; padding: 0; text-align: left; cursor: pointer; color: inherit; min-width: 0;">
+                  <span style="width: 18px; height: 18px; border-radius: 2px; border: 1.5px solid {{ t.boxBorder }}; background: {{ t.boxBg }}; box-shadow: inset 0 0 0 1px rgba(255,253,246,0.6); display: flex; align-items: center; justify-content: center; color: #E9EFE8; font-size: 11px; font-weight: 600; flex-shrink: 0; transition: background 0.18s ease, border-color 0.18s ease;"><span style="animation: markIn 0.22s cubic-bezier(.22,.7,.2,1) both;">{{ t.check }}</span></span>
+                  <span style="display: grid; gap: 2.8px; min-width: 0;">
+                    <span style="display: flex; align-items: center; gap: 8.4px; min-width: 0;">
+                      <span style="font-size: 14px; font-weight: 500; white-space: nowrap;">{{ t.name }}</span>
+                      <span style="font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 1.4px 5.6px; border-radius: 2px; color: {{ t.badgeFg }}; background: {{ t.badgeBg }}; border: 1px solid {{ t.badgeBorder }};">{{ t.badge }}</span>
+                    </span>
                     <span style="font-size: 12px; color: #6F6A58;">{{ t.note }}</span>
                   </span>
                 </button>
@@ -125,7 +129,7 @@
       </div>
 
       <div style="display: flex; align-items: center; gap: 22.4px; margin-top: 33.6px;">
-        <button onClick="{{ goUpload }}" style="padding: 11.2px 22.4px; font-size: 14px; font-weight: 500; color: #243A2C; background: transparent; border: 1px solid #33503E; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.12s ease;" style-hover="background: #E3EBE2; color: #1F3327;">Continue to records</button>
+        <button onClick="{{ goUpload }}" style="padding: 11.2px 22.4px; font-size: 14px; font-weight: 500; color: #F6F1E5; background: #33503E; border: 1px solid #33503E; border-radius: 3px; cursor: pointer; transition: background 0.18s ease, transform 0.12s ease;" style-hover="background: #26402F;">Continue to records</button>
         <span style="font-size: 13px; color: #6F6A58;">{{ homeSummary }}</span>
       </div>
     </div>
@@ -135,7 +139,7 @@
     <div style="max-width: 1080px; margin: 0 auto; padding: 56px 33.6px 89.6px; animation: riseIn 0.42s cubic-bezier(.22,.7,.2,1) both;">
       
       <h1 style="font-weight: 400; font-size: 36px; line-height: 1.14; margin: 0 0 11.2px;">Add your records.</h1>
-      <p style="font-size: 15px; line-height: 1.6; color: #5B5749; margin: 0 0 33.6px; max-width: 540px;">Unofficial transcripts are fine. Everything we read stays editable — fix anything wrong before it reaches your results.</p>
+      <p style="font-size: 15px; line-height: 1.6; color: #5B5749; margin: 0 0 33.6px; white-space: nowrap;">Unofficial transcripts are fine. Everything we read stays editable — fix anything wrong before it reaches your results.</p>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16.8px;">
         <div onDragOver="{{ onDragOverTr }}" onDragEnter="{{ onDragOverTr }}" onDragLeave="{{ onDragLeaveTr }}" onDrop="{{ onDropTr }}" style="background: {{ trCardBg }}; border-radius: 3px; box-shadow: 0 0 0 1px {{ trRing }}; padding: 22.4px; min-height: 190px; display: flex; flex-direction: column; justify-content: space-between; transition: background 0.15s ease;">
@@ -265,7 +269,7 @@
       </sc-if>
 
       <div style="display: flex; align-items: center; gap: 22.4px; margin-top: 33.6px;">
-        <button onClick="{{ goResults }}" style="padding: 11.2px 22.4px; font-size: 14px; font-weight: 500; color: {{ ctaFg }}; background: transparent; border: 1px solid {{ ctaBorder }}; border-radius: 3px; cursor: {{ ctaCursor }}; opacity: {{ ctaOpacity }};" style-hover="background: #E3EBE2;">Run articulation</button>
+        <button onClick="{{ goResults }}" style="padding: 11.2px 22.4px; font-size: 14px; font-weight: 500; color: {{ ctaFg }}; background: {{ ctaBg }}; border: 1px solid {{ ctaBorder }}; border-radius: 3px; cursor: {{ ctaCursor }}; opacity: {{ ctaOpacity }}; transition: background 0.18s ease, transform 0.12s ease;" style-hover="background: {{ ctaHover }};">Run articulation</button>
         <span style="font-size: 13px; color: #6F6A58;">{{ uploadSummary }}</span>
       </div>
     </div>
@@ -320,7 +324,10 @@
         <div style="display: flex; flex-wrap: wrap; gap: 5.6px; min-width: 0; flex: 1 1 520px;">
           <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="2">
             <button onClick="{{ tab.select }}" style="display: grid; gap: 2.8px; text-align: left; padding: 8.4px 14px; background: {{ tab.bg }}; border: 1px solid {{ tab.border }}; border-radius: 3px; cursor: pointer; color: {{ tab.fg }};" style-hover="border-color: #33503E;">
-              <span style="font-size: 13px; font-weight: 500;">{{ tab.name }}</span>
+              <span style="display: flex; align-items: center; gap: 8.4px;">
+                <span style="font-size: 13px; font-weight: 500;">{{ tab.name }}</span>
+                <span style="font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; padding: 1.4px 5.6px; border-radius: 2px; color: {{ tab.badgeFg }}; background: {{ tab.badgeBg }};">{{ tab.badge }}</span>
+              </span>
               <span style="font-size: 11px; color: #6F6A58;">{{ tab.sub }}</span>
             </button>
           </sc-for>
@@ -476,7 +483,7 @@
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;showAlternatives&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#33503E&quot;,&quot;options&quot;:[&quot;#33503E&quot;,&quot;#4A6E56&quot;,&quot;#33503E&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;showAlternatives&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Behavior&quot;},&quot;dataBase&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;backend/dist/&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Data&quot;},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#33503E&quot;,&quot;options&quot;:[&quot;#33503E&quot;,&quot;#4A6E56&quot;,&quot;#33503E&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Theme&quot;}}">
 const C = {
   bg: '#EDE6D4', surface: '#F6F1E5', text: '#2A2823',
   n900: '#E1D8C0', n800: '#C9BFA6', n700: '#8C8571', n600: '#6F6A58', n400: '#5B5749',
@@ -1624,8 +1631,136 @@ const STATUS = {
     stripe: '#9C3A2C', dash: '1 4', endFill: 'transparent' }
 };
 
+/* ---------------------------------------------------------------
+   Live backend data — backend/dist/*.json, published by the Python
+   pipeline (worksheet.xlsx -> convert_worksheet.py -> build_dist.py).
+   These are plain static files, so this works on Vercel with no
+   server. Where a (home college x campus x major) combination
+   exists in dist, its rows replace the sample data and the pair is
+   badged as verified; everything else stays sample data.
+--------------------------------------------------------------- */
+const DIST_BASE = 'backend/dist/';
+const DIST_SCHOOL = { irvine: 'uci', ucsd: 'ucsd' };
+const DIST_CCC = { 'Evergreen Valley College': 'evc', 'De Anza College': 'deanza' };
+const DIST_AREA_NAME = { math: 'Mathematics', programming: 'Major preparation', science: 'Science', business: 'Business core' };
+const DIST_AREA_ORDER = ['math', 'programming', 'science', 'business'];
+
+function loadDist(base) {
+  const grab = (name) => fetch(base + name, { cache: 'no-store' }).then(r => {
+    if (!r.ok) throw new Error(name + ' — HTTP ' + r.status);
+    return r.json();
+  });
+  return Promise.all([grab('school_majors.json'), grab('catalog.json'), grab('slots.json')])
+    .then(parts => ({ schoolMajors: parts[0], catalog: parts[1], slots: parts[2] }));
+}
+
+// 'Cognitive Science, B.S.' here and 'Cognitive Sciences (School of Social
+// Sciences)' in the agreement are the same major.
+const majorKey = (label) => String(label || '').split(/[,(]/)[0].toLowerCase().replace(/\s+/g, ' ').trim().replace(/s$/, '');
+
+// dist catalog cells are maintainer-authored: a primary code, ASSIST's
+// alternates, per-receiving-school clauses split by ';', and provenance notes
+// after '--'. Only the clauses that apply to the campus being viewed reach the
+// student, and a clause that says the campus has no equivalent is a real gap.
+const SCHOOL_ALIASES = { uci: ['UCI', 'UC Irvine'], ucsd: ['UCSD', 'UC San Diego'] };
+const mentionsSchool = (seg, names) => (names || []).some(n => seg.toLowerCase().indexOf(n.toLowerCase()) >= 0);
+const negativeClause = (seg) => /no\s+([a-z']+\s+){0,3}equival|permanent gap/i.test(seg);
+
+function cellForSchool(cell, schoolKey) {
+  const text = String(cell);
+  const mine = SCHOOL_ALIASES[schoolKey] || [];
+  const others = Object.keys(SCHOOL_ALIASES).filter(k => k !== schoolKey);
+  const clauses = text.split(/;|--/).map(x => x.trim()).filter(Boolean);
+  const excluded = clauses.some(seg => negativeClause(seg) && mentionsSchool(seg, mine));
+  // Drop clauses written about a different campus, and provenance after '--'.
+  const kept = text.split('--')[0].split(';').map(x => x.trim()).filter(seg =>
+    seg && !negativeClause(seg) && !others.some(k => mentionsSchool(seg, SCHOOL_ALIASES[k]) && !mentionsSchool(seg, mine))
+  ).join('; ');
+  const paren = kept.match(/\(([^)]*)\)/);
+  const detail = paren && !/pdf|permanent gap|see limitation/i.test(paren[1]) ? paren[1] : '';
+  return { text: kept, detail: detail, excluded: excluded };
+}
+
+function codesIn(cell) {
+  const found = String(cell).match(/\b[A-Z]{2,6}\s?[A-Z]?\d{1,4}[A-Z]{0,2}\b/g) || [];
+  const seen = {};
+  return found.map(c => c.replace(/\s+/g, ' ').trim()).filter(c => (seen[c] ? false : (seen[c] = 1)));
+}
+
+// school_majors.json requires a few slots that slot_registry.json does not
+// define yet (diffeq, physics3, circuits, cogsci_research, psych_intro). A
+// requirement must never disappear because the registry is behind, so name it
+// here and, failing that, from the slot id itself.
+const SLOT_FALLBACK = {
+  diffeq: { name: 'Differential Equations', cat: 'math' },
+  physics3: { name: 'Physics III — Waves, Optics & Thermodynamics (w/ Calc)', cat: 'science' },
+  circuits: { name: 'Introduction to Circuit Analysis', cat: 'programming' },
+  cogsci_research: { name: 'Research Methods & Statistics', cat: 'science' },
+  psych_intro: { name: 'Introduction to Psychology', cat: 'science' }
+};
+// The catalog cell describes the sending side, so its parenthetical is usually
+// just the alternate codes already shown in the home column, or the slot's own
+// name. Keep it only when prose survives stripping codes and connectives.
+function usefulDetail(detail, slotName) {
+  if (!detail) return '';
+  const bare = (x) => String(x).toLowerCase().replace(/[^a-z]/g, '');
+  if (bare(detail) === bare(slotName)) return '';
+  const residue = detail
+    .replace(/\b[A-Z]{2,6}\s?[A-Z]?\d{1,4}[A-Z]{0,2}\b/g, ' ')
+    .replace(/\b(or|and|also|any|of|these|non-STEM|java|python|for|the|combined|general|physics|math)\b/gi, ' ')
+    .replace(/[^a-z]/gi, '');
+  return residue.length >= 20 ? detail : '';
+}
+
+function slotMeta(dist, slotId) {
+  const known = dist.slots[slotId] || SLOT_FALLBACK[slotId];
+  if (known) return known;
+  const cat = /calc|math|algebra|diffeq|discrete|stat/.test(slotId) ? 'math'
+    : /phys|chem|bio|psych|research|sci/.test(slotId) ? 'science'
+    : /acct|econ|biz|law|mis|market/.test(slotId) ? 'business'
+    : 'programming';
+  return { name: slotId.replace(/[_-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase()), cat: cat };
+}
+
+function distAreasFor(dist, targetId, majorLabel, homeCollege) {
+  if (!dist) return null;
+  const schoolKey = DIST_SCHOOL[targetId];
+  const cccKey = DIST_CCC[homeCollege];
+  if (!schoolKey || !cccKey) return null;
+  const major = (dist.schoolMajors[schoolKey] || []).filter(m => majorKey(m.label) === majorKey(majorLabel))[0];
+  if (!major) return null;
+  const catalog = dist.catalog[cccKey] || {};
+  const buckets = {};
+  major.slots.forEach(slotId => {
+    const slot = slotMeta(dist, slotId);
+    const cell = catalog[slotId];
+    const parsed = cell ? cellForSchool(cell, schoolKey) : { text: '', detail: '', excluded: false };
+    const codes = parsed.excluded ? [] : codesIn(parsed.text);
+    const cat = DIST_AREA_ORDER.indexOf(slot.cat) >= 0 ? slot.cat : 'programming';
+    buckets[cat] = buckets[cat] || [];
+    buckets[cat].push(codes.length ? {
+      req: slot.name, reqTitle: usefulDetail(parsed.detail, slot.name), home: codes.length > 1 ? codes : codes[0],
+      homeTitle: '', status: '', kind: 'done', verified: true
+    } : {
+      req: slot.name,
+      reqTitle: parsed.excluded
+        ? 'Required by the major — the agreement lists no equivalent for this campus'
+        : 'Required by the major — nothing articulates in the agreement',
+      home: 'No equivalent', homeTitle: '', status: 'No course', kind: 'gap', verified: true
+    });
+  });
+  const areas = DIST_AREA_ORDER.filter(c => buckets[c]).map(c => ({
+    name: c === 'programming' ? DIST_AREA_NAME[c] + ' — ' + major.label : DIST_AREA_NAME[c],
+    rows: buckets[c]
+  }));
+  return areas.length ? areas : null;
+}
+
 class Component extends DCLogic {
   state = {
+    dist: null,
+    distStatus: 'loading',
+    distError: '',
     screen: 'home',
     homeCollege: 'Evergreen Valley College',
     selected: ['berkeley', 'sjsu'],
@@ -1652,6 +1787,14 @@ class Component extends DCLogic {
 
   trInput = React.createRef();
   apInput = React.createRef();
+
+  componentDidMount() {
+    const base = this.props.dataBase ?? DIST_BASE;
+    loadDist(base).then(
+      (dist) => this.setState({ dist, distStatus: 'live' }),
+      (err) => this.setState({ distStatus: 'sample', distError: String((err && err.message) || err) })
+    );
+  }
 
   go = (screen) => () => { this.setState({ screen }); window.scrollTo(0, 0); };
 
@@ -1764,13 +1907,21 @@ class Component extends DCLogic {
         bg: on ? '#EDE6D4' : '#DED4B9', fg: on ? C.text : C.n600, border: '#C6BB9C' };
     });
 
+    const verifiedFor = (id) => !!distAreasFor(s.dist, id, s.majors[id], s.homeCollege);
+    const verifiedIds = TARGETS.filter(t => verifiedFor(t.id)).map(t => t.id);
+
     const targets = TARGETS.map((t, ti) => {
       const on = selected.indexOf(t.id) >= 0;
+      const live = verifiedFor(t.id);
       return {
         name: t.name, note: t.note, selected: on, check: on ? '✓' : '', delay: (ti * 0.03).toFixed(2) + 's',
+        badge: live ? 'Verified' : 'Sample',
+        badgeFg: live ? '#33503E' : '#6F6A58',
+        badgeBg: live ? '#E3EADF' : '#E7DFC9',
+        badgeBorder: live ? '#A9BFA6' : '#C9BFA6',
         major: s.majors[t.id],
         bg: on ? C.a900 : 'transparent', border: on ? C.a800 : C.n800,
-        boxBg: on ? accent : 'transparent', boxBorder: on ? accent : C.n700,
+        boxBg: on ? accent : '#FFFDF6', boxBorder: on ? accent : '#6F6A58',
         toggle: () => this.setState(p => ({
           selected: p.selected.indexOf(t.id) >= 0 ? p.selected.filter(x => x !== t.id) : p.selected.concat([t.id])
         })),
@@ -1850,6 +2001,9 @@ class Component extends DCLogic {
     // The campus keeps writing and general education; the chosen major supplies
     // major prep and the quantitative/science sequence.
     const areasSourceFor = (id) => {
+      // A published agreement for this pairing wins over the sample data.
+      const live = distAreasFor(s.dist, id, s.majors[id], s.homeCollege);
+      if (live) return live;
       const campus = AREAS[id] || [];
       if (!campus.length) return [];
       const family = familyFor(s.majors[id]);
@@ -1866,7 +2020,11 @@ class Component extends DCLogic {
       const rows = resolvedFor(t.id).reduce((a, ar) => a.concat(ar.rows), []);
       const cleared = rows.filter(r => r.kind === 'done').length;
       const gaps = rows.filter(r => r.kind === 'gap').length;
+      const live = verifiedFor(t.id);
       return { name: t.name, sub: cleared + ' of ' + rows.length + ' cleared · ' + gaps + ' with no course',
+        badge: live ? 'Verified' : 'Sample',
+        badgeFg: live ? '#33503E' : '#6F6A58',
+        badgeBg: live ? '#E3EADF' : '#E7DFC9',
         select: () => this.setState({ tab: t.id }),
         bg: on ? C.a900 : 'transparent', fg: on ? C.a300 : C.n400,
         border: on ? C.a800 : C.n800 };
@@ -2053,6 +2211,15 @@ class Component extends DCLogic {
       homeMappedNote: 'Catalog and articulation data in this prototype are mapped for Evergreen Valley College. Results below still use that catalog.',
       onHomeChange: (e) => this.setState({ homeCollege: e.target.value }),
       selectedCount: selected.length + ' of ' + TARGETS.length + ' selected',
+      sourceSummary: s.distStatus === 'loading'
+        ? 'Loading agreements…'
+        : (verifiedIds.length
+            ? verifiedIds.length + ' verified · ' + (TARGETS.length - verifiedIds.length) + ' sample'
+            : 'Sample data'),
+      sourceNote: s.distStatus === 'live'
+        ? 'Campuses badged Verified read their requirements from the published ASSIST agreements in backend/dist. The rest are sample data for demonstration.'
+        : 'Published agreement data could not be loaded (' + (s.distError || 'not available at this path') + '), so every campus below shows sample data.',
+      sourceNoteFg: s.distStatus === 'live' ? '#6F6A58' : '#9C3A2C',
       homeSummary: selected.length
         ? 'Comparing ' + selectedTargets.map(t => t.name).join(' and ') + '.'
         : 'Pick at least one transfer target to continue.',
@@ -2118,7 +2285,9 @@ class Component extends DCLogic {
       toggleAdd: () => this.setState(p => ({ adding: !p.adding })),
       query: s.query,
       onQuery: (e) => this.setState({ query: e.target.value }),
-      ctaFg: ready ? C.a300 : C.n600,
+      ctaFg: ready ? '#F6F1E5' : C.n600,
+      ctaBg: ready ? '#33503E' : 'transparent',
+      ctaHover: ready ? '#26402F' : 'transparent',
       ctaBorder: ready ? accent : C.n800,
       ctaCursor: ready ? 'pointer' : 'not-allowed',
       ctaOpacity: ready ? '1' : '0.45',
