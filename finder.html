@@ -289,7 +289,7 @@
       <div style="border-radius: 3px; box-shadow: 0 0 0 1px #C99C90; background: #F3E3DD; padding: 22.4px; margin-bottom: 28px;">
         <div style="display: flex; align-items: baseline; gap: 11.2px; margin-bottom: 5.6px;">
           <span style="font-size: 26px; font-weight: 500; color: #9C3A2C; font-variant-numeric: tabular-nums;">{{ gapCount }}</span>
-          <span style="font-size: 15px; font-weight: 600; color: #9C3A2C;">requirements have no articulated course at {{ homeShort }}</span>
+          <span style="font-size: 15px; font-weight: 600; color: #9C3A2C;">{{ gapPhrase }}</span>
         </div>
         <p style="font-size: 13px; line-height: 1.6; color: #5B5749; margin: 0 0 16.8px; max-width: 660px;">These can't be satisfied at your home college under the current agreement. Cross-enrolling is the usual path. Every option below still needs sign-off from a counselor before you register.</p>
         <div style="display: grid; gap: 11.2px;">
@@ -1478,13 +1478,34 @@ function jsonFrom(reply) {
   return JSON.parse(body.slice(start, end + 1));
 }
 
+// Inside the Claude design host the reader is window.claude.complete. On a
+// normal deploy that does not exist, so the same prompt goes to
+// /api/read?kind=… — a serverless function holding the API key. Either way the
+// caller gets the model's raw text back, and the pattern-matching parser is
+// still the last resort.
+const READER_API = '/api/read';
+
+async function askReader(kind, prompt, maxTokens, text) {
+  if (window.claude && window.claude.complete) {
+    return window.claude.complete({
+      model: 'claude-sonnet-4-5',
+      max_tokens: maxTokens,
+      system: READ_SYSTEM,
+      messages: [{ role: 'user', content: prompt }]
+    });
+  }
+  const res = await fetch(READER_API + '?kind=' + kind, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text: text })
+  });
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok || !data.reply) throw new Error(data.error || 'reader unavailable (HTTP ' + res.status + ')');
+  return data.reply;
+}
+
 async function readCoursesWithClaude(text) {
-  if (!(window.claude && window.claude.complete)) throw new Error('unavailable');
-  const reply = await window.claude.complete({
-    model: 'claude-sonnet-4-5',
-    max_tokens: 8000,
-    system: READ_SYSTEM,
-    messages: [{ role: 'user', content:
+  const reply = await askReader('courses',
       'Extract every course from this community college transcript.\n\n' +
       'Return a JSON object: {"college": string|null, "courses": [{"code": string, "title": string, "units": number, "grade": string, "term": string}]}\n\n' +
       'Rules:\n' +
@@ -1495,8 +1516,7 @@ async function readCoursesWithClaude(text) {
       '- term: abbreviate as "Fa 2024", "Sp 2025", "Su 2026", "Wi 2025". Use the term heading the course sits under. If none, use "—".\n' +
       '- Skip totals, GPA lines, transfer-credit summaries, and test credit.\n' +
       '- If a row is ambiguous, include it with your best reading rather than dropping it.\n\n' +
-      'TRANSCRIPT TEXT:\n' + text.slice(0, 60000) }]
-  });
+      'TRANSCRIPT TEXT:\n' + text.slice(0, 60000), 8000, text);
   const data = jsonFrom(reply);
   const rows = (data.courses || [])
     .filter(c => c && c.code && c.title)
@@ -1512,20 +1532,14 @@ async function readCoursesWithClaude(text) {
 }
 
 async function readApWithClaude(text) {
-  if (!(window.claude && window.claude.complete)) throw new Error('unavailable');
-  const reply = await window.claude.complete({
-    model: 'claude-sonnet-4-5',
-    max_tokens: 2000,
-    system: READ_SYSTEM,
-    messages: [{ role: 'user', content:
+  const reply = await askReader('ap',
       'Extract every AP or IB exam score from this score report.\n\n' +
       'Return a JSON object: {"scores": [{"exam": string, "score": number}]}\n\n' +
       'Rules:\n' +
       '- exam: the subject name without the leading "AP" (e.g. "Calculus BC", "Physics 1: Algebra-Based", "Computer Science A"). Keep subject codes uppercase.\n' +
       '- score: the reported score as a number. If the same exam appears more than once, keep the highest.\n' +
       '- Ignore dates, administration years, "sent to" columns, and student identifiers.\n\n' +
-      'REPORT TEXT:\n' + text.slice(0, 40000) }]
-  });
+      'REPORT TEXT:\n' + text.slice(0, 40000), 2000, text);
   const data = jsonFrom(reply);
   const rows = (data.scores || [])
     .filter(a => a && a.exam && Number(a.score) >= 1)
@@ -1534,7 +1548,55 @@ async function readApWithClaude(text) {
   return rows;
 }
 
+// SJECCD-style columnar transcripts (San José City / Evergreen Valley, and the
+// same PeopleSoft print used by many districts):
+//
+//   MATH 073 202 EVC Multivariable Calculus A 5.00 5.00 20.0000
+//   CHEM 001A 201 EVC General Chemistry            <- enrolled, no grade yet
+//   Fall 2026 Regular Term Totals: ...             <- term named AFTER its rows
+//
+// The term heading follows its courses, so rows are buffered and stamped when
+// the term-totals line names them.
+const COL_ROW_RE = /^([A-Z]{2,6})\s+([A-Z]?\d{2,4}[A-Z]?)\s+(\d{2,3})\s+([A-Z]{2,4})\s+(.+?)(?:\s+([A-Z][+-]?|IP|CR|NC|NP|P|W|RD)(?:\s+([A-Z]{1,2}))?\s+([\d.]+)\s+([\d.]+)\s+([\d.]+))?$/;
+const COL_TERM_RE = /^(Fall|Spring|Summer|Winter)\s+(\d{4})\b.*Term Totals/i;
+
+function parseCoursesColumnar(text) {
+  const out = [];
+  const seen = {};
+  let pending = [];
+  text.split(/\r?\n/).forEach(raw => {
+    const line = raw.replace(/\s+/g, ' ').trim();
+    if (!line) return;
+    const t = line.match(COL_TERM_RE);
+    if (t) {
+      const label = normalizeTerm(t[1], t[2]);
+      pending.forEach(r => { r.term = label; });
+      pending = [];
+      return;
+    }
+    if (/totals:|academic standing|gpa =/i.test(line)) return;
+    const m = line.match(COL_ROW_RE);
+    if (!m) return;
+    const code = (m[1] + ' ' + m[2]).toUpperCase();
+    if (seen[code]) return;
+    seen[code] = 1;
+    const graded = !!m[6];
+    const row = {
+      code: code,
+      title: titleCase(m[5]),
+      units: graded ? parseFloat(m[8]) || 0 : 0,
+      grade: graded ? normalizeGrade(m[6]) : 'IP',
+      term: '—'
+    };
+    out.push(row);
+    pending.push(row);
+  });
+  return out;
+}
+
 function parseCourses(text) {
+  const columnar = parseCoursesColumnar(text);
+  if (columnar.length >= 3) return columnar;
   const out = [];
   const seen = {};
   let term = '';
@@ -1666,19 +1728,32 @@ const SCHOOL_ALIASES = { uci: ['UCI', 'UC Irvine'], ucsd: ['UCSD', 'UC San Diego
 const mentionsSchool = (seg, names) => (names || []).some(n => seg.toLowerCase().indexOf(n.toLowerCase()) >= 0);
 const negativeClause = (seg) => /no\s+([a-z']+\s+){0,3}equival|permanent gap/i.test(seg);
 
+// Maintainer prose about how the mapping was established, not about courses.
+const PROVENANCE = /\bpdf\b|\bnote:|inferred|see limitation|same limitation|confirmed via|not read as/i;
+// Scope is written outside parentheses ("… for UCSD"); a school named inside
+// them is a caveat about an alternate ("also PHYS 2A works for UCI Cogsci …").
+const outsideParens = (seg) => seg.replace(/\([^)]*\)/g, ' ');
+// "for COGS 9A" names the receiving course, never a course at the CCC.
+const dropReceiving = (seg) => seg.replace(/\bfor\s+[A-Z]{2,6}\s?\d{1,4}[A-Z]{0,2}\b/g, ' ');
+
 function cellForSchool(cell, schoolKey) {
   const text = String(cell);
   const mine = SCHOOL_ALIASES[schoolKey] || [];
   const others = Object.keys(SCHOOL_ALIASES).filter(k => k !== schoolKey);
-  const clauses = text.split(/;|--/).map(x => x.trim()).filter(Boolean);
+  const clauses = text.split(/;|--/).map(x => x.replace(/^\s*but\s+/i, '').trim()).filter(Boolean);
   const excluded = clauses.some(seg => negativeClause(seg) && mentionsSchool(seg, mine));
-  // Drop clauses written about a different campus, and provenance after '--'.
-  const kept = text.split('--')[0].split(';').map(x => x.trim()).filter(seg =>
-    seg && !negativeClause(seg) && !others.some(k => mentionsSchool(seg, SCHOOL_ALIASES[k]) && !mentionsSchool(seg, mine))
-  ).join('; ');
-  const paren = kept.match(/\(([^)]*)\)/);
-  const detail = paren && !/pdf|permanent gap|see limitation/i.test(paren[1]) ? paren[1] : '';
-  return { text: kept, detail: detail, excluded: excluded };
+  // Provenance is judged outside parentheses too, so a real clause carrying a
+  // "(see limitation note above)" aside still counts.
+  const usable = clauses.filter(seg => !negativeClause(seg) && !PROVENANCE.test(outsideParens(seg)));
+  const scope = (seg) => outsideParens(seg);
+  // A clause naming this campus wins; failing that, one naming no campus.
+  const forMe = usable.filter(seg => mentionsSchool(scope(seg), mine));
+  const neutral = usable.filter(seg => !others.some(k => mentionsSchool(scope(seg), SCHOOL_ALIASES[k])) && !mentionsSchool(scope(seg), mine));
+  const kept = (forMe.length ? forMe : neutral).map(dropReceiving);
+  const primary = kept[0] || '';
+  const paren = primary.match(/\(([^)]*)\)/);
+  const detail = paren && !PROVENANCE.test(paren[1]) && !/permanent gap/i.test(paren[1]) ? paren[1] : '';
+  return { text: primary, detail: detail, alternate: kept.slice(1).join('; '), excluded: excluded };
 }
 
 function codesIn(cell) {
@@ -1695,22 +1770,30 @@ const SLOT_FALLBACK = {
   diffeq: { name: 'Differential Equations', cat: 'math' },
   physics3: { name: 'Physics III — Waves, Optics & Thermodynamics (w/ Calc)', cat: 'science' },
   circuits: { name: 'Introduction to Circuit Analysis', cat: 'programming' },
+  comporg: { name: 'Computer Organization & Systems Programming', cat: 'programming' },
   cogsci_research: { name: 'Research Methods & Statistics', cat: 'science' },
   psych_intro: { name: 'Introduction to Psychology', cat: 'science' }
 };
 // The catalog cell describes the sending side, so its parenthetical is usually
 // just the alternate codes already shown in the home column, or the slot's own
 // name. Keep it only when prose survives stripping codes and connectives.
-function usefulDetail(detail, slotName) {
+function usefulDetail(detail, slotName, schoolKey) {
   if (!detail) return '';
   const bare = (x) => String(x).toLowerCase().replace(/[^a-z]/g, '');
   if (bare(detail) === bare(slotName)) return '';
+  // A caveat about a different campus is not this campus's business.
+  const elsewhere = Object.keys(SCHOOL_ALIASES).filter(k => k !== schoolKey)
+    .some(k => mentionsSchool(detail, SCHOOL_ALIASES[k]));
+  if (elsewhere) return '';
   const residue = detail
     .replace(/\b[A-Z]{2,6}\s?[A-Z]?\d{1,4}[A-Z]{0,2}\b/g, ' ')
     .replace(/\b(or|and|also|any|of|these|non-STEM|java|python|for|the|combined|general|physics|math)\b/gi, ' ')
     .replace(/[^a-z]/gi, '');
   return residue.length >= 20 ? detail : '';
 }
+
+const listPhrase = (items) => items.length < 2 ? (items[0] || '')
+  : items.slice(0, -1).join(', ') + ' and ' + items[items.length - 1];
 
 function slotMeta(dist, slotId) {
   const known = dist.slots[slotId] || SLOT_FALLBACK[slotId];
@@ -1734,12 +1817,20 @@ function distAreasFor(dist, targetId, majorLabel, homeCollege) {
   major.slots.forEach(slotId => {
     const slot = slotMeta(dist, slotId);
     const cell = catalog[slotId];
-    const parsed = cell ? cellForSchool(cell, schoolKey) : { text: '', detail: '', excluded: false };
-    const codes = parsed.excluded ? [] : codesIn(parsed.text);
+    const parsed = cell ? cellForSchool(cell, schoolKey) : { text: '', detail: '', alternate: '', excluded: false };
+    // '+' means every course is required; within a group, any one of the codes
+    // satisfies it.
+    const groups = parsed.excluded ? []
+      : parsed.text.split('+').map(part => codesIn(part)).filter(g => g.length);
+    const note = [usefulDetail(parsed.detail, slot.name, schoolKey), parsed.alternate ? 'Alternate: ' + parsed.alternate : '']
+      .filter(Boolean).join(' · ');
     const cat = DIST_AREA_ORDER.indexOf(slot.cat) >= 0 ? slot.cat : 'programming';
     buckets[cat] = buckets[cat] || [];
-    buckets[cat].push(codes.length ? {
-      req: slot.name, reqTitle: usefulDetail(parsed.detail, slot.name), home: codes.length > 1 ? codes : codes[0],
+    buckets[cat].push(groups.length > 1 ? {
+      req: slot.name, reqTitle: note, parts: groups, home: groups.map(g => g[0]).join(' + '),
+      homeTitle: '', status: '', kind: 'done', verified: true
+    } : groups.length ? {
+      req: slot.name, reqTitle: note, home: groups[0].length > 1 ? groups[0] : groups[0][0],
       homeTitle: '', status: '', kind: 'done', verified: true
     } : {
       req: slot.name,
@@ -1763,7 +1854,7 @@ class Component extends DCLogic {
     distError: '',
     screen: 'home',
     homeCollege: 'Evergreen Valley College',
-    selected: ['berkeley', 'sjsu'],
+    selected: [],
     majors: TARGETS.reduce((m, t) => { m[t.id] = t.major; return m; }, {}),
     trStatus: 'idle',
     trFileName: '',
@@ -1829,7 +1920,7 @@ class Component extends DCLogic {
         });
         return;
       }
-      this.setState({ trStatus: 'error', trError: true, trMessage: 'Text came out of the file, but no courses could be identified in it. Add them by hand below.' });
+      this.setState({ trStatus: 'error', trError: true, trMessage: 'Text came out of the file, but no courses could be identified in it (' + ((err && err.message) || 'reader failed') + '). Add them by hand below.' });
     }
   };
 
@@ -1968,8 +2059,33 @@ class Component extends DCLogic {
       return hit && hit.score >= spec.min ? hit : null;
     };
 
+    const bestOf = (codes) => {
+      const opts = codes.map(x => String(x).toUpperCase().replace(/\s+/g, ' ').trim());
+      const onRecord = opts.map(o => byCode[o]).filter(Boolean);
+      return { opts: opts, hit: onRecord.filter(x => PASSING.test(normalizeGrade(String(x.grade || ''))))[0] || onRecord[0] };
+    };
+
     const resolveRow = (r) => {
       if (r.kind === 'gap') return Object.assign({}, r, { homeTitle: 'Nothing articulates at ' + shortHome });
+      // A requirement satisfied only by taking several courses together.
+      if (r.parts) {
+        const groups = r.parts.map(bestOf);
+        const shown = groups.map(g => (g.hit ? g.hit.code : g.opts[0])).join(' + ');
+        const grades = groups.map(g => (g.hit ? normalizeGrade(String(g.hit.grade || '')) : ''));
+        const all = 'All ' + groups.length + ' courses required';
+        if (grades.every(g => PASSING.test(g))) {
+          return Object.assign({}, r, { kind: 'done', status: 'Cleared', home: shown, homeTitle: all + ' · both on your record' });
+        }
+        const missing = groups.filter(g => !g.hit).map(g => g.opts[0]);
+        if (grades.some(g => g === 'IP' || g === 'RD')) {
+          return Object.assign({}, r, { kind: 'progress', status: 'In progress', home: shown, homeTitle: all + ' · one still in progress' });
+        }
+        if (grades.some(g => g === 'PLN')) {
+          return Object.assign({}, r, { kind: 'planned', status: 'Planned', home: shown, homeTitle: all + ' · added by hand' });
+        }
+        return Object.assign({}, r, { kind: 'needed', status: 'To take', home: shown,
+          homeTitle: all + ' · ' + (missing.length ? listPhrase(missing) + ' not on your record' : 'check the grades below') });
+      }
       // A requirement may list several "or" options; the best one on the record wins.
       const options = (Array.isArray(r.home) ? r.home : [r.home]).map(x => String(x).toUpperCase().trim());
       const onRecord = options.map(o => byCode[o]).filter(Boolean);
@@ -2297,6 +2413,7 @@ class Component extends DCLogic {
 
       resultsHeadline: clearedTotal + ' requirements cleared, ' + gapTotal + ' with nowhere to take them.',
       gapCount: gapTotal,
+      gapPhrase: (gapTotal === 1 ? 'requirement has' : 'requirements have') + ' no articulated course at ' + shortHome,
       gaps: gapList.map((g, gi) => Object.assign({}, g, { delay: (gi * 0.06).toFixed(2) + 's' })),
       hasGaps: gapList.length > 0,
       noAreas: areasRaw.length === 0,
