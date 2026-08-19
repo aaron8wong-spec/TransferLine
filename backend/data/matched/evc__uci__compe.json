@@ -84,7 +84,7 @@
       "slot_confidence": "manual",
       "articulation_kind": "clean",
       "sending_courses": [
-        "COMSC 075 (or CIT 044 Java)"
+        "CIT 044 (or COMSC 076) for UCSD; CIT 044 (or COMSC 075) for UCI -- differs by receiving school, see limitation note"
       ],
       "articulation_detail": "entered via worksheet.xlsx"
     },

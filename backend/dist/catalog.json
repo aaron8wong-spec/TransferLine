@@ -2,6 +2,7 @@
   "deanza": {
     "calc1": "MATH 1A (or 1AH, or MATH 12 for the business-calc path)",
     "calc2": "MATH 1B (or 1BH)",
+    "psych_intro": "PSYC C1000 + PSYC 24 for COGS 9A; PSYC C1000 + (PSYC 4 or PSYC 8) for COGS 9C -- differs by which COGS course it satisfies, same limitation pattern as calc3",
     "calc3": "MATH 1D for UCI (multivariable) -- but MATH 1C + MATH 1D COMBINED for UCSD (see limitation note above)",
     "linalg": "MATH 2B (or 2BH) -- NOTE: De Anza's 'MATH 2B' is Linear Algebra, not Calc II",
     "diffeq": "MATH 2A (or 2AH) -- NOTE: De Anza's OWN numbering means their 'MATH 2A' is Diff Eq, not Calc I",
@@ -12,21 +13,23 @@
     "circuits": "ENGR 37 (Introduction to Circuit Analysis)",
     "cogsci_research": "PSYC 2 (Research Methods in Psychology) + STAT C1000 (or PSYC 15, same as SOC 15)",
     "discrete": "MATH 22 (or 22H) for UCI; NO equivalent exists for UCSD's CSE 20 (permanent gap for UCSD path)",
-    "prog2": "CIS 22C (or 22CH)"
+    "prog2": "CIS 22C (or 22CH)",
+    "comporg": "CIS 21JA + CIS 21JB + CIS 26B (or CIS 26BH honors) -- inferred by structural parallel with EVC's same 'Complete A or B' section; not read as clearly as EVC's mapping was"
   },
   "evc": {
     "calc1": "MATH 071 (or MATH 066, or MATH 062 non-STEM)",
     "calc2": "MATH 072 (or MATH 067)",
+    "psych_intro": "PSYC C1000 + PSYCH 030 for COGS 9A; PSYC C1000 + PSYCH 099 for COGS 9C -- differs by which COGS course it satisfies, same limitation pattern as calc3",
     "calc3": "MATH 073",
     "linalg": "MATH 079",
     "diffeq": "MATH 078",
-    "prog1": "COMSC 075 (or CIT 044 Java)",
+    "prog1": "CIT 044 (or COMSC 076) for UCSD; CIT 044 (or COMSC 075) for UCI -- differs by receiving school, see limitation note",
     "physics1": "PHYS 007A (or PHYS 004A General Physics)",
     "physics2": "PHYS 007B",
     "physics3": "PHYS 007C",
     "circuits": "ENGR 071 (Introduction to Circuit Analysis)",
     "cogsci_research": "PSYCH 018 (Introduction to Research Methods) + STAT C1000",
     "discrete": "COMSC 080 (or MATH 070) -- confirmed via UCI PDF; UCSD PDF shows NO EVC equivalent (permanent gap for UCSD path)",
-    "prog2": "COMSC 076"
+    "comporg": "COMSC 077 (Introduction to Computer Systems)"
   }
 }

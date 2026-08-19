@@ -47,10 +47,10 @@ SCHOOL_MAJORS = [
     ("ucsd", "UC San Diego", "compe", "Computer Engineering, B.S. (CSE Dept.)",
      "CONFIRMED via actual UCSD ASSIST agreements (both De Anza and EVC PDFs agree). Official 'General "
      "Advice' list: MATH 20A/20B/20C (calc1/2/3), MATH 20D (diffeq), MATH 18 (linalg), calc-based physics "
-     "series (physics1/2/3), CSE 8B-or-11 (prog1), CSE 12 (prog2), CSE 20 (discrete). CORRECTION from an "
-     "earlier version of this sheet: discrete math IS explicitly required (previously left unmarked); "
-     "Computer Organization is NOT in the official required list (previously marked required in error) -- "
-     "it appears in the detailed per-CCC table but not the summary bullet list, so treat it as unconfirmed."),
+     "series (physics1/2/3), CSE 8B-or-11 (prog1), CSE 12 (prog2), CSE 20 (discrete). CSE 30 (comporg) is "
+     "ALSO required -- user confirmed via the live page after this sheet initially left it out because it "
+     "wasn't in the summary bullet list (only in the detailed per-CCC table). Lesson: the detailed table is "
+     "the authoritative source; the prose summary isn't necessarily exhaustive."),
 
     ("ucsd", "UC San Diego", "cogsci", "Cognitive Science, B.S.",
      "CONFIRMED via actual UCSD ASSIST agreements (both CCCs). Students choose ONE math sequence: "
@@ -88,7 +88,7 @@ CCC_LABELS = {
 # part of it.
 CONFIRMED_MARKS = {
     ("ucsd", "compe"): {"calc1", "calc2", "calc3", "diffeq", "linalg",
-                        "prog1", "prog2", "discrete",
+                        "prog1", "prog2", "discrete", "comporg",
                         "physics1", "physics2", "physics3"},
     ("ucsd", "cogsci"): {"calc1", "calc2", "linalg", "cogsci_research"},
     ("uci", "compe"): {"calc1", "calc2", "calc3", "diffeq", "linalg",
@@ -216,6 +216,12 @@ def build():
         ("into the JSON files build_dist.py already knows how to read \u2014 no changes needed to the", 10, False),
         ("rest of your pipeline.", 10, False),
         ("", None, False),
+        ("AUTOMATIC CROSS-CCC GAP CHECK: every time you run build_dist.py, it automatically checks every", 10, False),
+        ("required-but-unarticulated course at every CCC against every OTHER CCC's catalog -- if another", 10, False),
+        ("CCC in your dataset offers it, it's reported on the console and written to", 10, False),
+        ("dist/cross_ccc_alternatives.json. This runs on every future addition too, not just today's data --", 10, False),
+        ("no need to check for this by hand.", 10, False),
+        ("", None, False),
         ("KNOWN LIMITATION: convert_worksheet.py currently reads 'Elective Groups'/'Elective Options'", 10, False),
         ("for your own reference but does NOT yet feed pick-N-of-M logic into the app -- the app's", 10, False),
         ("data model only understands flat 'required' lists right now. The data is captured here so", 10, False),
@@ -276,7 +282,7 @@ def build():
         notes_cell.border = BORDER
         notes_cell.font = Font(name=FONT_NAME, size=9)
         if is_example:
-            notes_cell.value = "Fully confirmed row -- see source note. Computer Organization intentionally left blank (not in official required list)."
+            notes_cell.value = "Fully confirmed row, including comporg (CSE 30) -- confirmed against the live page after this sheet initially missed it."
         elif school_key == "uci" and major_id == "cogsci":
             notes_cell.value = ("psych_intro here is a proxy for COGS 9A+9C (both need PSYC C1000 + a second "
                                  "CCC course -- see Elective Options). COGS 9B has NO CCC equivalent, ever -- "
@@ -316,14 +322,18 @@ def build():
         "diffeq": "MATH 078",
         "linalg": "MATH 079",
         "discrete": "COMSC 080 (or MATH 070) -- confirmed via UCI PDF; UCSD PDF shows NO EVC equivalent (permanent gap for UCSD path)",
-        "prog1": "COMSC 075 (or CIT 044 Java)",
-        "prog2": "COMSC 076",
+        "prog1": "CIT 044 (or COMSC 076) for UCSD; CIT 044 (or COMSC 075) for UCI -- differs by receiving school, see limitation note",
+        # prog2 (CSE 12) intentionally has NO value here -- confirmed genuine
+        # gap at EVC (user verified against the live page). See the Notes
+        # column for the De Anza alternative.
+        "comporg": "COMSC 077 (Introduction to Computer Systems)",
         "circuits": "ENGR 071 (Introduction to Circuit Analysis)",
         "physics1": "PHYS 007A (or PHYS 004A General Physics)",
         "physics2": "PHYS 007B",
         "physics3": "PHYS 007C",
         "stats_gen": "STAT C1000 (or BUS 060)",
         "cogsci_research": "PSYCH 018 (Introduction to Research Methods) + STAT C1000",
+        "psych_intro": "PSYC C1000 + PSYCH 030 for COGS 9A; PSYC C1000 + PSYCH 099 for COGS 9C -- differs by which COGS course it satisfies, same limitation pattern as calc3",
     }
     deanza_confirmed = {
         "calc1": "MATH 1A (or 1AH, or MATH 12 for the business-calc path)",
@@ -334,12 +344,14 @@ def build():
         "discrete": "MATH 22 (or 22H) for UCI; NO equivalent exists for UCSD's CSE 20 (permanent gap for UCSD path)",
         "prog1": "CIS 35A (or 36B) for UCSD; CIS 22A/26A/35A/36A/36B (any of these) for UCI",
         "prog2": "CIS 22C (or 22CH)",
+        "comporg": "CIS 21JA + CIS 21JB + CIS 26B (or CIS 26BH honors) -- inferred by structural parallel with EVC's same 'Complete A or B' section; not read as clearly as EVC's mapping was",
         "circuits": "ENGR 37 (Introduction to Circuit Analysis)",
         "physics1": "PHYS 4A (also PHYS 2A works for UCI Cogsci but is being DEPRECATED next fall)",
         "physics2": "PHYS 4B (also PHYS 2B, same deprecation warning)",
         "physics3": "PHYS 4C (also PHYS 2C, same deprecation warning)",
         "stats_gen": "STAT C1000 (or Honors), or PSYC 15 / POLI 20",
         "cogsci_research": "PSYC 2 (Research Methods in Psychology) + STAT C1000 (or PSYC 15, same as SOC 15)",
+        "psych_intro": "PSYC C1000 + PSYC 24 for COGS 9A; PSYC C1000 + (PSYC 4 or PSYC 8) for COGS 9C -- differs by which COGS course it satisfies, same limitation pattern as calc3",
     }
     CCC_CONFIRMED = {"evc": evc_confirmed, "deanza": deanza_confirmed}
 
@@ -371,6 +383,21 @@ def build():
             notes_cell.value = ("SEE LIMITATION NOTE: De Anza's calc3 course differs by receiving school "
                                  "(MATH 1D alone for UCI, MATH 1C+1D combined for UCSD) -- one cell can't "
                                  "fully capture this.")
+        if slot_id == "prog1":
+            notes_cell.value = ("SEE LIMITATION NOTE: EVC's prog1 course also differs by receiving school "
+                                 "(COMSC 076 for UCSD, COMSC 075 for UCI, both alongside CIT 044) -- same "
+                                 "one-cell-per-slot limitation as calc3.")
+        if slot_id == "prog2":
+            notes_cell.value = ("GAP AT EVC for UCSD Computer Engineering: CSE 12 has no EVC equivalent "
+                                 "(confirmed against the live ASSIST page). Students can instead complete "
+                                 "it via De Anza College's CIS 22C (or 22CH) -- confirmed on De Anza's own "
+                                 "agreement -- by cross-enrolling or taking it there before transfer. This "
+                                 "is exactly the kind of gap dist/cross_ccc_alternatives.json now finds "
+                                 "automatically on every build.")
+        if slot_id == "psych_intro":
+            notes_cell.value = ("SEE LIMITATION NOTE: this slot needs a different course combo depending on "
+                                 "whether it's satisfying UCI's COGS 9A or COGS 9C -- same one-cell-per-slot "
+                                 "limitation as calc3 and prog1.")
 
     # ---------------- Sheet: Elective Groups ----------------
     ws5 = wb.create_sheet("Elective Groups")

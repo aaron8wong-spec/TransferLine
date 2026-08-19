@@ -121,6 +121,20 @@
       "school_key": "ucsd",
       "major_id": "compe",
       "receiving_code": "(manual entry)",
+      "receiving_title": "Computer Organization",
+      "slot_id": "comporg",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "CIS 21JA + CIS 21JB + CIS 26B (or CIS 26BH honors) -- inferred by structural parallel with EVC's same 'Complete A or B' section; not read as clearly as EVC's mapping was"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
       "receiving_title": "Physics I \u2014 Mechanics (w/ Calc)",
       "slot_id": "physics1",
       "slot_confidence": "manual",

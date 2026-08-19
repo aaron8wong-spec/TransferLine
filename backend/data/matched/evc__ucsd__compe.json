@@ -98,7 +98,7 @@
       "slot_confidence": "manual",
       "articulation_kind": "clean",
       "sending_courses": [
-        "COMSC 075 (or CIT 044 Java)"
+        "CIT 044 (or COMSC 076) for UCSD; CIT 044 (or COMSC 075) for UCI -- differs by receiving school, see limitation note"
       ],
       "articulation_detail": "entered via worksheet.xlsx"
     },
@@ -110,9 +110,21 @@
       "receiving_title": "Data Structures",
       "slot_id": "prog2",
       "slot_confidence": "manual",
+      "articulation_kind": "no_articulation",
+      "sending_courses": [],
+      "articulation_detail": "required by major, but no CCC Catalog entry filled in yet"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Computer Organization",
+      "slot_id": "comporg",
+      "slot_confidence": "manual",
       "articulation_kind": "clean",
       "sending_courses": [
-        "COMSC 076"
+        "COMSC 077 (Introduction to Computer Systems)"
       ],
       "articulation_detail": "entered via worksheet.xlsx"
     },

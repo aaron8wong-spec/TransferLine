@@ -40,9 +40,11 @@
       "receiving_title": "Introduction to Psychology",
       "slot_id": "psych_intro",
       "slot_confidence": "manual",
-      "articulation_kind": "no_articulation",
-      "sending_courses": [],
-      "articulation_detail": "required by major, but no CCC Catalog entry filled in yet"
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "PSYC C1000 + PSYCH 030 for COGS 9A; PSYC C1000 + PSYCH 099 for COGS 9C -- differs by which COGS course it satisfies, same limitation pattern as calc3"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
     }
   ]
 }
