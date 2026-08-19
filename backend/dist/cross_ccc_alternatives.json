@@ -1,0 +1,17 @@
+{
+  "evc": {
+    "prog2": {
+      "slot_name": "Data Structures",
+      "required_by": [
+        {
+          "school_key": "ucsd",
+          "major_id": "compe",
+          "major_label": "Computer Engineering, B.S. (CSE Dept.)"
+        }
+      ],
+      "available_at": {
+        "deanza": "CIS 22C (or 22CH)"
+      }
+    }
+  }
+}
