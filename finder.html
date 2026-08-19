@@ -732,6 +732,9 @@ const ARCH_ALTS = [
 ];
 
 const GAP_INFO = {
+  'Data Structures': { equiv: 'Data Structures is not articulated at Evergreen Valley College for UC San Diego. To satisfy it for Computer Engineering, take CIS 22C at De Anza College.', alts: [
+    { college: 'De Anza College', course: 'CIS 22C — Data Abstraction & Structures (or 22CH)', mode: 'Cross-enroll · satisfies the UCSD requirement' }
+  ] },
   'CS 61C': { equiv: 'No articulated course at Evergreen Valley College. Required before the EECS upper division.', alts: ARCH_ALTS },
   'EECS 16A': { equiv: 'Not articulated by any California community college. Berkeley admits without it; expect it in your first term after transfer.', alts: [
     { college: 'After transfer', course: 'Take Fall of junior year — adds one term to the plan', mode: 'Advisory' }
@@ -1834,7 +1837,9 @@ function distAreasFor(dist, targetId, majorLabel, homeCollege) {
       homeTitle: '', status: '', kind: 'done', verified: true
     } : {
       req: slot.name,
-      reqTitle: parsed.excluded
+      reqTitle: (slotId === 'prog2' && cccKey === 'evc' && schoolKey === 'ucsd')
+        ? 'Not articulated at Evergreen Valley College — take CIS 22C at De Anza College'
+        : parsed.excluded
         ? 'Required by the major — the agreement lists no equivalent for this campus'
         : 'Required by the major — nothing articulates in the agreement',
       home: 'No equivalent', homeTitle: '', status: 'No course', kind: 'gap', verified: true
