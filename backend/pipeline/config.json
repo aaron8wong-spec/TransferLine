@@ -1,0 +1,32 @@
+{
+  "_comment": "Fill in real ASSIST institution IDs (from --list-institutions) and a year ID (from --list-years) before running scrape_raw.py. school_key/ccc_key are your own short labels used to name output files and to key the final dist JSON \u2014 they should match the ids your frontend already uses (ucb, ucla, sjsu, calpoly / deanza, evc, foothill, sjcc, saddleback).",
+
+  "academic_year_id": null,
+
+  "receiving_schools": [
+    { "school_key": "ucb",     "institution_id": null, "majors": [
+      { "major_id": "eecs", "label": "Electrical Engineering & Computer Sciences (EECS)", "search": "Electrical Engineering" },
+      { "major_id": "haas", "label": "Business Administration (Haas)",                    "search": "Business Administration" }
+    ]},
+    { "school_key": "ucla",    "institution_id": null, "majors": [
+      { "major_id": "cs",      "label": "Computer Science",     "search": "Computer Science" },
+      { "major_id": "bizecon", "label": "Business Economics",   "search": "Business Economics" }
+    ]},
+    { "school_key": "sjsu",    "institution_id": null, "majors": [
+      { "major_id": "cs",    "label": "Computer Science",         "search": "Computer Science" },
+      { "major_id": "busad", "label": "Business Administration",  "search": "Business Administration" }
+    ]},
+    { "school_key": "calpoly", "institution_id": null, "majors": [
+      { "major_id": "cs",    "label": "Computer Science",         "search": "Computer Science" },
+      { "major_id": "busad", "label": "Business Administration",  "search": "Business Administration" }
+    ]}
+  ],
+
+  "sending_ccc": [
+    { "ccc_key": "deanza",     "institution_id": null },
+    { "ccc_key": "evc",        "institution_id": null },
+    { "ccc_key": "foothill",   "institution_id": null },
+    { "ccc_key": "sjcc",       "institution_id": null },
+    { "ccc_key": "saddleback", "institution_id": null }
+  ]
+}

@@ -1,0 +1,154 @@
+{
+  "calc1": {
+    "name": "Calculus I",
+    "cat": "math",
+    "hints": [
+      "calculus i",
+      "single variable calculus",
+      "calculus for science",
+      "analytic geometry and calculus i"
+    ]
+  },
+  "calc2": {
+    "name": "Calculus II",
+    "cat": "math",
+    "hints": [
+      "calculus ii",
+      "calculus 2"
+    ]
+  },
+  "calc3": {
+    "name": "Calculus III (Multivariable)",
+    "cat": "math",
+    "hints": [
+      "multivariable calculus",
+      "calculus iii",
+      "calculus 3",
+      "vector calculus"
+    ]
+  },
+  "linalg": {
+    "name": "Linear Algebra",
+    "cat": "math",
+    "hints": [
+      "linear algebra"
+    ]
+  },
+  "discrete": {
+    "name": "Discrete Mathematics",
+    "cat": "math",
+    "hints": [
+      "discrete math",
+      "discrete structures"
+    ]
+  },
+  "prog1": {
+    "name": "Programming Methodology",
+    "cat": "programming",
+    "hints": [
+      "programming methodology",
+      "intro to programming",
+      "introduction to computer science",
+      "programming i",
+      "computer programming i"
+    ]
+  },
+  "prog2": {
+    "name": "Data Structures",
+    "cat": "programming",
+    "hints": [
+      "data structures",
+      "programming ii",
+      "computer programming ii",
+      "intermediate programming"
+    ]
+  },
+  "physics1": {
+    "name": "Physics I \u2014 Mechanics (w/ Calc)",
+    "cat": "science",
+    "hints": [
+      "physics for scientists and engineers i",
+      "mechanics",
+      "general physics i",
+      "physics i"
+    ]
+  },
+  "physics2": {
+    "name": "Physics II \u2014 E&M (w/ Calc)",
+    "cat": "science",
+    "hints": [
+      "physics for scientists and engineers ii",
+      "electricity and magnetism",
+      "general physics ii",
+      "physics ii"
+    ]
+  },
+  "finacct": {
+    "name": "Financial Accounting",
+    "cat": "business",
+    "hints": [
+      "financial accounting",
+      "accounting i",
+      "principles of accounting i"
+    ]
+  },
+  "manacct": {
+    "name": "Managerial Accounting",
+    "cat": "business",
+    "hints": [
+      "managerial accounting",
+      "accounting ii",
+      "principles of accounting ii",
+      "cost accounting"
+    ]
+  },
+  "micro": {
+    "name": "Microeconomics",
+    "cat": "business",
+    "hints": [
+      "microeconomics"
+    ]
+  },
+  "macro": {
+    "name": "Macroeconomics",
+    "cat": "business",
+    "hints": [
+      "macroeconomics"
+    ]
+  },
+  "bizcalc": {
+    "name": "Calculus for Business",
+    "cat": "math",
+    "hints": [
+      "business calculus",
+      "calculus for business",
+      "calculus for management"
+    ]
+  },
+  "bizstat": {
+    "name": "Business Statistics",
+    "cat": "business",
+    "hints": [
+      "business statistics",
+      "statistics for business",
+      "introduction to statistics"
+    ]
+  },
+  "bizlaw": {
+    "name": "Business Law",
+    "cat": "business",
+    "hints": [
+      "business law",
+      "legal environment of business"
+    ]
+  },
+  "mis": {
+    "name": "Management Information Systems",
+    "cat": "business",
+    "hints": [
+      "management information systems",
+      "business information systems",
+      "intro to information systems"
+    ]
+  }
+}

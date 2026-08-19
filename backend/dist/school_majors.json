@@ -1,0 +1,58 @@
+{
+  "uci": [
+    {
+      "id": "cogsci",
+      "label": "Cognitive Sciences (School of Social Sciences)",
+      "slots": [
+        "calc1",
+        "calc2",
+        "psych_intro"
+      ]
+    },
+    {
+      "id": "compe",
+      "label": "Computer Engineering (Henry Samueli School of Engineering)",
+      "slots": [
+        "calc1",
+        "calc2",
+        "calc3",
+        "circuits",
+        "diffeq",
+        "linalg",
+        "physics1",
+        "physics2",
+        "physics3",
+        "prog1"
+      ]
+    }
+  ],
+  "ucsd": [
+    {
+      "id": "cogsci",
+      "label": "Cognitive Science, B.S.",
+      "slots": [
+        "calc1",
+        "calc2",
+        "cogsci_research",
+        "linalg"
+      ]
+    },
+    {
+      "id": "compe",
+      "label": "Computer Engineering, B.S. (CSE Dept.)",
+      "slots": [
+        "calc1",
+        "calc2",
+        "calc3",
+        "diffeq",
+        "discrete",
+        "linalg",
+        "physics1",
+        "physics2",
+        "physics3",
+        "prog1",
+        "prog2"
+      ]
+    }
+  ]
+}

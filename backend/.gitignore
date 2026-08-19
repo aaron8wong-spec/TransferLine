@@ -1,0 +1,14 @@
+﻿__pycache__/
+*.pyc
+
+backend/data/matched/*.json
+backend/data/raw/*.json
+backend/data/electives.json
+backend/dist/*.json
+
+!backend/data/matched/.gitkeep
+!backend/data/raw/.gitkeep
+!backend/dist/.gitkeep
+
+.DS_Store
+Thumbs.db

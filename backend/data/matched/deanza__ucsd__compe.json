@@ -1,0 +1,162 @@
+{
+  "ccc_key": "deanza",
+  "school_key": "ucsd",
+  "major_id": "compe",
+  "major_label": "Computer Engineering, B.S. (CSE Dept.)",
+  "rows": [
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Calculus I",
+      "slot_id": "calc1",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 1A (or 1AH, or MATH 12 for the business-calc path)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Calculus II",
+      "slot_id": "calc2",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 1B (or 1BH)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Calculus III (Multivariable)",
+      "slot_id": "calc3",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 1D for UCI (multivariable) -- but MATH 1C + MATH 1D COMBINED for UCSD (see limitation note above)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Linear Algebra",
+      "slot_id": "linalg",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 2B (or 2BH) -- NOTE: De Anza's 'MATH 2B' is Linear Algebra, not Calc II"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Differential Equations",
+      "slot_id": "diffeq",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 2A (or 2AH) -- NOTE: De Anza's OWN numbering means their 'MATH 2A' is Diff Eq, not Calc I"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Discrete Mathematics",
+      "slot_id": "discrete",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 22 (or 22H) for UCI; NO equivalent exists for UCSD's CSE 20 (permanent gap for UCSD path)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Programming Methodology",
+      "slot_id": "prog1",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "CIS 35A (or 36B) for UCSD; CIS 22A/26A/35A/36A/36B (any of these) for UCI"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Data Structures",
+      "slot_id": "prog2",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "CIS 22C (or 22CH)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Physics I \u2014 Mechanics (w/ Calc)",
+      "slot_id": "physics1",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "PHYS 4A (also PHYS 2A works for UCI Cogsci but is being DEPRECATED next fall)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Physics II \u2014 E&M (w/ Calc)",
+      "slot_id": "physics2",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "PHYS 4B (also PHYS 2B, same deprecation warning)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Physics III \u2014 Waves, Optics & Modern Physics (w/ Calc)",
+      "slot_id": "physics3",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "PHYS 4C (also PHYS 2C, same deprecation warning)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    }
+  ]
+}

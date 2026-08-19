@@ -1,0 +1,48 @@
+{
+  "ccc_key": "evc",
+  "school_key": "uci",
+  "major_id": "cogsci",
+  "major_label": "Cognitive Sciences (School of Social Sciences)",
+  "rows": [
+    {
+      "ccc_key": "evc",
+      "school_key": "uci",
+      "major_id": "cogsci",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Calculus I",
+      "slot_id": "calc1",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 071 (or MATH 066, or MATH 062 non-STEM)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "uci",
+      "major_id": "cogsci",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Calculus II",
+      "slot_id": "calc2",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 072 (or MATH 067)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "uci",
+      "major_id": "cogsci",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Introduction to Psychology",
+      "slot_id": "psych_intro",
+      "slot_confidence": "manual",
+      "articulation_kind": "no_articulation",
+      "sending_courses": [],
+      "articulation_detail": "required by major, but no CCC Catalog entry filled in yet"
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+  "ccc_key": "evc",
+  "school_key": "ucsd",
+  "major_id": "compe",
+  "major_label": "Computer Engineering, B.S. (CSE Dept.)",
+  "rows": [
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Calculus I",
+      "slot_id": "calc1",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 071 (or MATH 066, or MATH 062 non-STEM)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Calculus II",
+      "slot_id": "calc2",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 072 (or MATH 067)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Calculus III (Multivariable)",
+      "slot_id": "calc3",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 073"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Linear Algebra",
+      "slot_id": "linalg",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 079"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Differential Equations",
+      "slot_id": "diffeq",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 078"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Discrete Mathematics",
+      "slot_id": "discrete",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "COMSC 080 (or MATH 070) -- confirmed via UCI PDF; UCSD PDF shows NO EVC equivalent (permanent gap for UCSD path)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Programming Methodology",
+      "slot_id": "prog1",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "COMSC 075 (or CIT 044 Java)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Data Structures",
+      "slot_id": "prog2",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "COMSC 076"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Physics I \u2014 Mechanics (w/ Calc)",
+      "slot_id": "physics1",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "PHYS 007A (or PHYS 004A General Physics)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Physics II \u2014 E&M (w/ Calc)",
+      "slot_id": "physics2",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "PHYS 007B"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "compe",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Physics III \u2014 Waves, Optics & Modern Physics (w/ Calc)",
+      "slot_id": "physics3",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "PHYS 007C"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+{
+  "ccc_key": "evc",
+  "school_key": "ucsd",
+  "major_id": "cogsci",
+  "major_label": "Cognitive Science, B.S.",
+  "rows": [
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "cogsci",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Calculus I",
+      "slot_id": "calc1",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 071 (or MATH 066, or MATH 062 non-STEM)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "cogsci",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Calculus II",
+      "slot_id": "calc2",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 072 (or MATH 067)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "cogsci",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Linear Algebra",
+      "slot_id": "linalg",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 079"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "evc",
+      "school_key": "ucsd",
+      "major_id": "cogsci",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Introduction to Research (Methods)",
+      "slot_id": "cogsci_research",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "PSYCH 018 (Introduction to Research Methods) + STAT C1000"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    }
+  ]
+}

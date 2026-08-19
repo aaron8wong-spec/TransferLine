@@ -1,0 +1,176 @@
+{
+  "uci_cogsci_electives_evc": {
+    "school_key": "uci",
+    "major_id": "cogsci",
+    "pick_n": "enough options to reach 6 courses total (verify exact rule against source PDF)",
+    "description": "EVC->UCI Cognitive Sciences: complete 3 semesters/quarters (6 courses recommended) from the options below. CONFIRMED from actual ASSIST PDF, but the precise UCI-course-to-EVC-course row pairing was ambiguous in the extracted text for a couple of these -- flagged per-option below.",
+    "options": [
+      {
+        "option_id": "programming",
+        "option_label": "Programming series: EVC COMSC 075 + COMSC 076 (2 courses)",
+        "slots": [
+          "prog1",
+          "prog2"
+        ]
+      },
+      {
+        "option_id": "multivar_calc",
+        "option_label": "EVC MATH 073 (Multivariable Calculus, 5 units)",
+        "slots": [
+          "calc3"
+        ]
+      },
+      {
+        "option_id": "linear_algebra",
+        "option_label": "EVC MATH 079 (Linear Algebra, 3 units)",
+        "slots": [
+          "linalg"
+        ]
+      },
+      {
+        "option_id": "diffeq",
+        "option_label": "EVC MATH 078 (Differential Equations, 4 units)",
+        "slots": [
+          "diffeq"
+        ]
+      },
+      {
+        "option_id": "physics_2course",
+        "option_label": "EVC PHYS 007A + PHYS 007B (only 2 courses -- EVC has no 3rd physics course option here)",
+        "slots": [
+          "physics1",
+          "physics2"
+        ]
+      },
+      {
+        "option_id": "statistics",
+        "option_label": "EVC STAT C1000 (or BUS 060)",
+        "slots": [
+          "stats_gen"
+        ]
+      },
+      {
+        "option_id": "logic",
+        "option_label": "EVC PHIL 090 (Introduction to Logic) -- no matching slot tracked here",
+        "slots": []
+      },
+      {
+        "option_id": "linguistics",
+        "option_label": "No EVC equivalent exists for any linguistics option (LSCI 3/10/20/51)",
+        "slots": []
+      },
+      {
+        "option_id": "neuro_electives",
+        "option_label": "No EVC equivalent exists for extra neuro electives (BIO SCI 36/37/38)",
+        "slots": []
+      }
+    ]
+  },
+  "uci_cogsci_electives_deanza": {
+    "school_key": "uci",
+    "major_id": "cogsci",
+    "pick_n": "enough options to reach 6 courses total (verify exact rule against source PDF)",
+    "description": "De Anza->UCI Cognitive Sciences: same 'complete 3 semesters/6 courses' requirement as EVC, but De Anza has MUCH better coverage -- it offers real equivalents for linguistics and logic that EVC doesn't. WARNING: the PHYS2A/2B/2C physics option is flagged in the source PDF as 'Effective next fall, this articulation is no longer valid' -- use the PHYS4A/4B/4C option instead going forward.",
+    "options": [
+      {
+        "option_id": "programming",
+        "option_label": "Programming series: De Anza CIS 40 + CIS 41A + CIS 41B (3 courses)",
+        "slots": [
+          "prog1",
+          "prog2"
+        ]
+      },
+      {
+        "option_id": "linguistics",
+        "option_label": "De Anza LING 1 (Introduction to Linguistics) -- real equivalent, unlike EVC",
+        "slots": []
+      },
+      {
+        "option_id": "logic",
+        "option_label": "De Anza PHIL 7 (Deductive Logic, or 7H honors) -- real equivalent, unlike EVC",
+        "slots": []
+      },
+      {
+        "option_id": "multivar_calc",
+        "option_label": "De Anza MATH 1D (Calculus IV) -- satisfies UCI's MATH 2D/2E multivariable pair",
+        "slots": [
+          "calc3"
+        ]
+      },
+      {
+        "option_id": "linear_algebra",
+        "option_label": "De Anza MATH 2B (or 2BH)",
+        "slots": [
+          "linalg"
+        ]
+      },
+      {
+        "option_id": "diffeq",
+        "option_label": "De Anza MATH 2A (or 2AH) -- note De Anza's OWN numbering: their 'MATH 2A' means Diff Eq, not Calc I",
+        "slots": [
+          "diffeq"
+        ]
+      },
+      {
+        "option_id": "physics_3course",
+        "option_label": "De Anza PHYS 2A/2B/2C (5 units, DEPRECATED next fall) OR PHYS 4A/4B/4C (6 units, use this one going forward)",
+        "slots": [
+          "physics1",
+          "physics2",
+          "physics3"
+        ]
+      },
+      {
+        "option_id": "statistics",
+        "option_label": "De Anza STAT C1000 (or Honors), or PSYC 15 / POLI 20 (same as SOC 15)",
+        "slots": [
+          "stats_gen"
+        ]
+      }
+    ]
+  },
+  "ucsd_cogsci_electives_evc": {
+    "school_key": "ucsd",
+    "major_id": "cogsci",
+    "pick_n": "1 course from each of 2 groups (a neuro/programming pool, and intro programming)",
+    "description": "EVC->UCSD Cognitive Science: beyond calc1/calc2/linalg/cogsci_research (all now confirmed mandatory, see Requirements Matrix), students also complete 1 course from each of 2 further groups. Some UCI-course-to-CCC-course pairings were ambiguous in the extracted PDF text -- flagged per-option below.",
+    "options": [
+      {
+        "option_id": "neuro",
+        "option_label": "EVC PSYCH 030 (Intro Biological Psychology) -- likely satisfies a neuro-focused option",
+        "slots": [
+          "neuro_intro"
+        ]
+      },
+      {
+        "option_id": "programming",
+        "option_label": "EVC COMSC 075, or CIT 044 (Java) + COMSC 076 combo -- ambiguous exact UCSD target course",
+        "slots": [
+          "prog1"
+        ]
+      }
+    ]
+  },
+  "ucsd_cogsci_electives_deanza": {
+    "school_key": "ucsd",
+    "major_id": "cogsci",
+    "pick_n": "1 course from each of 2 groups (a neuro/programming pool, and intro programming)",
+    "description": "De Anza->UCSD Cognitive Science: same structure as EVC. De Anza has no clean research-methods equivalent found in the source PDF (mostly 'No Course Articulated') but does offer real programming options.",
+    "options": [
+      {
+        "option_id": "neuro",
+        "option_label": "De Anza PSYC 24 (Introduction to Psychobiology) -- likely satisfies COGS 17 Neurobiology of Cognition",
+        "slots": [
+          "neuro_intro"
+        ]
+      },
+      {
+        "option_id": "programming",
+        "option_label": "De Anza: mostly 'No Course Articulated' for the COGS18/CSE6R/CSE8A/CSE11-style intro Python options; CIS 40 Python + CIS 41A, or CIS 35A/36B Java, may partially apply -- needs your visual check of the actual table",
+        "slots": [
+          "prog1"
+        ]
+      }
+    ]
+  }
+}

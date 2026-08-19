@@ -1,0 +1,64 @@
+{
+  "ccc_key": "deanza",
+  "school_key": "ucsd",
+  "major_id": "cogsci",
+  "major_label": "Cognitive Science, B.S.",
+  "rows": [
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "cogsci",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Calculus I",
+      "slot_id": "calc1",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 1A (or 1AH, or MATH 12 for the business-calc path)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "cogsci",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Calculus II",
+      "slot_id": "calc2",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 1B (or 1BH)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "cogsci",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Linear Algebra",
+      "slot_id": "linalg",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "MATH 2B (or 2BH) -- NOTE: De Anza's 'MATH 2B' is Linear Algebra, not Calc II"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    },
+    {
+      "ccc_key": "deanza",
+      "school_key": "ucsd",
+      "major_id": "cogsci",
+      "receiving_code": "(manual entry)",
+      "receiving_title": "Introduction to Research (Methods)",
+      "slot_id": "cogsci_research",
+      "slot_confidence": "manual",
+      "articulation_kind": "clean",
+      "sending_courses": [
+        "PSYC 2 (Research Methods in Psychology) + STAT C1000 (or PSYC 15, same as SOC 15)"
+      ],
+      "articulation_detail": "entered via worksheet.xlsx"
+    }
+  ]
+}

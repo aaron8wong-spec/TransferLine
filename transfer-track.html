@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Transfer Track — Find Your Path from CCC to University</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  :root{
+    --ink:#151B33;
+    --ink-soft:#3B4368;
+    --paper:#EAEDF2;
+    --paper-deep:#DDE1EA;
+    --surface:#FFFFFF;
+    --line:#C7CCDA;
+    --gold:#B8842A;
+    --gold-soft:#F3E3C4;
+    --sage:#4E7A5C;
+    --sage-soft:#DCEBE1;
+    --brick:#A6402F;
+    --brick-soft:#F3DBD5;
+    --shadow: 0 1px 2px rgba(21,27,51,0.06), 0 8px 24px rgba(21,27,51,0.06);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    color:var(--ink);
+    margin:0;
+  }
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+  a{color:inherit;}
+  button{font-family:inherit;}
+  :focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
+
+  /* ============ HERO ============ */
+  .hero{
+    background:
+      radial-gradient(1200px 400px at 15% -10%, rgba(184,132,42,0.14), transparent 60%),
+      linear-gradient(180deg, var(--ink) 0%, #1E2748 100%);
+    color:#F1EDE0;
+    padding:64px 24px 40px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero-inner{ max-width:1080px; margin:0 auto; }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:#D9BE85;
+    margin-bottom:14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px; height:1px;
+    background:#D9BE85;
+    display:inline-block;
+  }
+  .hero h1{
+    font-size:clamp(32px, 5vw, 52px);
+    line-height:1.05;
+    color:#F8F5EC;
+    max-width:16ch;
+  }
+  .hero p.sub{
+    margin-top:18px;
+    max-width:56ch;
+    font-size:17px;
+    color:#C9CEE0;
+  }
+
+  /* step rail */
+  .rail{
+    margin-top:44px;
+    display:flex;
+    align-items:flex-start;
+    gap:0;
+  }
+  .rail-step{
+    flex:1;
+    position:relative;
+    padding-right:12px;
+  }
+  .rail-step .track-line{
+    position:absolute;
+    top:15px;
+    left:calc(50% + 15px);
+    right:-12px;
+    height:2px;
+    background:#3A4570;
+  }
+  .rail-step:last-child .track-line{ display:none; }
+  .rail-step.done .track-line{ background:var(--gold); }
+  .rail-dot-row{ display:flex; align-items:center; }
+  .rail-dot{
+    width:30px; height:30px; border-radius:50%;
+    background:#242D52;
+    border:2px solid #3A4570;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px; font-weight:600; color:#8D96BE;
+    flex-shrink:0;
+    transition:all .25s ease;
+  }
+  .rail-step.active .rail-dot{ border-color:var(--gold); color:#F8F5EC; background:#3A2E17; }
+  .rail-step.done .rail-dot{ background:var(--gold); border-color:var(--gold); color:#1E2748; }
+  .rail-label{
+    margin-top:10px; font-size:12.5px; color:#9AA2C4; max-width:11ch;
+  }
+  .rail-step.active .rail-label, .rail-step.done .rail-label{ color:#EDE7D6; }
+
+  /* ============ LAYOUT ============ */
+  main{ max-width:1080px; margin:0 auto; padding:40px 24px 100px; }
+  section.panel{
+    background:var(--surface);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:32px;
+    margin-bottom:24px;
+    border:1px solid var(--paper-deep);
+  }
+  section.panel[hidden]{ display:none; }
+  .panel-head{ margin-bottom:22px; }
+  .panel-head .step-num{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px; color:var(--gold); letter-spacing:.08em;
+    text-transform:uppercase;
+    display:block; margin-bottom:6px;
+  }
+  .panel-head h2{ font-size:24px; }
+  .panel-head p{ color:var(--ink-soft); margin-top:6px; font-size:15px; max-width:60ch; }
+
+  /* card grid selectors */
+  .card-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
+    gap:12px;
+  }
+  .choice-card{
+    text-align:left;
+    background:var(--paper);
+    border:1.5px solid var(--paper-deep);
+    border-radius:10px;
+    padding:16px 18px;
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease, transform .1s ease;
+  }
+  .choice-card:hover{ border-color:var(--gold); }
+  .choice-card:active{ transform:scale(0.99); }
+  .choice-card .name{ font-weight:600; font-size:15.5px; }
+  .choice-card .meta{ font-size:12.5px; color:var(--ink-soft); margin-top:3px; }
+  .choice-card.selected{
+    background:var(--gold-soft);
+    border-color:var(--gold);
+  }
+  .choice-card.selected .name::after{
+    content:" ✓";
+    color:var(--gold);
+  }
+  .choice-card.multi.selected{ background:var(--sage-soft); border-color:var(--sage); }
+  .choice-card.multi.selected .name::after{ color:var(--sage); }
+
+  /* major picks per selected school */
+  .major-picks{ margin-top:18px; display:flex; flex-direction:column; gap:10px; }
+  .major-pick-row{
+    display:flex; align-items:center; gap:14px; flex-wrap:wrap;
+    background:var(--paper); border:1px solid var(--paper-deep); border-radius:10px;
+    padding:12px 16px;
+  }
+  .major-pick-row .school-name{ font-weight:600; font-size:14.5px; min-width:170px; }
+  .major-pick-row select{
+    flex:1; min-width:220px;
+    padding:9px 12px; border-radius:8px; border:1.5px solid var(--line);
+    font-family:inherit; font-size:14px; background:var(--surface); color:var(--ink);
+  }
+  .major-pick-row select.needs-choice{ border-color:var(--brick); }
+  .major-pick-row .picked-tag{
+    font-size:11.5px; font-family:'IBM Plex Mono', monospace; color:var(--sage);
+    background:var(--sage-soft); padding:3px 9px; border-radius:999px; white-space:nowrap;
+  }
+
+  /* combobox / searchable dropdown */
+  .combobox{ position:relative; max-width:420px; }
+  .combo-input-wrap{ position:relative; }
+  .combo-input{
+    width:100%;
+    font-family:inherit; font-size:15.5px;
+    padding:13px 40px 13px 16px;
+    border-radius:10px;
+    border:1.5px solid var(--line);
+    background:var(--surface);
+    color:var(--ink);
+  }
+  .combo-input::placeholder{ color:#9AA2C4; }
+  .combo-caret{
+    position:absolute; right:14px; top:50%; transform:translateY(-50%);
+    color:var(--ink-soft); pointer-events:none; font-size:13px;
+  }
+  .combo-listbox{
+    list-style:none; margin:6px 0 0; padding:6px;
+    position:absolute; z-index:20; left:0; right:0;
+    background:var(--surface);
+    border:1.5px solid var(--paper-deep);
+    border-radius:12px;
+    box-shadow:var(--shadow);
+    max-height:280px; overflow-y:auto;
+  }
+  .combo-listbox[hidden]{ display:none; }
+  .combo-option{
+    display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+    padding:11px 12px; border-radius:8px; cursor:pointer;
+  }
+  .combo-option .name{ font-weight:600; font-size:14.5px; }
+  .combo-option .meta{ font-size:12.5px; color:var(--ink-soft); }
+  .combo-option:hover, .combo-option.active{ background:var(--gold-soft); }
+  .combo-option.selected{ background:var(--sage-soft); }
+  .combo-option.selected .name::after{ content:" ✓"; color:var(--sage); }
+  .combo-empty{ padding:12px; font-size:13.5px; color:var(--ink-soft); }
+  .combo-selected-note{
+    margin-top:12px; font-size:13.5px; color:var(--ink-soft);
+  }
+  .combo-selected-note strong{ color:var(--ink); }
+  .change-link{
+    background:none; border:none; padding:0; margin-left:6px;
+    color:var(--gold); font-weight:600; font-size:13.5px; cursor:pointer;
+    text-decoration:underline;
+  }
+
+  .hint-row{ margin-top:16px; font-size:13.5px; color:var(--ink-soft); }
+  .hint-row strong{ color:var(--ink); }
+
+  /* buttons */
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    background:var(--ink); color:#F1EDE0;
+    border:none; border-radius:8px;
+    padding:11px 20px; font-size:14.5px; font-weight:600;
+    cursor:pointer;
+  }
+  .btn:hover{ background:#232C4F; }
+  .btn.secondary{
+    background:transparent; color:var(--ink-soft);
+    border:1.5px solid var(--line);
+  }
+  .btn.secondary:hover{ border-color:var(--ink-soft); color:var(--ink); }
+  .btn:disabled{ opacity:.4; cursor:not-allowed; }
+  .actions-row{ margin-top:22px; display:flex; gap:10px; flex-wrap:wrap; }
+
+  /* upload */
+  .dropzone{
+    border:2px dashed var(--line);
+    border-radius:12px;
+    padding:32px;
+    text-align:center;
+    background:var(--paper);
+    cursor:pointer;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .dropzone.drag{ border-color:var(--gold); background:var(--gold-soft); }
+  .dropzone input{ display:none; }
+  .dropzone .icon{ font-size:28px; }
+  .dropzone .title{ font-weight:600; margin-top:8px; }
+  .dropzone .desc{ font-size:13px; color:var(--ink-soft); margin-top:4px; }
+  .scan-status{ margin-top:14px; font-size:13.5px; color:var(--sage); font-weight:600; }
+  .scan-status.working{ color:var(--ink-soft); }
+
+  .checklist{ margin-top:20px; display:flex; flex-direction:column; gap:8px; }
+  .checklist-item{
+    display:flex; align-items:center; gap:10px;
+    background:var(--paper); border-radius:8px; padding:10px 14px;
+    border:1px solid var(--paper-deep);
+  }
+  .checklist-item input[type=checkbox]{ width:17px; height:17px; accent-color:var(--sage); flex-shrink:0; }
+  .checklist-item .lbl{ font-size:14.5px; }
+  .checklist-item .src{
+    margin-left:auto; font-size:11px; font-family:'IBM Plex Mono',monospace;
+    color:var(--ink-soft); background:var(--surface); padding:2px 8px; border-radius:6px;
+    border:1px solid var(--paper-deep);
+  }
+  .add-manual{ display:flex; gap:8px; margin-top:14px; }
+  .add-manual select{
+    flex:1; padding:10px 12px; border-radius:8px; border:1.5px solid var(--line);
+    font-family:inherit; font-size:14px; background:var(--surface);
+  }
+
+  /* ============ ROUTE MAP (signature element) ============ */
+  .map-summary{
+    display:flex; gap:14px; flex-wrap:wrap; margin-bottom:24px;
+  }
+  .stat-pill{
+    background:var(--paper); border:1px solid var(--paper-deep); border-radius:10px;
+    padding:14px 18px; min-width:130px;
+  }
+  .stat-pill .num{ font-family:'Fraunces',serif; font-size:28px; font-weight:600; }
+  .stat-pill .lbl{ font-size:12px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.05em; margin-top:2px; }
+  .stat-pill.gold .num{ color:var(--gold); }
+  .stat-pill.sage .num{ color:var(--sage); }
+  .stat-pill.brick .num{ color:var(--brick); }
+
+  .route{ display:flex; flex-direction:column; }
+  .route-head{
+    display:grid;
+    grid-template-columns: 150px 1fr 190px;
+    gap:16px;
+    padding:0 8px 10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--ink-soft);
+    border-bottom:1px solid var(--paper-deep);
+  }
+  .route-row{
+    display:grid;
+    grid-template-columns: 150px 1fr 190px;
+    gap:16px;
+    align-items:center;
+    padding:14px 8px;
+    border-bottom:1px solid var(--paper-deep);
+  }
+  .route-row:last-child{ border-bottom:none; }
+  .station{
+    display:flex; align-items:center; gap:10px;
+  }
+  .dot{
+    width:14px; height:14px; border-radius:50%;
+    background:var(--line); flex-shrink:0;
+    border:2px solid var(--surface);
+    box-shadow:0 0 0 2px var(--line);
+  }
+  .dot.done{ background:var(--gold); box-shadow:0 0 0 2px var(--gold); }
+  .dot.gap{ background:var(--brick); box-shadow:0 0 0 2px var(--brick); }
+  .dot.todo{ background:var(--sage); box-shadow:0 0 0 2px var(--sage); }
+  .station .code{ font-family:'IBM Plex Mono', monospace; font-size:13.5px; font-weight:600; }
+  .station .code.gapcode{ color:var(--brick); font-weight:500; font-style:italic; }
+
+  .req-mid{ min-width:0; }
+  .req-name{ font-weight:600; font-size:14.5px; }
+  .req-badges{ display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
+  .badge{
+    font-size:11px; padding:2px 8px; border-radius:999px;
+    background:var(--paper); border:1px solid var(--paper-deep); color:var(--ink-soft);
+  }
+  .badge.all{ background:var(--sage-soft); border-color:var(--sage); color:var(--sage); font-weight:600; }
+
+  .row-line{
+    height:2px; background:var(--line); flex:1; position:relative; top:0;
+  }
+  .row-line.done{ background:var(--gold); }
+  .row-line.gap{ background:repeating-linear-gradient(90deg, var(--brick) 0 6px, transparent 6px 11px); }
+  .row-line.todo{ background:var(--sage); opacity:.5; }
+
+  .status-col{ display:flex; align-items:center; justify-content:flex-end; gap:10px; }
+  .status-tag{ font-size:12.5px; font-weight:600; }
+  .status-tag.done{ color:var(--gold); }
+  .status-tag.gap{ color:var(--brick); }
+  .status-tag.todo{ color:var(--ink-soft); }
+  .mark-btn{
+    background:var(--surface); border:1.5px solid var(--line); border-radius:7px;
+    width:26px; height:26px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    font-size:14px; color:var(--ink-soft);
+  }
+  .mark-btn.on{ background:var(--gold); border-color:var(--gold); color:#fff; }
+
+  .disclaimer{
+    margin-top:22px; font-size:12.5px; color:var(--ink-soft);
+    background:var(--paper); border-radius:8px; padding:12px 16px;
+    border-left:3px solid var(--gold);
+  }
+
+  footer{
+    text-align:center; padding:32px 24px 60px; color:var(--ink-soft); font-size:12.5px;
+  }
+
+  @media (max-width:720px){
+    .route-head{ display:none; }
+    .route-row{ grid-template-columns:1fr; gap:8px; }
+    .status-col{ justify-content:flex-start; }
+    .rail-label{ display:none; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{ transition:none !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Transfer Track</div>
+    <h1>See exactly which courses connect your community college to your dream school.</h1>
+    <p class="sub">Pick your college, your target universities, and your major — Transfer Track lines up every requirement side by side, so you know precisely which classes to take and which ones already count.</p>
+
+    <div class="rail" id="rail"></div>
+  </div>
+</div>
+
+<main>
+
+  <!-- STEP 1 -->
+  <section class="panel" id="panel-ccc">
+    <div class="panel-head">
+      <span class="step-num">Station 1 of 4</span>
+      <h2>Your community college</h2>
+      <p>We'll use this college's course catalog to match against transfer requirements.</p>
+    </div>
+    <div class="combobox" id="ccc-combobox">
+      <div class="combo-input-wrap">
+        <input
+          type="text"
+          id="ccc-input"
+          class="combo-input"
+          role="combobox"
+          aria-expanded="false"
+          aria-autocomplete="list"
+          aria-controls="ccc-listbox"
+          placeholder="Search for your community college…"
+          autocomplete="off">
+        <span class="combo-caret" aria-hidden="true">▾</span>
+      </div>
+      <ul class="combo-listbox" id="ccc-listbox" role="listbox" hidden></ul>
+    </div>
+    <div class="combo-selected-note" id="ccc-selected-note"></div>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="panel" id="panel-targets" hidden>
+    <div class="panel-head">
+      <span class="step-num">Station 2 of 4</span>
+      <h2>Target schools &amp; majors</h2>
+      <p>Choose one or more schools. Then, for each one, pick the major as <em>that school</em> names it — many schools use different names for related programs (Berkeley's computer science major, for example, lives inside "Electrical Engineering &amp; Computer Sciences").</p>
+    </div>
+    <div class="card-grid" id="target-grid"></div>
+    <div class="major-picks" id="major-picks"></div>
+    <div class="actions-row">
+      <button class="btn" id="to-upload-btn" disabled>Continue</button>
+    </div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="panel" id="panel-upload" hidden>
+    <div class="panel-head">
+      <span class="step-num">Station 3 of 4 — optional</span>
+      <h2>Upload your transcript or AP scores</h2>
+      <p>We'll scan for course codes and AP exam scores and pre-check anything that already satisfies a requirement. You can review and edit everything before it counts.</p>
+    </div>
+    <div class="dropzone" id="dropzone">
+      <input type="file" id="file-input" accept=".pdf,.txt" multiple>
+      <div class="icon">📄</div>
+      <div class="title">Drop a transcript or AP score report here, or click to choose a file</div>
+      <div class="desc">PDF or plain text · nothing is uploaded anywhere, everything stays in your browser</div>
+    </div>
+    <div class="scan-status" id="scan-status" style="display:none;"></div>
+
+    <div class="checklist" id="checklist"></div>
+    <div class="add-manual">
+      <select id="manual-select"></select>
+      <button class="btn secondary" id="manual-add-btn">Mark complete</button>
+    </div>
+
+    <div class="actions-row">
+      <button class="btn" id="to-map-btn">See my transfer route →</button>
+      <button class="btn secondary" id="skip-upload-btn">Skip for now</button>
+    </div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="panel" id="panel-map" hidden>
+    <div class="panel-head">
+      <span class="step-num">Station 4 of 4</span>
+      <h2>Your transfer route map</h2>
+      <p>Left: your community college courses. Right: what your target schools require. The line between them is your articulation match.</p>
+    </div>
+
+    <div class="map-summary" id="map-summary"></div>
+
+    <div class="route" id="route">
+      <div class="route-head">
+        <div>Your course</div>
+        <div>Required for</div>
+        <div style="text-align:right;">Status</div>
+      </div>
+      <div id="route-rows"></div>
+    </div>
+
+    <div class="disclaimer">
+      This tool uses sample articulation data modeled on ASSIST.org and university catalogs for demonstration. Always confirm official articulation at <span class="mono">assist.org</span> and directly with your target school before enrolling.
+    </div>
+  </section>
+
+</main>
+
+<footer>Built for California community college students. Not affiliated with ASSIST.org, the UC, or CSU systems.</footer>
+
+<script>
+/* ============================================================
+   DATA (sample / demo — modeled on real ASSIST + catalog shapes)
+   ============================================================ */
+const CCCS = [
+  {id:'deanza', name:'De Anza College', meta:'Cupertino, CA'},
+  {id:'evc', name:'Evergreen Valley College', meta:'San José, CA'},
+  {id:'foothill', name:'Foothill College', meta:'Los Altos Hills, CA'},
+  {id:'sjcc', name:'San José City College', meta:'San José, CA'},
+  {id:'saddleback', name:'Saddleback College', meta:'Mission Viejo, CA'},
+];
+
+const SCHOOLS = [
+  {id:'ucb', name:'UC Berkeley', meta:'University of California'},
+  {id:'ucla', name:'UCLA', meta:'University of California'},
+  {id:'sjsu', name:'San José State University', meta:'CSU'},
+  {id:'calpoly', name:'Cal Poly San Luis Obispo', meta:'CSU'},
+];
+
+const SLOTS = {
+  calc1:   {name:'Calculus I',                         cat:'math'},
+  calc2:   {name:'Calculus II',                        cat:'math'},
+  calc3:   {name:'Calculus III (Multivariable)',       cat:'math'},
+  linalg:  {name:'Linear Algebra',                     cat:'math'},
+  discrete:{name:'Discrete Mathematics',               cat:'math'},
+  prog1:   {name:'Programming Methodology',            cat:'programming'},
+  prog2:   {name:'Data Structures',                    cat:'programming'},
+  physics1:{name:'Physics I — Mechanics (w/ Calc)',    cat:'science'},
+  physics2:{name:'Physics II — E&M (w/ Calc)',         cat:'science'},
+  finacct: {name:'Financial Accounting',               cat:'business'},
+  manacct: {name:'Managerial Accounting',              cat:'business'},
+  micro:   {name:'Microeconomics',                     cat:'business'},
+  macro:   {name:'Macroeconomics',                     cat:'business'},
+  bizcalc: {name:'Calculus for Business',              cat:'math'},
+  bizstat: {name:'Business Statistics',                cat:'business'},
+  bizlaw:  {name:'Business Law',                       cat:'business'},
+  mis:     {name:'Management Information Systems',     cat:'business'},
+};
+
+// Each school lists its OWN majors, in its OWN naming — schools don't share
+// major ids/labels, since e.g. Berkeley's CS-equivalent major is named
+// differently than SJSU's. Each major carries its own required slot list.
+const SCHOOL_MAJORS = {
+  ucb: [
+    {id:'eecs',  label:'Electrical Engineering & Computer Sciences (EECS)',
+      slots:['calc1','calc2','calc3','linalg','discrete','prog1','prog2','physics1']},
+    {id:'haas',  label:'Business Administration (Haas)',
+      slots:['finacct','manacct','micro','macro','bizcalc','bizstat']},
+  ],
+  ucla: [
+    {id:'cs',    label:'Computer Science',
+      slots:['calc1','calc2','calc3','linalg','discrete','prog1','prog2','physics1','physics2']},
+    {id:'bizecon', label:'Business Economics',
+      slots:['micro','macro','bizcalc','bizstat']},
+  ],
+  sjsu: [
+    {id:'cs',    label:'Computer Science',
+      slots:['calc1','calc2','discrete','prog1','prog2','physics1']},
+    {id:'busad', label:'Business Administration',
+      slots:['finacct','manacct','micro','macro','bizcalc','bizstat','bizlaw','mis']},
+  ],
+  calpoly: [
+    {id:'cs',    label:'Computer Science',
+      slots:['calc1','calc2','calc3','linalg','discrete','prog1','prog2','physics1','physics2']},
+    {id:'busad', label:'Business Administration',
+      slots:['finacct','manacct','micro','macro','bizcalc','bizstat','mis']},
+  ],
+};
+
+// slot -> course code per CCC. Missing key = no current articulation (gap).
+const CATALOG = {
+  deanza: {
+    calc1:'MATH 1A', calc2:'MATH 1B', calc3:'MATH 1C', linalg:'MATH 2B', discrete:'MATH 10',
+    prog1:'CIS 22A', prog2:'CIS 22B', physics1:'PHYS 4A', physics2:'PHYS 4B',
+    finacct:'ACTG 1A', manacct:'ACTG 1B', micro:'ECON 1', macro:'ECON 2',
+    bizcalc:'MATH 11', bizstat:'MATH 10', mis:'CIS 8'
+    // bizlaw: no articulation
+  },
+  evc: {
+    calc1:'MATH 71', calc2:'MATH 72', calc3:'MATH 73', linalg:'MATH 78',
+    prog1:'CIS 40', prog2:'CIS 41', physics1:'PHYS 4A',
+    finacct:'ACTG 1A', manacct:'ACTG 1B', micro:'ECON 1A', macro:'ECON 1B',
+    bizcalc:'MATH 12', bizstat:'MATH 10', mis:'CIS 10'
+    // discrete, physics2, bizlaw: no articulation
+  },
+  foothill: {
+    calc1:'MATH 1A', calc2:'MATH 1B', calc3:'MATH 1C', linalg:'MATH 2B', discrete:'MATH 10',
+    prog1:'CIS 22A', prog2:'CIS 22B', physics1:'PHYS 2A', physics2:'PHYS 2B',
+    finacct:'ACTG 1A', manacct:'ACTG 1B', micro:'ECON 1', macro:'ECON 2',
+    bizcalc:'MATH 11', bizstat:'PSYC 5', bizlaw:'BUS 65', mis:'BUS 40'
+  },
+  sjcc: {
+    calc1:'MATH 011A', calc2:'MATH 011B', calc3:'MATH 012',
+    prog1:'CS 020A', prog2:'CS 020B', physics1:'PHYS 004A', physics2:'PHYS 004B',
+    finacct:'ACTG 065A', manacct:'ACTG 065B', micro:'ECON 001A', macro:'ECON 001B',
+    bizcalc:'MATH 021', bizstat:'MATH 010', mis:'CIS 015'
+    // linalg, discrete, bizlaw: no articulation
+  },
+  saddleback: {
+    calc1:'MATH 3A', calc2:'MATH 3B', calc3:'MATH 3C', linalg:'MATH 3D', discrete:'MATH 15',
+    prog1:'CS 1A', prog2:'CS 1B', physics1:'PHYSCS 2A', physics2:'PHYSCS 2B',
+    finacct:'ACCTG 1A', manacct:'ACCTG 1B', micro:'ECON 1', macro:'ECON 2',
+    bizcalc:'MATH 10', bizstat:'MATH 12', mis:'BUSAD 20'
+    // bizlaw: no articulation
+  }
+};
+
+const AP_MAP = [
+  {exam:'AP CALCULUS BC', minScore:3, slots:['calc1','calc2']},
+  {exam:'AP CALCULUS AB', minScore:3, slots:['calc1']},
+  {exam:'AP COMPUTER SCIENCE A', minScore:3, slots:['prog1']},
+  {exam:'AP PHYSICS C: MECHANICS', minScore:3, slots:['physics1']},
+  {exam:'AP PHYSICS C: ELECTRICITY AND MAGNETISM', minScore:3, slots:['physics2']},
+  {exam:'AP MICROECONOMICS', minScore:3, slots:['micro']},
+  {exam:'AP MACROECONOMICS', minScore:3, slots:['macro']},
+  {exam:'AP STATISTICS', minScore:3, slots:['bizstat']},
+];
+
+/* ============================================================
+   STATE
+   ============================================================ */
+const state = {
+  ccc: null,
+  targets: new Set(),
+  schoolMajors: new Map(), // schoolId -> major option id (specific to that school)
+  completed: new Map(), // slotId -> 'transcript' | 'ap' | 'manual'
+  step: 1,
+};
+
+/* ============================================================
+   RAIL
+   ============================================================ */
+const RAIL_STEPS = ['College','Schools & Majors','Records','Route'];
+function renderRail(){
+  const rail = document.getElementById('rail');
+  rail.innerHTML = '';
+  RAIL_STEPS.forEach((label, i) => {
+    const n = i+1;
+    const el = document.createElement('div');
+    el.className = 'rail-step' + (n < state.step ? ' done' : '') + (n === state.step ? ' active' : '');
+    el.innerHTML = `
+      <div class="rail-dot-row">
+        <div class="rail-dot">${n < state.step ? '✓' : n}</div>
+        <div class="track-line"></div>
+      </div>
+      <div class="rail-label">${label}</div>
+    `;
+    rail.appendChild(el);
+  });
+}
+
+/* ============================================================
+   STEP 1 — CCC (searchable combobox)
+   ============================================================ */
+const cccInput = document.getElementById('ccc-input');
+const cccListbox = document.getElementById('ccc-listbox');
+let cccComboActiveIndex = -1;
+let cccComboOptions = CCCS;
+
+function pickCcc(collegeId){
+  state.ccc = collegeId;
+  state.step = Math.max(state.step, 2);
+  document.getElementById('panel-targets').hidden = false;
+  cccInput.value = '';
+  closeCccListbox();
+  renderAll();
+  document.getElementById('panel-targets').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function openCccListbox(){
+  cccListbox.hidden = false;
+  cccInput.setAttribute('aria-expanded', 'true');
+}
+function closeCccListbox(){
+  cccListbox.hidden = true;
+  cccInput.setAttribute('aria-expanded', 'false');
+  cccComboActiveIndex = -1;
+}
+
+function renderCccListbox(query){
+  const q = (query || '').trim().toLowerCase();
+  cccComboOptions = CCCS.filter(c =>
+    c.name.toLowerCase().includes(q) || c.meta.toLowerCase().includes(q)
+  );
+  cccListbox.innerHTML = '';
+  if(cccComboOptions.length === 0){
+    cccListbox.innerHTML = `<li class="combo-empty">No community college matches "${query}".</li>`;
+    return;
+  }
+  cccComboOptions.forEach((c, i) => {
+    const li = document.createElement('li');
+    li.className = 'combo-option' + (state.ccc === c.id ? ' selected' : '') + (i === cccComboActiveIndex ? ' active' : '');
+    li.setAttribute('role', 'option');
+    li.innerHTML = `<span class="name">${c.name}</span><span class="meta">${c.meta}</span>`;
+    li.addEventListener('mousedown', (e) => { e.preventDefault(); pickCcc(c.id); });
+    li.addEventListener('mouseenter', () => { cccComboActiveIndex = i; renderCccListbox(cccInput.value); });
+    cccListbox.appendChild(li);
+  });
+}
+
+function renderCccSelectedNote(){
+  const note = document.getElementById('ccc-selected-note');
+  if(state.ccc){
+    const c = CCCS.find(x => x.id === state.ccc);
+    note.innerHTML = `Selected: <strong>${c.name}</strong><button class="change-link" id="ccc-change-btn" type="button">change</button>`;
+    const btn = document.getElementById('ccc-change-btn');
+    if(btn) btn.addEventListener('click', () => { cccInput.focus(); openCccListbox(); renderCccListbox(''); });
+  } else {
+    note.innerHTML = '';
+  }
+}
+
+cccInput.addEventListener('focus', () => { openCccListbox(); renderCccListbox(cccInput.value); });
+cccInput.addEventListener('input', () => { cccComboActiveIndex = -1; openCccListbox(); renderCccListbox(cccInput.value); });
+cccInput.addEventListener('keydown', (e) => {
+  if(cccListbox.hidden && (e.key === 'ArrowDown' || e.key === 'ArrowUp')){ openCccListbox(); renderCccListbox(cccInput.value); }
+  if(e.key === 'ArrowDown'){ e.preventDefault(); cccComboActiveIndex = Math.min(cccComboActiveIndex+1, cccComboOptions.length-1); renderCccListbox(cccInput.value); }
+  else if(e.key === 'ArrowUp'){ e.preventDefault(); cccComboActiveIndex = Math.max(cccComboActiveIndex-1, 0); renderCccListbox(cccInput.value); }
+  else if(e.key === 'Enter'){ e.preventDefault(); if(cccComboOptions[cccComboActiveIndex]) pickCcc(cccComboOptions[cccComboActiveIndex].id); }
+  else if(e.key === 'Escape'){ closeCccListbox(); }
+});
+document.addEventListener('click', (e) => {
+  if(!document.getElementById('ccc-combobox').contains(e.target)) closeCccListbox();
+});
+
+/* ============================================================
+   STEP 2 — Target schools + per-school majors (merged)
+   ============================================================ */
+function renderTargetGrid(){
+  const grid = document.getElementById('target-grid');
+  grid.innerHTML = '';
+  SCHOOLS.forEach(s => {
+    const card = document.createElement('button');
+    card.className = 'choice-card multi' + (state.targets.has(s.id) ? ' selected' : '');
+    card.innerHTML = `<div class="name">${s.name}</div><div class="meta">${s.meta}</div>`;
+    card.addEventListener('click', () => {
+      if(state.targets.has(s.id)){
+        state.targets.delete(s.id);
+        state.schoolMajors.delete(s.id);
+      } else {
+        state.targets.add(s.id);
+      }
+      renderAll();
+    });
+    grid.appendChild(card);
+  });
+
+  renderMajorPicks();
+}
+
+function renderMajorPicks(){
+  const wrap = document.getElementById('major-picks');
+  wrap.innerHTML = '';
+
+  Array.from(state.targets).forEach(schoolId => {
+    const school = SCHOOLS.find(s => s.id === schoolId);
+    const majors = SCHOOL_MAJORS[schoolId] || [];
+    const chosen = state.schoolMajors.get(schoolId) || '';
+
+    const row = document.createElement('div');
+    row.className = 'major-pick-row';
+    row.innerHTML = `
+      <span class="school-name">${school.name}</span>
+      <select data-school="${schoolId}" class="${chosen ? '' : 'needs-choice'}">
+        <option value="" ${chosen ? '' : 'selected'} disabled>Choose your major at ${school.name}…</option>
+        ${majors.map(m => `<option value="${m.id}" ${chosen===m.id?'selected':''}>${m.label}</option>`).join('')}
+      </select>
+      ${chosen ? `<span class="picked-tag">set</span>` : ''}
+    `;
+    row.querySelector('select').addEventListener('change', (e) => {
+      if(e.target.value) state.schoolMajors.set(schoolId, e.target.value);
+      else state.schoolMajors.delete(schoolId);
+      renderAll();
+    });
+    wrap.appendChild(row);
+  });
+
+  const allChosen = state.targets.size > 0 &&
+    Array.from(state.targets).every(id => state.schoolMajors.has(id));
+  document.getElementById('to-upload-btn').disabled = !allChosen;
+}
+
+document.getElementById('to-upload-btn').addEventListener('click', () => {
+  state.step = Math.max(state.step, 3);
+  document.getElementById('panel-upload').hidden = false;
+  renderAll();
+  document.getElementById('panel-upload').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+/* ============================================================
+   Helpers: combined requirement slots for current selection
+   ============================================================ */
+function currentSlotIds(){
+  if(state.targets.size === 0) return [];
+  const set = new Set();
+  state.targets.forEach(schoolId => {
+    const majorId = state.schoolMajors.get(schoolId);
+    if(!majorId) return;
+    const major = (SCHOOL_MAJORS[schoolId] || []).find(m => m.id === majorId);
+    if(major) major.slots.forEach(s => set.add(s));
+  });
+  const order = {math:0, programming:1, science:2, business:3};
+  return Array.from(set).sort((a,b) => {
+    const ca = SLOTS[a].cat, cb = SLOTS[b].cat;
+    if(order[ca] !== order[cb]) return order[ca]-order[cb];
+    return SLOTS[a].name.localeCompare(SLOTS[b].name);
+  });
+}
+
+/* ============================================================
+   STEP 4 — Upload + checklist
+   ============================================================ */
+function renderChecklist(){
+  const wrap = document.getElementById('checklist');
+  wrap.innerHTML = '';
+  const slots = currentSlotIds();
+  if(slots.length === 0) return;
+  slots.forEach(slotId => {
+    const item = document.createElement('label');
+    item.className = 'checklist-item';
+    const src = state.completed.get(slotId);
+    item.innerHTML = `
+      <input type="checkbox" ${src ? 'checked' : ''} data-slot="${slotId}">
+      <span class="lbl">${SLOTS[slotId].name}</span>
+      ${src ? `<span class="src">${src === 'transcript' ? 'from transcript' : src === 'ap' ? 'AP credit' : 'added manually'}</span>` : ''}
+    `;
+    item.querySelector('input').addEventListener('change', (e) => {
+      if(e.target.checked) state.completed.set(slotId, 'manual');
+      else state.completed.delete(slotId);
+      renderAll();
+    });
+    wrap.appendChild(item);
+  });
+}
+
+function renderManualSelect(){
+  const sel = document.getElementById('manual-select');
+  sel.innerHTML = '';
+  const slots = currentSlotIds();
+  slots.forEach(slotId => {
+    const opt = document.createElement('option');
+    opt.value = slotId;
+    opt.textContent = SLOTS[slotId].name;
+    sel.appendChild(opt);
+  });
+}
+document.getElementById('manual-add-btn').addEventListener('click', () => {
+  const sel = document.getElementById('manual-select');
+  if(!sel.value) return;
+  state.completed.set(sel.value, 'manual');
+  renderAll();
+});
+
+document.getElementById('skip-upload-btn').addEventListener('click', () => goToMap());
+document.getElementById('to-map-btn').addEventListener('click', () => goToMap());
+function goToMap(){
+  state.step = 4;
+  document.getElementById('panel-map').hidden = false;
+  renderAll();
+  document.getElementById('panel-map').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ---- file scanning ---- */
+const dropzone = document.getElementById('dropzone');
+const fileInput = document.getElementById('file-input');
+dropzone.addEventListener('click', () => fileInput.click());
+['dragover','dragenter'].forEach(evt => dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.add('drag'); }));
+['dragleave','drop'].forEach(evt => dropzone.addEventListener(evt, e => { e.preventDefault(); dropzone.classList.remove('drag'); }));
+dropzone.addEventListener('drop', e => { handleFiles(e.dataTransfer.files); });
+fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+async function handleFiles(fileList){
+  const files = Array.from(fileList);
+  if(files.length === 0) return;
+  const status = document.getElementById('scan-status');
+  status.style.display = 'block';
+  status.className = 'scan-status working';
+  status.textContent = 'Scanning ' + files.map(f=>f.name).join(', ') + ' …';
+
+  let combinedText = '';
+  for(const file of files){
+    try{
+      if(file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')){
+        combinedText += await extractPdfText(file) + '\n';
+      } else {
+        combinedText += await file.text() + '\n';
+      }
+    } catch(err){
+      console.error('Could not read file', file.name, err);
+    }
+  }
+
+  const found = scanText(combinedText);
+  found.courseMatches.forEach(slotId => { if(!state.completed.has(slotId)) state.completed.set(slotId, 'transcript'); });
+  found.apMatches.forEach(slotId => { if(!state.completed.has(slotId)) state.completed.set(slotId, 'ap'); });
+
+  const n = found.courseMatches.size + found.apMatches.size;
+  status.className = 'scan-status';
+  status.textContent = n > 0
+    ? `Found ${n} match${n===1?'':'es'} — review the checklist below and adjust anything that's wrong.`
+    : `Scanned the file but didn't find a confident match. Add courses manually below.`;
+
+  renderAll();
+}
+
+async function extractPdfText(file){
+  const buf = await file.arrayBuffer();
+  if(window['pdfjsLib']){
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const doc = await pdfjsLib.getDocument({data: buf}).promise;
+    let text = '';
+    for(let i=1; i<=doc.numPages; i++){
+      const page = await doc.getPage(i);
+      const content = await page.getTextContent();
+      text += content.items.map(it => it.str).join(' ') + '\n';
+    }
+    return text;
+  }
+  return '';
+}
+
+function scanText(text){
+  const upper = text.toUpperCase();
+  const courseMatches = new Set();
+  const apMatches = new Set();
+
+  if(state.ccc){
+    const catalog = CATALOG[state.ccc] || {};
+    Object.entries(catalog).forEach(([slotId, code]) => {
+      const pattern = code.trim().replace(/\s+/g, '\\s*');
+      const re = new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, m => m === '\\' ? '\\\\' : m), 'i');
+      // simple safe rebuild: escape then allow flexible whitespace
+      const escaped = code.trim().split(/\s+/).map(p => p.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('\\s*');
+      const re2 = new RegExp('\\b' + escaped + '\\b', 'i');
+      if(re2.test(text)) courseMatches.add(slotId);
+    });
+  }
+
+  AP_MAP.forEach(ap => {
+    const idx = upper.indexOf(ap.exam);
+    if(idx > -1){
+      const window_ = upper.slice(idx, idx + ap.exam.length + 20);
+      const scoreMatch = window_.slice(ap.exam.length).match(/[1-5]/);
+      if(scoreMatch && parseInt(scoreMatch[0],10) >= ap.minScore){
+        ap.slots.forEach(s => apMatches.add(s));
+      }
+    }
+  });
+
+  return {courseMatches, apMatches};
+}
+
+/* ============================================================
+   STEP 5 — Route map
+   ============================================================ */
+function renderMap(){
+  const slots = currentSlotIds();
+  const summary = document.getElementById('map-summary');
+  const rows = document.getElementById('route-rows');
+
+  const total = slots.length;
+  const done = slots.filter(s => state.completed.has(s)).length;
+  const gaps = slots.filter(s => !CATALOG[state.ccc] || !CATALOG[state.ccc][s]).length;
+
+  summary.innerHTML = `
+    <div class="stat-pill"><div class="num">${total}</div><div class="lbl">Total requirements</div></div>
+    <div class="stat-pill gold"><div class="num">${done}</div><div class="lbl">Completed</div></div>
+    <div class="stat-pill sage"><div class="num">${total-done}</div><div class="lbl">Remaining</div></div>
+    <div class="stat-pill brick"><div class="num">${gaps}</div><div class="lbl">No articulation yet</div></div>
+  `;
+
+  rows.innerHTML = '';
+  const cccName = CCCS.find(c => c.id === state.ccc)?.name || '';
+
+  slots.forEach(slotId => {
+    const code = CATALOG[state.ccc] ? CATALOG[state.ccc][slotId] : null;
+    const requiredBy = Array.from(state.targets)
+      .map(schoolId => {
+        const majorId = state.schoolMajors.get(schoolId);
+        const major = (SCHOOL_MAJORS[schoolId] || []).find(m => m.id === majorId);
+        if(!major || !major.slots.includes(slotId)) return null;
+        const school = SCHOOLS.find(s => s.id === schoolId);
+        return {school, major};
+      })
+      .filter(Boolean);
+    const isCompleted = state.completed.has(slotId);
+    const isGap = !code;
+    const status = isGap ? 'gap' : (isCompleted ? 'done' : 'todo');
+    const allSchools = requiredBy.length === state.targets.size && state.targets.size > 1;
+
+    const row = document.createElement('div');
+    row.className = 'route-row';
+    row.innerHTML = `
+      <div class="station">
+        <span class="dot ${status}"></span>
+        <span class="code ${isGap ? 'gapcode' : ''}">${code || 'No match'}</span>
+      </div>
+      <div class="req-mid">
+        <div class="req-name">${SLOTS[slotId].name}</div>
+        <div class="req-badges">
+          ${requiredBy.map(r => `<span class="badge ${allSchools ? 'all' : ''}">${r.school.name} — ${r.major.label}</span>`).join('')}
+          ${isGap ? `<span class="badge" style="color:var(--brick);border-color:var(--brick);">check with a counselor</span>` : ''}
+        </div>
+      </div>
+      <div class="status-col">
+        <span class="status-tag ${status}">${isGap ? 'No articulation' : (isCompleted ? 'Completed' : 'Not yet')}</span>
+        ${!isGap ? `<button class="mark-btn ${isCompleted ? 'on':''}" data-slot="${slotId}" title="Toggle complete">✓</button>` : ''}
+      </div>
+    `;
+    if(!isGap){
+      row.querySelector('.mark-btn').addEventListener('click', () => {
+        if(state.completed.has(slotId)) state.completed.delete(slotId);
+        else state.completed.set(slotId, 'manual');
+        renderAll();
+      });
+    }
+    rows.appendChild(row);
+  });
+
+  if(slots.length === 0){
+    rows.innerHTML = `<div style="padding:24px 8px;color:var(--ink-soft);">Select at least one target school and choose your major there to see your route.</div>`;
+  }
+}
+
+/* ============================================================
+   MASTER RENDER
+   ============================================================ */
+function renderAll(){
+  renderRail();
+  renderCccSelectedNote();
+  renderTargetGrid();
+  renderChecklist();
+  renderManualSelect();
+  renderMap();
+}
+
+renderAll();
+</script>
+</body>
+</html>
