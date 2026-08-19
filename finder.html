@@ -1711,12 +1711,24 @@ const DIST_AREA_NAME = { math: 'Mathematics', programming: 'Major preparation', 
 const DIST_AREA_ORDER = ['math', 'programming', 'science', 'business'];
 
 function loadDist(base) {
-  const grab = (name) => fetch(base + name, { cache: 'no-store' }).then(r => {
-    if (!r.ok) throw new Error(name + ' — HTTP ' + r.status);
+  const grab = (name, optional) => fetch(base + name, { cache: 'no-store' }).then(r => {
+    if (!r.ok) {
+      if (optional) return {};
+      throw new Error(name + ' — HTTP ' + r.status);
+    }
     return r.json();
+  }).catch(err => {
+    if (optional) return {};
+    throw err;
   });
-  return Promise.all([grab('school_majors.json'), grab('catalog.json'), grab('slots.json')])
-    .then(parts => ({ schoolMajors: parts[0], catalog: parts[1], slots: parts[2] }));
+  return Promise.all([
+    grab('school_majors.json'),
+    grab('catalog.json'),
+    grab('slots.json'),
+    // Optional: written from the worksheet's 'AP Credit' tab. Older dist/
+    // folders won't have this -- fall back to {} rather than breaking load.
+    grab('ap_credit.json', true)
+  ]).then(parts => ({ schoolMajors: parts[0], catalog: parts[1], slots: parts[2], apCredit: parts[3] || {} }));
 }
 
 // 'Cognitive Science, B.S.' here and 'Cognitive Sciences (School of Social
@@ -1816,6 +1828,7 @@ function distAreasFor(dist, targetId, majorLabel, homeCollege) {
   const major = (dist.schoolMajors[schoolKey] || []).filter(m => majorKey(m.label) === majorKey(majorLabel))[0];
   if (!major) return null;
   const catalog = dist.catalog[cccKey] || {};
+  const apForSchool = (dist.apCredit && dist.apCredit[schoolKey]) || {};
   const buckets = {};
   major.slots.forEach(slotId => {
     const slot = slotMeta(dist, slotId);
@@ -1828,13 +1841,18 @@ function distAreasFor(dist, targetId, majorLabel, homeCollege) {
     const note = [usefulDetail(parsed.detail, slot.name, schoolKey), parsed.alternate ? 'Alternate: ' + parsed.alternate : '']
       .filter(Boolean).join(' · ');
     const cat = DIST_AREA_ORDER.indexOf(slot.cat) >= 0 ? slot.cat : 'programming';
+    // Real, sourced AP credit rule for this exact (school, slot) pair, if one
+    // exists -- e.g. UCSD calc1 accepts AP Calc AB 4+ OR BC 3+. Attached to
+    // every row below (including gaps) so resolveRow's existing AP check can
+    // clear a requirement even where no CCC course was ever on file for it.
+    const apOptions = apForSchool[slotId];
     buckets[cat] = buckets[cat] || [];
     buckets[cat].push(groups.length > 1 ? {
       req: slot.name, reqTitle: note, parts: groups, home: groups.map(g => g[0]).join(' + '),
-      homeTitle: '', status: '', kind: 'done', verified: true
+      homeTitle: '', status: '', kind: 'done', verified: true, ap: apOptions
     } : groups.length ? {
       req: slot.name, reqTitle: note, home: groups[0].length > 1 ? groups[0] : groups[0][0],
-      homeTitle: '', status: '', kind: 'done', verified: true
+      homeTitle: '', status: '', kind: 'done', verified: true, ap: apOptions
     } : {
       req: slot.name,
       reqTitle: (slotId === 'prog2' && cccKey === 'evc' && schoolKey === 'ucsd')
@@ -1842,7 +1860,7 @@ function distAreasFor(dist, targetId, majorLabel, homeCollege) {
         : parsed.excluded
         ? 'Required by the major — the agreement lists no equivalent for this campus'
         : 'Required by the major — nothing articulates in the agreement',
-      home: 'No equivalent', homeTitle: '', status: 'No course', kind: 'gap', verified: true
+      home: 'No equivalent', homeTitle: '', status: 'No course', kind: 'gap', verified: true, ap: apOptions
     });
   });
   const areas = DIST_AREA_ORDER.filter(c => buckets[c]).map(c => ({
@@ -2056,12 +2074,19 @@ class Component extends DCLogic {
 
     const apFor = (spec) => {
       if (!spec) return null;
-      const want = spec.exam.toLowerCase();
-      const hit = s.apRows.filter(a => {
-        const name = a.exam.toLowerCase();
-        return name.indexOf(want) >= 0 || want.indexOf(name) >= 0;
-      })[0];
-      return hit && hit.score >= spec.min ? hit : null;
+      // A slot can have multiple independently-qualifying exams (e.g. AP
+      // Calculus AB at a 4, OR BC at a 3) -- check each until one hits.
+      const specs = Array.isArray(spec) ? spec : [spec];
+      for (const sp of specs) {
+        if (!sp || !sp.exam) continue;
+        const want = sp.exam.toLowerCase();
+        const hit = s.apRows.filter(a => {
+          const name = a.exam.toLowerCase();
+          return name.indexOf(want) >= 0 || want.indexOf(name) >= 0;
+        })[0];
+        if (hit && hit.score >= sp.min) return hit;
+      }
+      return null;
     };
 
     const bestOf = (codes) => {
@@ -2071,7 +2096,15 @@ class Component extends DCLogic {
     };
 
     const resolveRow = (r) => {
-      if (r.kind === 'gap') return Object.assign({}, r, { homeTitle: 'Nothing articulates at ' + shortHome });
+      if (r.kind === 'gap') {
+        const ap = apFor(r.ap);
+        if (ap) return Object.assign({}, r, {
+          kind: 'done', status: 'Cleared by AP', apExam: ap.exam, apScore: ap.score,
+          home: 'AP ' + ap.exam,
+          homeTitle: 'Score ' + ap.score + ' — covers this even though ' + shortHome + ' has no course for it'
+        });
+        return Object.assign({}, r, { homeTitle: 'Nothing articulates at ' + shortHome });
+      }
       // A requirement satisfied only by taking several courses together.
       if (r.parts) {
         const groups = r.parts.map(bestOf);
@@ -2101,7 +2134,7 @@ class Component extends DCLogic {
         const ap = apFor(r.ap);
         if (ap) return Object.assign({}, r, {
           kind: 'done', status: 'Cleared by AP', apExam: ap.exam, apScore: ap.score,
-          home: 'AP ' + ap.exam, homeTitle: 'Score ' + ap.score + ' · meets the minimum of ' + r.ap.min
+          home: 'AP ' + ap.exam, homeTitle: 'Score ' + ap.score + ' meets the requirement'
         });
         return Object.assign({}, r, { kind: 'needed', status: 'To take', home: optionLabel,
           homeTitle: options.length > 1

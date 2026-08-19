@@ -115,6 +115,24 @@ def load_electives(wb):
     return groups
 
 
+def load_ap_credit(wb):
+    """Returns list of {school_key, exam, min_score, slot_id} from the AP Credit tab."""
+    rows = []
+    if "AP Credit" not in wb.sheetnames:
+        return rows
+    for row in wb["AP Credit"].iter_rows(min_row=2, values_only=True):
+        school_key, exam, min_score, slot_id, note = (list(row) + [None] * 5)[:5]
+        if not school_key or not exam or not slot_id:
+            continue
+        rows.append({
+            "school_key": str(school_key).strip(),
+            "exam": str(exam).strip(),
+            "min_score": int(min_score) if min_score else 0,
+            "slot_id": str(slot_id).strip(),
+        })
+    return rows
+
+
 CCC_LABELS = {
     "deanza": "De Anza College", "evc": "Evergreen Valley College",
 }
@@ -131,6 +149,7 @@ def main():
     name_to_id = load_slot_name_to_id(wb["Slot Reference"])
     catalog = load_catalog(wb["CCC Catalog"], CCC_LABELS)
     electives = load_electives(wb)
+    ap_credit = load_ap_credit(wb)
 
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -193,6 +212,11 @@ def main():
         electives_path.write_text(json.dumps(electives, indent=2))
         print(f"\nWrote {len(electives)} elective group(s) to {electives_path}")
         print("(captured for reference -- build_dist.py / the app do not yet enforce 'pick N of M' logic)")
+
+    if ap_credit:
+        ap_path = out_dir.parent / "ap_credit.json"
+        ap_path.write_text(json.dumps(ap_credit, indent=2))
+        print(f"Wrote {len(ap_credit)} AP credit rule(s) to {ap_path}")
 
     print("\nNow run: python pipeline/build_dist.py  (from inside your backend/ folder)")
 

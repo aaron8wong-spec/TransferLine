@@ -109,6 +109,22 @@ def print_alternatives_summary(alternatives):
                 print(f"  [{ccc_key}] missing {info['slot_name']} (needed for {majors}) -> NO alternative found at any tracked CCC")
 
 
+def load_ap_credit():
+    ap_path = BACKEND_ROOT / "data" / "ap_credit.json"
+    if not ap_path.exists():
+        return {}
+    rows = json.loads(ap_path.read_text())
+    # Reshape flat rows into { school_key: { slot_id: [{exam, min}, ...] } } --
+    # the exact shape the frontend's distAreasFor()/apFor() expect, so a slot
+    # with multiple qualifying exams (e.g. AB OR BC) checks either.
+    out = {}
+    for row in rows:
+        out.setdefault(row["school_key"], {}).setdefault(row["slot_id"], []).append({
+            "exam": row["exam"], "min": row["min_score"],
+        })
+    return out
+
+
 def main():
     registry = load_slot_registry()
     matched_files = sorted(MATCHED_DIR.glob("*.json"))
@@ -172,17 +188,20 @@ def main():
         ]
 
     alternatives = find_cross_ccc_alternatives(ccc_required_slots, catalog, school_majors_out, registry)
+    ap_credit = load_ap_credit()
 
     DIST_DIR.mkdir(parents=True, exist_ok=True)
     (DIST_DIR / "school_majors.json").write_text(json.dumps(school_majors_out, indent=2))
     (DIST_DIR / "catalog.json").write_text(json.dumps(catalog, indent=2))
     (DIST_DIR / "slots.json").write_text(json.dumps(registry, indent=2))
     (DIST_DIR / "cross_ccc_alternatives.json").write_text(json.dumps(alternatives, indent=2))
+    (DIST_DIR / "ap_credit.json").write_text(json.dumps(ap_credit, indent=2))
 
     print(f"Wrote dist/school_majors.json         ({sum(len(v) for v in school_majors_out.values())} major(s) across {len(school_majors_out)} school(s))")
     print(f"Wrote dist/catalog.json               ({len(catalog)} CCC(s))")
     print(f"Wrote dist/slots.json                 (canonical slot definitions, for reference)")
     print(f"Wrote dist/cross_ccc_alternatives.json (gap-filling alternatives across your CCC set)")
+    print(f"Wrote dist/ap_credit.json              ({sum(len(v) for v in ap_credit.values())} slot(s) with AP credit rules across {len(ap_credit)} school(s))")
     if skipped_unresolved:
         print(f"\n{skipped_unresolved} row(s) skipped as unresolved — see data/review_queue.json.")
 
